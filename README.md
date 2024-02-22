@@ -22,9 +22,9 @@ My project is a simple client-server desktop messenger. This messenger will incl
 
 
 ## List of functions
-1. User registration and authorization.
-2. Creation of chats and groups for communication with other users.
-3. Ability to send, edit, and delete messages.
-4. Data storage in a remote database.
-5. Implementation of client-server architecture.
-6. Option to change your nickname and password.
+1. **User registration and authorization**: This is the process where users create an account by providing necessary information (login and password). After registration, they can log into the system using their credentials. This process ensures that each user has a unique identity in the system.
+2. **Creation of chats and groups for communication with other users**: Users can create chats or group chats. Chats are usually between two users, while group chats can include multiple users. This feature allows users to communicate and collaborate with each other.
+3. **Ability to send, edit, and delete messages**: Users can send messages to other users in a chat or group. If they make a mistake or want to change something, they have the option to edit their messages. They can also delete their messages if they no longer want them to be visible to others.
+4. **Data storage in a remote database**: All the data related to the application, like user information, chat history, group details, etc., are stored in a remote database. This allows the data to be persistent and accessible from different devices.
+5. **Implementation of client-server architecture**: The application follows a client-server architecture. The client (desktop application) sends requests to the server, and the server processes these requests and sends back responses. Server sends new data to database and other users or get information from the database. This architecture allows for efficient data management and ensures that the application can handle multiple users at the same time.
+6. **Option to change your nickname and password**: Users have the option to change their nickname and password. This feature adds an extra layer of security and personalization to the user’s account.
