@@ -29,5 +29,5 @@ My project is a simple client-server desktop messenger. This messenger will incl
 5. **Implementation of client-server architecture**: The application follows a client-server architecture. The client (desktop application) sends requests to the server, and the server processes these requests and sends back responses. Server sends new data to database and other users or get information from the database. This architecture allows for efficient data management and ensures that the application can handle multiple users at the same time.
 6. **Option to change your nickname and password**: Users have the option to change their nickname and password. Nickname is a name, that other users see, login is unchangable.
 
-##Data model
+## Data model
 ![image](https://github.com/LoneXDii/OOP-Course-Work/assets/151780058/a9decec5-0a1a-4d12-a9bd-0756e21195e1)
