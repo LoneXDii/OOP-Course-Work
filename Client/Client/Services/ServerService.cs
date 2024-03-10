@@ -16,13 +16,13 @@ internal class ServerService
     private StreamReader? Reader = null;
     private StreamWriter? Writer = null;
 
-    public delegate void UserCreated(User user);
+    public delegate void UserCreated(User? user);
     public event UserCreated OnUserCreated;
 
-    public delegate void ChatCreated(IChat chat);
+    public delegate void ChatCreated(IChat? chat);
     public event ChatCreated OnChatCreated;
 
-    public delegate void MessageCreated(Message message);
+    public delegate void MessageCreated(Message? message);
     public event MessageCreated OnMessageCreated;
 
     public ServerService(string host, int port)
@@ -38,14 +38,16 @@ internal class ServerService
         Writer?.Close();
     }
 
-    public async Task CreateUserAsync(string login)
+    public async Task CreateUserAsync(User user)
     {
-        await SendRequestAsync("0001", login);
+        string request = JsonSerializer.Serialize(user);
+        await SendRequestAsync("0001", request);
     }
 
-    public async void CreateMessageAsync(string text)
+    public async Task CreateMessageAsync(Message message)
     {
-        await SendRequestAsync("0021", text);
+        string request = JsonSerializer.Serialize(message);
+        await SendRequestAsync("0021", request);
     }
 
     public async void CreateChatAsync()
@@ -80,14 +82,18 @@ internal class ServerService
             switch(type.ToString())
             {
                 case "0001":
-                    
-                    var a = JsonConvert.DeSerializeObject(responce);
+                    User? user = JsonSerializer.Deserialize<User>(responceMessage.ToString());
+                    OnUserCreated.Invoke(user);
                     break;
 
                 case "0011":
+                    IChat? chat = JsonSerializer.Deserialize<IChat>(responceMessage.ToString());
+                    OnChatCreated.Invoke(chat);
                     break;
 
                 case "0021":
+                    Message? message = JsonSerializer.Deserialize<Message>(responceMessage.ToString());
+                    OnMessageCreated.Invoke(message);
                     break;
             }
         }

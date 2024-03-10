@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Entities.Logick;
+namespace ServerPart.ClientEntites;
 
 internal class Message
 {
@@ -14,7 +14,8 @@ internal class Message
     public DateTime SendTime { get; set; }
     public string Text { get; set; }
 
-    public Message(string text) {
+    public Message(string text)
+    {
         Text = text;
         SendTime = DateTime.Now;
     }

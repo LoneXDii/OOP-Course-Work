@@ -1,8 +1,10 @@
-﻿using System;
+﻿using ServerPart.ClientEntites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ServerPart;
@@ -11,10 +13,20 @@ internal class ClientHandler
 {
     private TcpClient client;
     private Server server;
+    public string? IpAddress;
 
     public string Id { get; } = Guid.NewGuid().ToString();
     public StreamWriter Writer { get; }
     public StreamReader Reader { get; }
+
+    public delegate void UserCreated(User? user, string id);
+    public event UserCreated OnUserCreated;
+
+    public delegate void ChatCreated(IChat? chat);
+    public event ChatCreated OnChatCreated;
+
+    public delegate void MessageCreated(Message? message, string id);
+    public event MessageCreated OnMessageCreated;
 
     public ClientHandler(TcpClient client, Server server)
     {
@@ -29,26 +41,42 @@ internal class ClientHandler
     {
         try
         {
-            //Temporary (getting name and all users are in 1 group)
-            string? userName = await Reader.ReadLineAsync();
-            string? message = $"{userName} connected to chat. IP adress is {client.Client.RemoteEndPoint?.ToString()}";
-            await server.BroadcastMessageAsync(message, Id);
-            Console.WriteLine(message);
+            IpAddress = client.Client.RemoteEndPoint?.ToString();
+            string? serverMessage = $"Client is connected. IP adress is {IpAddress}";
+            Console.WriteLine(serverMessage);
             while (true)
             {
                 try
                 {
-                    message = await Reader.ReadLineAsync();
-                    if (message == null) continue;
-                    message = $"{userName}: {message}";
-                    Console.WriteLine($"Message sended:\n{message}");
-                    await server.BroadcastMessageAsync(message, Id);
+                    string? responce = await Reader.ReadLineAsync();
+                    if (responce == null) continue;
+                    StringBuilder type = new StringBuilder();
+                    for (int i = 0; i < 4; i++)
+                    {
+                        type.Append(responce[i]);
+                    }
+                    responce = responce.Remove(0,4);
+
+                    switch (type.ToString())
+                    {
+                        case "0001":
+                            User? user = JsonSerializer.Deserialize<User>(responce);
+                            OnUserCreated.Invoke(user, Id);
+                            break;
+
+                        case "0011":
+                            IChat? chat = JsonSerializer.Deserialize<IChat>(responce);
+                            OnChatCreated.Invoke(chat);
+                            break;
+
+                        case "0021":
+                            Message? message = JsonSerializer.Deserialize<Message>(responce);
+                            OnMessageCreated.Invoke(message, Id);
+                            break;
+                    }
                 }
                 catch 
                 {
-                    message = $"{userName} leaved chat";
-                    Console.WriteLine($"User leaved: {userName}");
-                    await server.BroadcastMessageAsync(message, Id);
                     break;
                 }
             }
@@ -59,6 +87,8 @@ internal class ClientHandler
         }
         finally
         {
+            string? serverMessage = $"Client is disconnected. IP adress is {IpAddress}";
+            Console.WriteLine(serverMessage);
             server.RemoveConnection(Id);
         }
     }
