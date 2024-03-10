@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Client.Entities.Logick;
 
-internal class Dialogue : IChat
+internal class Dialogue
 {
     public int Id { get; }
-    public int User1Id { get; }
-    public int User2Id { get; }
+    public int User1Id { get; set; }
+    public int User2Id { get; set; }
 
-    public void AddMessage(Message message)
+    public Dialogue(int user1Id, int user2Id)
     {
-
+        User1Id = user1Id;
+        User2Id = user2Id;
     }
 }

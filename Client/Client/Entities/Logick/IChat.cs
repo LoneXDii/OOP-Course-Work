@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Client.Entities.Logick;
 
-internal interface IChat
-{
-    public void AddMessage(Message message);
-}
+//internal interface IChat
+//{
+//    public void AddMessage(Message message);
+//}

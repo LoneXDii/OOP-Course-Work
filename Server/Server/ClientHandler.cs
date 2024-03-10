@@ -16,17 +16,27 @@ internal class ClientHandler
     public string? IpAddress;
 
     public string Id { get; } = Guid.NewGuid().ToString();
+    public int UserId { get; set; }
     public StreamWriter Writer { get; }
     public StreamReader Reader { get; }
 
     public delegate void UserCreated(User? user, string id);
     public event UserCreated OnUserCreated;
 
-    public delegate void ChatCreated(IChat? chat);
-    public event ChatCreated OnChatCreated;
+    public delegate void DialogueCreated(Dialogue? chat, string id);
+    public event DialogueCreated OnDialogueCreated;
 
     public delegate void MessageCreated(Message? message, string id);
     public event MessageCreated OnMessageCreated;
+
+    public delegate void GetDialoguesList(int userId, string id);
+    public event GetDialoguesList? OnGetDialoguesList;
+
+    public delegate void GetChatMessages(List<Message>? messages, string id);
+    public event GetChatMessages? OnGetChatMessages;
+
+    public delegate void AskForUser(string login, string id);
+    public event AskForUser? OnAskForUser;
 
     public ClientHandler(TcpClient client, Server server)
     {
@@ -65,13 +75,27 @@ internal class ClientHandler
                             break;
 
                         case "0011":
-                            IChat? chat = JsonSerializer.Deserialize<IChat>(responce);
-                            OnChatCreated.Invoke(chat);
+                            Dialogue? chat = JsonSerializer.Deserialize<Dialogue>(responce);
+                            OnDialogueCreated.Invoke(chat, Id);
                             break;
 
                         case "0021":
                             Message? message = JsonSerializer.Deserialize<Message>(responce);
                             OnMessageCreated.Invoke(message, Id);
+                            break;
+
+                        case "0101":
+                            int id = Convert.ToInt32(responce);
+                            OnGetDialoguesList?.Invoke(id, Id);
+                            break;
+
+                        case "0102":
+                            List<Message>? messages = JsonSerializer.Deserialize<List<Message>>(responce);
+                            OnGetChatMessages?.Invoke(messages, Id);
+                            break;
+
+                        case "1001":
+                            OnAskForUser?.Invoke(responce, Id);
                             break;
                     }
                 }

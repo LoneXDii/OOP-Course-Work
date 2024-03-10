@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Entities\Data\" />
-    <Folder Include="Entities\Presentational\" />
   </ItemGroup>
 
 </Project>
