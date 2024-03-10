@@ -8,4 +8,8 @@ namespace Client.Entities.Logick;
 
 internal class User
 {
+    //AuthorixationToken { get; }
+    public int Id { get; }
+    public string Login { get; }
+    public string NickName { get; }
 }

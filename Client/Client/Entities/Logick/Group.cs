@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Client.Entities.Logick;
 
-internal class Group : IChat
+internal class Group
 {
 }

@@ -23,7 +23,7 @@ internal class Server
             while (true)
             {
                 TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
-                ClientHandler clientHandler = new ClientHandler(tcpClient, this); //add constructor params
+                ClientHandler clientHandler = new ClientHandler(tcpClient, this);
                 clients.Add(clientHandler);
                 Task.Run(clientHandler.ProcessAsync);
             }
