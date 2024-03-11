@@ -1,5 +1,5 @@
-﻿using Client.Entities.Logick;
-using Client.Services;
+﻿using Client.DomainLayer;
+using Client.InfrastructureLayer.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

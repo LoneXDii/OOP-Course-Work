@@ -1,4 +1,4 @@
-﻿using Client.Entities.Logick;
+﻿using Client.DomainLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Entities.Presentational;
+namespace Client.InfrastructureLayer.Presentational;
 
 internal class ConsoleUI
 {
@@ -27,7 +27,7 @@ internal class ConsoleUI
             registration?.Invoke(login);
         Console.WriteLine("Enter login of user you want to chat");
         login = Console.ReadLine();
-        if(login != "1" && login is not null)
+        if (login != "1" && login is not null)
         {
             dialogueOpened?.Invoke(login);
         }

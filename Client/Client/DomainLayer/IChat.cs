@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client.Entities.Logick;
+namespace Client.DomainLayer;
 
-internal class Group
-{
-}
+//internal interface IChat
+//{
+//    public void AddMessage(Message message);
+//}
