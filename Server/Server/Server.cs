@@ -14,6 +14,7 @@ namespace ServerPart;
 internal class Server
 {
     private TcpListener tcpListener = new TcpListener(IPAddress.Any, 8888);
+    private TcpListener p2pConnetion = new TcpListener(IPAddress.Any, 8889);
     private List<ClientHandler> clients = new List<ClientHandler>();
 
     //temporary data storage
@@ -25,16 +26,13 @@ internal class Server
         try
         {
             tcpListener.Start();
+            p2pConnetion.Start();
             Console.WriteLine("Server started\nWaiting for connection...");
             while (true)
             {
                 TcpClient tcpClient = await tcpListener.AcceptTcpClientAsync();
-                ClientHandler clientHandler = new ClientHandler(tcpClient, this);
-                clientHandler.OnUserCreated += UserAdded;
-                clientHandler.OnMessageCreated += MessageAdded;
-                clientHandler.OnDialogueCreated += DialogueAdded;
-                clientHandler.OnGetDialoguesList += ForDialoguesAsked;
-                clientHandler.OnAskForUser += ForUserAsked;
+                TcpClient p2pClient = await p2pConnetion.AcceptTcpClientAsync();
+                ClientHandler clientHandler = new ClientHandler(tcpClient, p2pClient, this);
                 clients.Add(clientHandler);
                 Task.Run(clientHandler.ProcessAsync);
             }
@@ -49,18 +47,6 @@ internal class Server
         }
     }
 
-    public async Task BroadcastMessageAsync(string message, string id)
-    {
-        foreach (var client in clients)
-        {
-            if(client.Id != id) {
-                await client.Writer.WriteLineAsync(message);
-                await client.Writer.FlushAsync();
-            }
-        }
-
-    }
-
     public void RemoveConnection(string id)
     {
         ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
@@ -73,12 +59,15 @@ internal class Server
         foreach(var client in clients)
         {
             client.Close();
+            
         }
         tcpListener.Stop();
+        p2pConnetion.Stop();
     }
 
-    private async void UserAdded(User user, string id)
+    public async void UserAdded(User? user, string id)
     {
+        if (user == null) return;
         users.Add(user);
         user.Id = users.Count; 
         string responce = "0001" + JsonSerializer.Serialize(user);
@@ -92,8 +81,9 @@ internal class Server
         }
     }
 
-    private async void DialogueAdded(Dialogue dialogue, string id)
+    public async void DialogueAdded(Dialogue? dialogue, string id)
     {
+        if (dialogue == null) return;
         ClientHandler? client1 = clients.FirstOrDefault(c => c.UserId == dialogue.User1Id);
         ClientHandler? client2 = clients.FirstOrDefault(c => c.UserId == dialogue.User2Id);
         dialogues.Add(dialogue);
@@ -108,13 +98,14 @@ internal class Server
         if (client2 is not null)
         {
             Console.WriteLine($"Created dialogue {dialogue.Id} with client {client2.IpAddress}\nSended responce {responce}");
-            await client2.Writer.WriteLineAsync(responce);
-            await client2.Writer.FlushAsync();
+            await client2.p2pWriter.WriteLineAsync(responce);
+            await client2.p2pWriter.FlushAsync();
         }
     }
 
-    private async void MessageAdded(Message message, string id)
+    public async void MessageAdded(Message? message, string id)
     {
+        if(message == null) return;
         ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
         messages.Add(message);
         message.Id = messages.Count;
@@ -123,10 +114,25 @@ internal class Server
         if (client is not null)
         {
             Console.WriteLine($"Message added by client {client.IpAddress} in dialogue {message.ChatId}\nSended responce {responce}");
+            await client.Writer.WriteLineAsync(responce);
+            await client.Writer.FlushAsync();
         }
     }
 
-    private async void ForDialoguesAsked(int userId, string id)
+    public async Task BroadcastMessageAsync(string message, string id)
+    {
+        foreach (var client in clients)
+        {
+            if (client.Id != id)
+            {
+                Console.WriteLine($"New message sended to client {client.IpAddress}. Message is {message}");
+                await client.p2pWriter.WriteLineAsync(message);
+                await client.p2pWriter.FlushAsync();
+            }
+        }
+    }
+
+    public async void ForDialoguesAsked(int userId, string id)
     {
         ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
         List<Dialogue> dialogues = (from dialogue in this.dialogues
@@ -141,7 +147,7 @@ internal class Server
         }
     }
 
-   private async void ForUserAsked(string login, string id)
+   public async void ForUserAsked(string login, string id)
     {
         ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
         User? userAsked = null;

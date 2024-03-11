@@ -24,36 +24,66 @@ internal class ProgramHandler
     public ProgramHandler(ServerService server)
     {
         this.server = server;
-        server.OnUserCreated += CreateUser;
-        server.OnDialogueCreated += CreateDialogue;
-        server.OnMessageCreated += CreateMessage;
-        server.OnUserAsked += AddToUsersList;
+        this.server.OnMessageCreated += CreateMessage;
+        this.server.OnDialogueCreated += CreateDialogue;
     }
 
     public async void MessagePrinted(string text)
     {
-        if (currentUser is not null && currentChat is not null)
-            await server.CreateMessageAsync(new Message(text, currentUser.Id, currentChat.Id));
+        //temporary, for tests only
+        //if (currentUser is not null && currentChat is not null)
+        if (currentUser is not null)
+        {
+            //var message = await server.CreateMessageAsync(new Message(text, currentUser.Id, currentChat.Id));
+            var message = await server.CreateMessageAsync(new Message(text, currentUser.Id, 0));
+            if (message is null) return;
+            chatMessages.Add(message);
+            string messageSender = "";
+            foreach (var user in chatMembers)
+            {
+                if (user.Id == message.SenderId)
+                {
+                    messageSender = user.NickName;
+                }
+            }
+            OnMessageCreated?.Invoke(message, messageSender);
+        }
     }
 
     public async void Registrate(string login)
     {
-        await server.CreateUserAsync(new User(login));
-    }
-
-    public async void AskUserByLogin(string login)
-    {
-        await server.GetUserByLogin(login);
-    }
-
-    private void CreateUser(User? user)
-    {
+        var user = await server.CreateUserAsync(new User(login));
         if (user is null) return;
         currentUser = user;
 
         //temp
         chatMembers.Add(user);
     }
+
+    public async void AskUserByLogin(string login)
+    {
+        var user = await server.GetUserByLogin(login);
+        if (user is null) return;
+        users.Add(user);
+
+        //temp
+        chatMembers.Add(user);
+
+        Dialogue? dialogue = new Dialogue(currentUser.Id, user.Id);
+        dialogue = await server.CreateDialogueAsync(dialogue);
+        if (dialogue is null) return;
+        dialogues.Add(dialogue);
+        currentChat = dialogue;
+    }
+
+    //private void CreateUser(User? user)
+    //{
+    //    if (user is null) return;
+    //    currentUser = user;
+
+    //    //temp
+    //    chatMembers.Add(user);
+    //}
 
     private void CreateDialogue(Dialogue? dialogue)
     {
@@ -70,7 +100,7 @@ internal class ProgramHandler
         string messageSender = "";
         foreach (var user in chatMembers)
         {
-            if(user.Id == message.SenderId)
+            if (user.Id == message.SenderId)
             {
                 messageSender = user.NickName;
             }
@@ -78,19 +108,24 @@ internal class ProgramHandler
         OnMessageCreated?.Invoke(message, messageSender);
     }
 
-    private async void AddToUsersList(User? user) {
-        if(user is null) return;
-        users.Add(user);
+    //private async void AddToUsersList(User? user) {
+    //    if(user is null) return;
+    //    users.Add(user);
 
-        //temp
-        chatMembers.Add(user);
+    //    //temp
+    //    chatMembers.Add(user);
 
-        Dialogue dialogue = new Dialogue(currentUser.Id, user.Id);
-        await server.CreateDialogueAsync(dialogue);
-    }
+    //    Dialogue dialogue = new Dialogue(currentUser.Id, user.Id);
+    //    await server.CreateDialogueAsync(dialogue);
+    //}
 
-    public async Task ProcessAsync()
+    //public async Task ProcessAsync()
+    //{
+    //    await server.ProcessResponcesAsync();
+    //}
+
+    public async Task ProcessP2PAsync()
     {
-        await server.ProcessResponcesAsync();
+        await server.ProcessP2PConnectionAsync();
     }
 }

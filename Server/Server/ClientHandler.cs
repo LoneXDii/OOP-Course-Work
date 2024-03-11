@@ -12,6 +12,7 @@ namespace ServerPart;
 internal class ClientHandler
 {
     private TcpClient client;
+    private TcpClient p2pClient;
     private Server server;
     public string? IpAddress;
 
@@ -19,32 +20,20 @@ internal class ClientHandler
     public int UserId { get; set; }
     public StreamWriter Writer { get; }
     public StreamReader Reader { get; }
+    public StreamWriter p2pWriter { get; }
+    public StreamReader p2pReader { get; }
 
-    public delegate void UserCreated(User? user, string id);
-    public event UserCreated OnUserCreated;
-
-    public delegate void DialogueCreated(Dialogue? chat, string id);
-    public event DialogueCreated OnDialogueCreated;
-
-    public delegate void MessageCreated(Message? message, string id);
-    public event MessageCreated OnMessageCreated;
-
-    public delegate void GetDialoguesList(int userId, string id);
-    public event GetDialoguesList? OnGetDialoguesList;
-
-    public delegate void GetChatMessages(List<Message>? messages, string id);
-    public event GetChatMessages? OnGetChatMessages;
-
-    public delegate void AskForUser(string login, string id);
-    public event AskForUser? OnAskForUser;
-
-    public ClientHandler(TcpClient client, Server server)
+    public ClientHandler(TcpClient client, TcpClient p2pClient, Server server)
     {
         this.client = client;
         this.server = server;
+        this.p2pClient = p2pClient;
         var stream = client.GetStream();
+        var p2pStream = p2pClient.GetStream();
         Reader = new StreamReader(stream);
         Writer = new StreamWriter(stream);
+        p2pReader = new StreamReader(p2pStream);
+        p2pWriter = new StreamWriter(p2pStream);
     }
 
     public async Task ProcessAsync()
@@ -71,31 +60,31 @@ internal class ClientHandler
                     {
                         case "0001":
                             User? user = JsonSerializer.Deserialize<User>(responce);
-                            OnUserCreated.Invoke(user, Id);
+                            server.UserAdded(user, Id);
                             break;
 
                         case "0011":
                             Dialogue? chat = JsonSerializer.Deserialize<Dialogue>(responce);
-                            OnDialogueCreated.Invoke(chat, Id);
+                            server.DialogueAdded(chat, Id);
                             break;
 
                         case "0021":
                             Message? message = JsonSerializer.Deserialize<Message>(responce);
-                            OnMessageCreated.Invoke(message, Id);
+                            server.MessageAdded(message, Id);
                             break;
 
                         case "0101":
                             int id = Convert.ToInt32(responce);
-                            OnGetDialoguesList?.Invoke(id, Id);
+                            server.ForDialoguesAsked(id, Id);
                             break;
 
-                        case "0102":
-                            List<Message>? messages = JsonSerializer.Deserialize<List<Message>>(responce);
-                            OnGetChatMessages?.Invoke(messages, Id);
-                            break;
+                        //case "0102":
+                        //    List<Message>? messages = JsonSerializer.Deserialize<List<Message>>(responce);
+                        //    OnGetChatMessages?.Invoke(messages, Id);
+                        //    break;
 
                         case "1001":
-                            OnAskForUser?.Invoke(responce, Id);
+                            server.ForUserAsked(responce, Id);
                             break;
                     }
                 }
@@ -121,6 +110,8 @@ internal class ClientHandler
     {
         Writer.Close();
         Reader.Close();
+        p2pWriter.Close();
+        p2pReader.Close();
         client.Close();
     }
 }
