@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace ServerPart.ClientEntites;
 
-//internal interface IChat
-//{
-//    public void AddMessage(Message message);
-//}
+internal class Chat
+{
+    public string Name { get; set; }
+    public int Id { get; set; }
+
+    public Chat(string name)
+    {
+        Name = name;
+    }
+}

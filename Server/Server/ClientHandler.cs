@@ -17,7 +17,7 @@ internal class ClientHandler
     public string? IpAddress;
 
     public string Id { get; } = Guid.NewGuid().ToString();
-    public int UserId { get; set; }
+    public User? ClientUser { get; set; }
     public StreamWriter Writer { get; }
     public StreamReader Reader { get; }
     public StreamWriter p2pWriter { get; }
@@ -64,8 +64,18 @@ internal class ClientHandler
                             break;
 
                         case "0011":
-                            Dialogue? chat = JsonSerializer.Deserialize<Dialogue>(responce);
-                            server.DialogueAdded(chat, Id);
+                            Chat? chat = JsonSerializer.Deserialize<Chat>(responce);
+                            server.ChatAdded(chat, Id);
+                            break;
+
+                        case "0012":
+                            var responceParams = responce.Split('&');
+                            server.ChatMemberAdded(responceParams[0], Convert.ToInt32(responceParams[1]), Id);
+                            break;
+
+                        case "0013":
+                            int chatId = Convert.ToInt32(responce);
+                            server.GetChatMembers(chatId, Id);
                             break;
 
                         case "0021":
@@ -73,10 +83,10 @@ internal class ClientHandler
                             server.MessageAdded(message, Id);
                             break;
 
-                        case "0101":
-                            int id = Convert.ToInt32(responce);
-                            server.ForDialoguesAsked(id, Id);
-                            break;
+                        //case "0101":
+                        //    int id = Convert.ToInt32(responce);
+                        //    server.ForDialoguesAsked(id, Id);
+                        //    break;
 
                         //case "0102":
                         //    List<Message>? messages = JsonSerializer.Deserialize<List<Message>>(responce);

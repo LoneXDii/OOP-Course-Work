@@ -20,7 +20,8 @@ internal class Server
     //temporary data storage
     private List<User> users = new List<User>();
     private List<Message> messages = new List<Message>();
-    private List<Dialogue> dialogues = new List<Dialogue>();
+    private List<Chat> chats = new List<Chat>();
+    private List<(User, int)> chatsMembers = new List<(User, int)>();
     public async Task ListenAsync()
     {
         try
@@ -75,32 +76,53 @@ internal class Server
         if (client is not null)
         {
             Console.WriteLine($"Created user {user.Login} by client {client.IpAddress}\nSended responce {responce}");
-            client.UserId = user.Id;
+            client.ClientUser = user;
             await client.Writer.WriteLineAsync(responce);
             await client.Writer.FlushAsync();
         }
     }
 
-    public async void DialogueAdded(Dialogue? dialogue, string id)
+    public async void ChatAdded(Chat? chat, string id)
     {
-        if (dialogue == null) return;
-        ClientHandler? client1 = clients.FirstOrDefault(c => c.UserId == dialogue.User1Id);
-        ClientHandler? client2 = clients.FirstOrDefault(c => c.UserId == dialogue.User2Id);
-        dialogues.Add(dialogue);
-        dialogue.Id = dialogues.Count;
-        string responce = "0011" + JsonSerializer.Serialize(dialogue);
-        if (client1 is not null)
+        if (chat == null) return;
+
+        ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
+        if (client is not null && client.ClientUser is not null)
         {
-            Console.WriteLine($"Created dialogue {dialogue.Id} by client {client1.IpAddress}\nSended responce {responce}");
-            await client1.Writer.WriteLineAsync(responce);
-            await client1.Writer.FlushAsync();
+            chat.Id = chats.Count;
+            chats.Add(chat);
+            string responce = "0011" + JsonSerializer.Serialize(chat);
+
+            chatsMembers.Add((client.ClientUser, chat.Id));
+
+            Console.WriteLine($"Created chat {chat.Name} by client {client.IpAddress}\nSended responce {responce}");
+            await client.Writer.WriteLineAsync(responce);
+            await client.Writer.FlushAsync();
         }
-        if (client2 is not null)
-        {
-            Console.WriteLine($"Created dialogue {dialogue.Id} with client {client2.IpAddress}\nSended responce {responce}");
-            await client2.p2pWriter.WriteLineAsync(responce);
-            await client2.p2pWriter.FlushAsync();
-        }
+    }
+
+    public async void ChatMemberAdded(string? login, int? chatId, string id)
+    {
+        if(login == null || chatId == null) return;
+        var user = users.FirstOrDefault(c => c.Login == login);
+        var chat = chats.FirstOrDefault(c => c.Id == chatId);
+
+        if (user is null || chat is null) return;
+        var client1 = clients.FirstOrDefault(c => c.Id == id);
+        var client2 = clients.FirstOrDefault(c => c.ClientUser?.Id == user.Id);
+        chatsMembers.Add((user, chat.Id));
+
+        if (client1 is null || client2 is null) return;
+        var responce1 = "0012" + JsonSerializer.Serialize(user);
+        var responce2 = "0011" + JsonSerializer.Serialize(chat);
+
+        Console.WriteLine($"User added to chat {chat.Id} by client {client1.IpAddress}\nSended responce {responce1}");
+        await client1.Writer.WriteLineAsync(responce1);
+        await client1.Writer.FlushAsync();
+
+        Console.WriteLine($"Responce {responce2} sended to client {client2.IpAddress}");
+        await client2.p2pWriter.WriteLineAsync(responce2);
+        await client2.p2pWriter.FlushAsync();
     }
 
     public async void MessageAdded(Message? message, string id)
@@ -110,7 +132,7 @@ internal class Server
         messages.Add(message);
         message.Id = messages.Count;
         string responce = "0021" + JsonSerializer.Serialize(message);
-        await BroadcastMessageAsync(responce, id); //redo only for chat members
+        await BroadcastMessageAsync(message, id); //redo only for chat members
         if (client is not null)
         {
             Console.WriteLine($"Message added by client {client.IpAddress} in dialogue {message.ChatId}\nSended responce {responce}");
@@ -119,35 +141,58 @@ internal class Server
         }
     }
 
-    public async Task BroadcastMessageAsync(string message, string id)
+    public async Task BroadcastMessageAsync(Message message, string id)
     {
-        foreach (var client in clients)
+        var chatMembers = (from member in chatsMembers
+                           where member.Item2 == message.ChatId
+                           select member.Item1).ToList();
+
+        var chatClients = new List<ClientHandler>();
+        foreach (var member in chatMembers) 
+        {
+            ClientHandler? client = clients.FirstOrDefault(c => c.ClientUser?.Id == member.Id);
+            if(client is not null)
+                chatClients.Add(client);
+        }
+
+        string responce = "0021" + JsonSerializer.Serialize(message);
+
+        foreach (var client in chatClients)
         {
             if (client.Id != id)
             {
-                Console.WriteLine($"New message sended to client {client.IpAddress}. Message is {message}");
-                await client.p2pWriter.WriteLineAsync(message);
+                Console.WriteLine($"New message sended to client {client.IpAddress}\nSended responce {responce}");
+                await client.p2pWriter.WriteLineAsync(responce);
                 await client.p2pWriter.FlushAsync();
             }
         }
     }
 
-    public async void ForDialoguesAsked(int userId, string id)
+    public async void ForChatsAsked(int userId, string id)
     {
-        ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
-        List<Dialogue> dialogues = (from dialogue in this.dialogues
-                                    where userId == dialogue.User1Id || userId == dialogue.User2Id
-                                    select dialogue).ToList();
-        if(client is not null)
+        List<int> dialoguesIds = (from couple in chatsMembers
+                                  where couple.Item1.Id == userId
+                                  select couple.Item2).ToList();
+
+        var clientChats = new List<Chat>();
+        foreach (var dialogueId in dialoguesIds)
         {
-            string responce = "0101" + JsonSerializer.Serialize(dialogues);
+            Chat? chat = chats.FirstOrDefault(c => c.Id == dialogueId);
+            if(chat is not null)
+                clientChats.Add(chat);
+        }
+
+        ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
+        if (client is not null)
+        {
+            string responce = "0101" + JsonSerializer.Serialize(clientChats);
             Console.WriteLine($"Client {client.IpAddress} asked for dialogues.\nSended responce {responce}");
             await client.Writer.WriteLineAsync(responce);
             await client.Writer.FlushAsync();
         }
     }
 
-   public async void ForUserAsked(string login, string id)
+    public async void ForUserAsked(string login, string id)
     {
         ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
         User? userAsked = null;
@@ -166,5 +211,21 @@ internal class Server
             await client.Writer.WriteLineAsync(responce);
             await client.Writer.FlushAsync();
         }
+    }
+
+    public async void GetChatMembers(int chatId, string id)
+    {
+        ClientHandler? client = clients.FirstOrDefault(c => c.Id == id);
+        if (client is null) return;
+
+        var members = (from member in chatsMembers
+                       where member.Item2 == chatId
+                       select member.Item1).ToList();
+
+        if (members is null) return;
+        string responce = "0013"+JsonSerializer.Serialize(members);
+        Console.WriteLine($"Client {client.IpAddress} asked for chat {chatId} members\nSended responce {responce}");
+        await client.Writer.WriteLineAsync(responce);
+        await client.Writer.FlushAsync();
     }
 }

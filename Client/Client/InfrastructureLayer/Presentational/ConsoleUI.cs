@@ -1,46 +1,100 @@
-﻿using Client.DomainLayer;
+﻿using Client.ApplicationLayer;
+using Client.DomainLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Client.InfrastructureLayer.Presentational.ConsoleUI;
 
 namespace Client.InfrastructureLayer.Presentational;
 
 internal class ConsoleUI
 {
-    public delegate void Registration(string login);
-    public event Registration? registration;
+    ApplicationService application;
 
-    public delegate void DialogueOpened(string login);
-    public event DialogueOpened? dialogueOpened;
-
-    public delegate void MessagePrinted(string text);
-    public event MessagePrinted? messagePrinted;
+    public ConsoleUI(ApplicationService application)
+    {
+        this.application = application;
+        this.application.OnMessageAdded += PrintMessage;
+    }
 
     public void Start()
     {
         Console.WriteLine("Enter login:");
         string? login = Console.ReadLine();
         if (login is not null)
-            registration?.Invoke(login);
-        Console.WriteLine("Enter login of user you want to chat");
-        login = Console.ReadLine();
-        if (login != "1" && login is not null)
+            application.CreateUser(login);
+        Console.WriteLine("Enter:\n1.Create chat\n2.Get chat list");
+        int param = Convert.ToInt32(Console.ReadLine());
+        
+        if(param == 1)
         {
-            dialogueOpened?.Invoke(login);
+            Console.WriteLine("Enter chat name");
+            string? chatName = Console.ReadLine();
+            if (chatName is not null)
+                application.CreateChat(chatName);
         }
-        while (true)
+        if (param == 2)
         {
-            string? messageText = Console.ReadLine();
-            if (messageText != null)
+            var chats = application.GetChats();
+            int i = 1;
+            foreach (var chat in chats)
             {
-                messagePrinted?.Invoke(messageText);
+                Console.WriteLine($"{i}.{chat}");
+                i++;
+            }
+
+            Console.WriteLine("Select chat:");
+            param = Convert.ToInt32(Console.ReadLine());
+            application.SelectChat(param);
+
+            while (true)
+            {
+                string? message = Console.ReadLine();
+                if (message is not null)
+                    application.CreateMessage(message);
             }
         }
+
+        Console.WriteLine("Enter:\n1.Create chat\n2.Get chat list");
+        param = Convert.ToInt32(Console.ReadLine());
+        if (param == 2)
+        {
+            var chats = application.GetChats();
+            int i = 1;
+            foreach (var chat in chats)
+            {
+                Console.WriteLine($"{i}.{chat}");
+                i++;
+            }
+        }
+
+        Console.WriteLine("Select chat:");
+        param = Convert.ToInt32(Console.ReadLine());
+        application.SelectChat(param);
+
+        Console.WriteLine("Enter:\n1.Add member\n2.Print messages");
+        param = Convert.ToInt32(Console.ReadLine());
+        if(param == 1)
+        {
+            Console.WriteLine("Enter member name");
+            string? name = Console.ReadLine();
+            if(name is not null)
+                application.AddUserToChat(name);
+        }
+
+
+        Console.WriteLine("Enter:\n1.Add member\n2.Print messages");
+        param = Convert.ToInt32(Console.ReadLine());
+        while (true)
+        {
+            string? message = Console.ReadLine();
+            if(message is not null)
+                application.CreateMessage(message);
+        }
     }
-    public void PrintMessage(Message message, string senderName)
+    public void PrintMessage(string message)
     {
         if (OperatingSystem.IsWindows())
         {
@@ -50,9 +104,9 @@ internal class ConsoleUI
 
             Console.MoveBufferArea(0, top, left, 1, 0, top + 1);
             Console.SetCursorPosition(0, top);
-            Console.WriteLine($"{senderName}: {message.Text}");
+            Console.WriteLine(message);
             Console.SetCursorPosition(left, top + 1);
         }
-        else Console.WriteLine($"{senderName}: {message.Text}");
+        else Console.WriteLine(message);
     }
 }

@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Client.DomainLayer;
 
-internal class Group
+internal class Chat
 {
+    public string Name { get; set; }
+    public int Id { get; set; }
+
+    public Chat(string name)
+    {
+        Name = name;
+    }
 }

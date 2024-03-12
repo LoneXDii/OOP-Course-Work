@@ -8,21 +8,21 @@ namespace Client.DomainLayer;
 
 internal class EntitiesHandler
 {
-    public List<Dialogue> Dialogues { get; set; } = new List<Dialogue>();
+    public List<Chat> Chats { get; set; } = new List<Chat>();
     public List<User> ChatMembers { get; set; } = new List<User>();
     public List<User> Users { get; } = new List<User>();
     public List<Message> ChatMessages { get; set; } = new List<Message>();
     public User? CurrentUser { get; set; }
-    public Dialogue? CurrentChat { get; set; }
+    public Chat? CurrentChat { get; set; }
 
     public void AddMessage(Message message)
     {
         ChatMessages.Add(message);
     }
 
-    public void AddDialogue(Dialogue dialogue)
+    public void AddChat(Chat chat)
     {
-        Dialogues.Add(dialogue);
+        Chats.Add(chat);
     }
 
     public void AddChatMember(User chatMember)
