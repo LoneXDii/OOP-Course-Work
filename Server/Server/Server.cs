@@ -14,7 +14,7 @@ namespace ServerPart;
 internal class Server
 {
     private TcpListener tcpListener = new TcpListener(IPAddress.Any, 8888);
-    private TcpListener p2pConnetion = new TcpListener(IPAddress.Any, 8889);
+    private TcpListener p2pConnetion = new TcpListener(IPAddress.Any, 8080);
     private List<ClientHandler> clients = new List<ClientHandler>();
 
     //temporary data storage

@@ -84,7 +84,6 @@ internal class ConsoleUI
                 application.AddUserToChat(name);
         }
 
-
         Console.WriteLine("Enter:\n1.Add member\n2.Print messages");
         param = Convert.ToInt32(Console.ReadLine());
         while (true)
@@ -96,17 +95,18 @@ internal class ConsoleUI
     }
     public void PrintMessage(string message)
     {
-        if (OperatingSystem.IsWindows())
-        {
-            var position = Console.GetCursorPosition();
-            int left = position.Left;
-            int top = position.Top;
+        //if (OperatingSystem.IsWindows())
+        //{
+        //    var position = Console.GetCursorPosition();
+        //    int left = position.Left;
+        //    int top = position.Top;
 
-            Console.MoveBufferArea(0, top, left, 1, 0, top + 1);
-            Console.SetCursorPosition(0, top);
-            Console.WriteLine(message);
-            Console.SetCursorPosition(left, top + 1);
-        }
-        else Console.WriteLine(message);
+        //    Console.MoveBufferArea(0, top, left, 1, 0, top + 1);
+        //    Console.SetCursorPosition(0, top);
+        //    Console.WriteLine(message);
+        //    Console.SetCursorPosition(left, top + 1);
+        //}
+        //else Console.WriteLine(message);
+        Console.WriteLine(message);
     }
 }

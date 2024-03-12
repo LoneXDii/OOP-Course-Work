@@ -68,11 +68,11 @@ internal class ServerService
         return responceMessage.ToString();
     }
 
-    public async Task ProcessP2PConnectionAsync()
+    public void ProcessP2PConnectionAsync()
     {
         while (true)
         {
-            string? responce = await p2pReader.ReadLineAsync();
+            string? responce = p2pReader.ReadLineAsync().Result;
             if (responce == null) continue;
             StringBuilder type = new StringBuilder();
             StringBuilder responceMessage = new StringBuilder();

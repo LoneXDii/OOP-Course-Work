@@ -6,7 +6,7 @@ using Client.InfrastructureLayer.Presentational;
 
 
 ApplicationService app = new ApplicationService(new EntitiesHandler());
-ServerService server = new ServerService("127.0.0.1", 8888, 8889, app);
+ServerService server = new ServerService("127.0.0.1", 8888, 8080, app);
 Task.Run(() => server.ProcessP2PConnectionAsync());
 ConsoleUI ui = new ConsoleUI(app);
 ui.Start();
