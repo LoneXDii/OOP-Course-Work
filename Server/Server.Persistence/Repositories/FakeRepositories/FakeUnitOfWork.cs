@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server.Persistence.Repositories.FakeRepositories;
+﻿namespace Server.Persistence.Repositories.FakeRepositories;
 
 internal class FakeUnitOfWork : IUnitOfWork
 {
@@ -17,7 +11,7 @@ internal class FakeUnitOfWork : IUnitOfWork
     {
         _users = new(() => new FakeUserRepository());
         _chats = new(() => new FakeChatRepository());
-        _chatMembers = new (() => new FakeChatMemberrepository());
+        _chatMembers = new (() => new FakeChatMemberRepository());
         _messages = new (() => new FakeMessageRepository());
     }
 

@@ -1,18 +1,12 @@
-﻿using Server.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace Server.Persistence.Repositories.FakeRepositories;
 
-internal class FakeChatMemberrepository : IRepository<ChatMember>
+internal class FakeChatMemberRepository : IRepository<ChatMember>
 {
     private List<ChatMember> _members = new();
 
-    public FakeChatMemberrepository()
+    public FakeChatMemberRepository()
     {
         for (int i = 0; i < 10; i++)
         {
