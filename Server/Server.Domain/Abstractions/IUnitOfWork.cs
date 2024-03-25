@@ -7,7 +7,7 @@ using Server.Domain.Entities;
 
 namespace Server.Domain.Abstractions;
 
-internal interface IUnitOfWork
+public interface IUnitOfWork
 {
     IRepository<User> UserRepository { get; }
     IRepository<Chat> ChatRepository { get; }

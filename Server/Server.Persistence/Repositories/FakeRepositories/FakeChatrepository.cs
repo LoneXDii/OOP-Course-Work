@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Server.Persistence.Repositories.FakeRepositories;
 
-internal class FakeChatrepository : IRepository<Chat>
+internal class FakeChatRepository : IRepository<Chat>
 {
     private List<Chat> _chats = new();
 
-    public FakeChatrepository()
+    public FakeChatRepository()
     {
         for (int i = 0; i < 2; i++)
         {
