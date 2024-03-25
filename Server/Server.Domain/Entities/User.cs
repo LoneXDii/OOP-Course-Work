@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.Domain.Entities;
 
-internal class User : Entity
+public class User : Entity
 {
     public User(string name, string login, string password)
     {

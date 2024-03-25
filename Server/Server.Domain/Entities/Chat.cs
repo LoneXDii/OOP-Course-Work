@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.Domain.Entities;
 
-internal class Chat : Entity
+public class Chat : Entity
 {
     public Chat(string name)
     {

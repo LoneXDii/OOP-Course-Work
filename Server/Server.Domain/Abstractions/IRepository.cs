@@ -10,7 +10,7 @@ namespace Server.Domain.Abstractions;
 
 public interface IRepository<T> where T : Entity
 {
-    Task<T> GetByIdAsync(int id,
+    Task<T?> GetByIdAsync(int id,
                          CancellationToken cancellationToken = default,
                          params Expression<Func<T, object>>[] includedProperties);
 

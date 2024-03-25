@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Server.Domain.Entities;
 
-internal class ChatMember : Entity
+public class ChatMember : Entity
 {
+    public ChatMember(int userId, int chatId)
+    {
+        UserId = userId;
+        ChatId = chatId;
+    }
+
     public int UserId { get; set; }
     public int ChatId { get; set; }
 }
