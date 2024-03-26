@@ -1,4 +1,4 @@
-﻿namespace Server.Application.UserUseCases.Commands;
+﻿namespace Server.Application.UserUseCases.Queries;
 
 public sealed record GetAllUsersRequest() : IRequest<IEnumerable<User>> { }
 

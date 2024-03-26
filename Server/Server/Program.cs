@@ -14,5 +14,5 @@ IHost host = Host.CreateDefaultBuilder().ConfigureServices(
 
 var app = host.Services.GetRequiredService<IApplicationService>();
 
-app.Run();
+await app.Run();
 

@@ -47,13 +47,14 @@ internal class FakeChatMemberRepository : IRepository<ChatMember>
 
     public async Task AddAsync(ChatMember entity, CancellationToken cancellationToken = default)
     {
-        entity.Id = _members.Count + 1;
+        entity.Id = _members[_members.Count - 1].Id + 1;
         await Task.Run(() => _members.Add(entity));
     }
 
     public async Task UpdateAsync(ChatMember entity, CancellationToken cancellationToken = default)
     {
-        await FirstOrDefaultAsync(u => u.Id == entity.Id);
+        await Task.Delay(1);
+        throw new NotImplementedException();
     }
 
     public async Task DeleteAsync(ChatMember entity, CancellationToken cancellationToken = default)

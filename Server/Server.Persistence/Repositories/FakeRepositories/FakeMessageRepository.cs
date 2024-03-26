@@ -11,7 +11,7 @@ internal class FakeMessageRepository : IRepository<Message>
     {
         for (int i = 0; i < 100; i++)
         {
-            var message = new Message($"message {i}", DateTime.Now);
+            var message = new Message($"message {i}");
             message.SenderId = Random.Shared.Next(1, 10);
             if(message.SenderId <= 5)
             {
@@ -48,13 +48,15 @@ internal class FakeMessageRepository : IRepository<Message>
 
     public async Task AddAsync(Message entity, CancellationToken cancellationToken = default)
     {
-        entity.Id = _messages.Count + 1;
+        entity.Id = _messages[_messages.Count - 1].Id + 1;
         await Task.Run(() => _messages.Add(entity));
     }
 
     public async Task UpdateAsync(Message entity, CancellationToken cancellationToken = default)
     {
-        await FirstOrDefaultAsync(u => u.Id == entity.Id);
+        var message = await FirstOrDefaultAsync(m => m.Id == entity.Id, cancellationToken);
+        if(message is null) return;
+        message.Text = entity.Text;
     }
 
     public async Task DeleteAsync(Message entity, CancellationToken cancellationToken = default)

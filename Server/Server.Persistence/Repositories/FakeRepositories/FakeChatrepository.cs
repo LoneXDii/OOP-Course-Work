@@ -20,6 +20,7 @@ internal class FakeChatRepository : IRepository<Chat>
                 chat.CreatorId = Random.Shared.Next(6, 10);
             }
             chat.Id = i + 1;
+            _chats.Add(chat);
         }
     }
 
@@ -45,13 +46,15 @@ internal class FakeChatRepository : IRepository<Chat>
 
     public async Task AddAsync(Chat entity, CancellationToken cancellationToken = default)
     {
-        entity.Id = _chats.Count + 1;
+        entity.Id = _chats[_chats.Count - 1].Id + 1;
         await Task.Run(() => _chats.Add(entity));
     }
 
     public async Task UpdateAsync(Chat entity, CancellationToken cancellationToken = default)
     {
-        await FirstOrDefaultAsync(u => u.Id == entity.Id);
+        var chat = await FirstOrDefaultAsync(c => c.Id == entity.Id);
+        if (chat is null) return;
+        chat.Name = entity.Name;
     }
 
     public async Task DeleteAsync(Chat entity, CancellationToken cancellationToken = default)

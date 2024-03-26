@@ -40,13 +40,17 @@ internal class FakeUserRepository : IRepository<User>
 
     public async Task AddAsync(User entity, CancellationToken cancellationToken = default)
     {
-        entity.Id = _users.Count + 1;
+        entity.Id = _users[_users.Count - 1].Id + 1;
         await Task.Run(() => _users.Add(entity));
     }
 
     public async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
     {
-        await FirstOrDefaultAsync(u => u.Id == entity.Id);
+        var user = await FirstOrDefaultAsync(u => u.Id == entity.Id);
+        if (user is null) return;
+        user.Login = entity.Login;
+        user.Password = entity.Password;
+        user.Name = entity.Name;
     }
 
     public async Task DeleteAsync(User entity, CancellationToken cancellationToken = default)

@@ -2,13 +2,12 @@
 
 public class Message : Entity
 {
-    public Message(string text, DateTime sendTime)
+    public Message(string text)
     {
         Text = text;
-        SendTime = sendTime;
     }
     public string Text { get; set; }
-    public DateTime SendTime {  get; set; }
+    public DateTime SendTime {  get; set; } = DateTime.Now;
     public int SenderId { get; set; }
     public int ChatId { get; set; }
 }

@@ -15,9 +15,4 @@
     <ProjectReference Include="..\Server.Domain\Server.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ChatUseCases\Commands\" />
-    <Folder Include="MessageUseCases\Commands\" />
-  </ItemGroup>
-
 </Project>
