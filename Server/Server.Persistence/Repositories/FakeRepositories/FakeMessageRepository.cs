@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Server.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace Server.Persistence.Repositories.FakeRepositories;
 
@@ -47,6 +48,7 @@ internal class FakeMessageRepository : IRepository<Message>
 
     public async Task AddAsync(Message entity, CancellationToken cancellationToken = default)
     {
+        entity.Id = _messages.Count + 1;
         await Task.Run(() => _messages.Add(entity));
     }
 

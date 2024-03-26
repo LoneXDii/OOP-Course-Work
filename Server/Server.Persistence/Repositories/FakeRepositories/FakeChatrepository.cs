@@ -45,6 +45,7 @@ internal class FakeChatRepository : IRepository<Chat>
 
     public async Task AddAsync(Chat entity, CancellationToken cancellationToken = default)
     {
+        entity.Id = _chats.Count + 1;
         await Task.Run(() => _chats.Add(entity));
     }
 

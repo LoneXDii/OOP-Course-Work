@@ -19,16 +19,16 @@ internal class FakeUnitOfWork : IUnitOfWork
     public IRepository<Chat> ChatRepository => _chats.Value;
     public IRepository<Message> MessageRepository => _messages.Value;
     public IRepository<ChatMember> ChatMemberRepository => _chatMembers.Value;
-    public Task SaveAllAsync()
+    public async Task SaveAllAsync()
     {
-        throw new NotImplementedException();
+        await Task.Delay(1);
     }
-    public Task DeleteDataBaseAsync()
+    public async Task DeleteDataBaseAsync()
     {
-        throw new NotImplementedException();
+        await Task.Delay(1);
     }
-    public Task CreateDataBaseAsync()
+    public async Task CreateDataBaseAsync()
     {
-        throw new NotImplementedException();
+        await Task.Delay(1);
     }
 }
