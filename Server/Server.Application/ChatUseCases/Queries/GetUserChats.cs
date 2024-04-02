@@ -4,7 +4,7 @@ public sealed record GetUserChatsRequest(int userId) : IRequest<IEnumerable<Chat
 
 internal class GetUserChatsRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetUserChatsRequest, IEnumerable<Chat>>
 {
-    public async Task<IEnumerable<Chat>> Handle(GetUserChatsRequest request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Chat>> Handle(GetUserChatsRequest request, CancellationToken cancellationToken = default)
     {
         var chatIds = await unitOfWork.ChatMemberRepository.ListAsync(m => m.UserId == request.userId, cancellationToken);
 

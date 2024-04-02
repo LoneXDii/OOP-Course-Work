@@ -41,7 +41,13 @@ internal class ApplicationService : IApplicationService
                               "\n11.Update message (id, text)" +
                               "\n12.Delete message (id)" +
                               "\n13.Get user's chats (userId)" +
-                              "\n14.Get user's chat messages (userId, chatId)");
+                              "\n14.Get user's chat messages (userId, chatId)" +
+                              "\n15.Get chat members (chatId)" +
+                              "\n16.Add user to chat (userId, chatId)" +
+                              "\n17.Delete user from chat (userId, chatId)" +
+                              "\n18.Get user by id (userId)" +
+                              "\n19.Get chat by id (chatId)" +
+                              "\n20.Get message by id (messageId)");
 
             string param = Console.ReadLine();
             if (param is null) continue;
@@ -187,6 +193,62 @@ internal class ApplicationService : IApplicationService
                     {
                         Console.WriteLine($"Text = {m.Text}, SendTime = {m.SendTime}, SenderId = {m.SenderId}, ChatId = {m.ChatId}, Id = {m.Id}");
                     }
+                    break;
+
+                case "15":
+                    chatId = Convert.ToInt32(Console.ReadLine());
+                    users = await _mediator.Send(new GetChatMembersRequest(chatId));
+                    foreach (var u in users)
+                    {
+                        Console.WriteLine($"name: {u.Name}, login: {u.Login}, password: {u.Password}, id:{u.Id}");
+                    }
+                    break;
+
+                case "16":
+                    userId = Convert.ToInt32(Console.ReadLine());
+                    chatId = Convert.ToInt32(Console.ReadLine());
+                    await _mediator.Send(new AddUserToChatRequest(userId, chatId));
+                    Console.WriteLine($"User {userId} added to chat {chatId}");
+                    break;
+
+                case "17":
+                    userId = Convert.ToInt32(Console.ReadLine());
+                    chatId = Convert.ToInt32(Console.ReadLine());
+                    await _mediator.Send(new DeleteUserFromChatRequest(userId, chatId));
+                    Console.WriteLine($"User {userId} deleted from chat {chatId}");
+                    break;
+
+                case "18":
+                    userId = Convert.ToInt32(Console.ReadLine());
+                    var us = await _mediator.Send(new GetUserByIdRequest(userId));
+                    if (us is null)
+                    {
+                        Console.WriteLine("No such user");
+                        break;
+                    }
+                    Console.WriteLine($"name: {us.Name}, login: {us.Login}, password: {us.Password}, id:{us.Id}");
+                    break;
+
+                case "19":
+                    chatId = Convert.ToInt32(Console.ReadLine());
+                    var ch = await _mediator.Send(new GetChatByIdRequest(chatId));
+                    if (ch is null)
+                    {
+                        Console.WriteLine("No such chat");
+                        break;
+                    }
+                    Console.WriteLine($"name: {ch.Name}, creatorId = {ch.CreatorId}, id = {ch.Id}");
+                    break;
+
+                case "20":
+                    int messageId = Convert.ToInt32(Console.ReadLine());
+                    var ms = await _mediator.Send(new GetMessageByIdRequest(messageId));
+                    if (ms is null)
+                    {
+                        Console.WriteLine("No such message");
+                        break;
+                    }
+                    Console.WriteLine($"Text = {ms.Text}, SendTime = {ms.SendTime}, SenderId = {ms.SenderId}, ChatId = {ms.ChatId}, Id = {ms.Id}");
                     break;
 
                 default:

@@ -4,7 +4,7 @@ public sealed record AddMessageRequest(Message message) : IRequest<Message> { }
 
 internal class AddMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<AddMessageRequest, Message>
 {
-    public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken)
+    public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken = default)
     {
         await unitOfWork.MessageRepository.AddAsync(request.message, cancellationToken);
         await unitOfWork.SaveAllAsync();

@@ -4,9 +4,9 @@ public sealed record DeleteUserRequest(int userId) : IRequest { }
 
 internal class DeleteUserRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteUserRequest>
 {
-    public async Task Handle(DeleteUserRequest request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteUserRequest request, CancellationToken cancellationToken = default)
     {
-        var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == request.userId);
+        var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == request.userId, cancellationToken);
 
         if (user is null) return;
 

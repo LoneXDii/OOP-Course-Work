@@ -4,7 +4,7 @@ public sealed record UpdateChatRequest(Chat chat) : IRequest<Chat> { }
 
 internal class UpdateChatRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateChatRequest, Chat>
 {
-    public async Task<Chat> Handle(UpdateChatRequest request, CancellationToken cancellationToken)
+    public async Task<Chat> Handle(UpdateChatRequest request, CancellationToken cancellationToken = default)
     {
         await unitOfWork.ChatRepository.UpdateAsync(request.chat, cancellationToken);
         await unitOfWork.SaveAllAsync();
