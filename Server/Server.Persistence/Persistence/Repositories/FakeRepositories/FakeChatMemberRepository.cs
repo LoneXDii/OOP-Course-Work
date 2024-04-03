@@ -1,7 +1,7 @@
 ﻿using Server.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace Server.Persistence.Repositories.FakeRepositories;
+namespace Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 
 internal class FakeChatMemberRepository : IRepository<ChatMember>
 {
@@ -12,7 +12,7 @@ internal class FakeChatMemberRepository : IRepository<ChatMember>
         for (int i = 0; i < 10; i++)
         {
             ChatMember member = new ChatMember(0, 0);
-            if(i < 5)
+            if (i < 5)
             {
                 member = new ChatMember(i + 1, 1);
             }

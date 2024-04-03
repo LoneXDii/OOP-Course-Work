@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{98F8F8BC-2F4B-482C-BFFE-E3BF2BFA182E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{98F8F8BC-2F4B-482C-BFFE-E3BF2BFA182E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Domain", "Server.Domain\Server.Domain.csproj", "{DCFBDA03-B30A-4DBB-9C6F-38E58C94BEC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Domain", "Server.Domain\Server.Domain.csproj", "{DCFBDA03-B30A-4DBB-9C6F-38E58C94BEC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Application", "Server.Application\Server.Application.csproj", "{DD98AD99-84A6-445F-955D-C158DE2CA693}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Application", "Server.Application\Server.Application.csproj", "{DD98AD99-84A6-445F-955D-C158DE2CA693}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Persistence", "Server.Persistence\Server.Persistence.csproj", "{458E0600-CC4F-47FB-9A8A-FB7CB4A1D04D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server.Infrastructure", "Server.Persistence\Server.Infrastructure.csproj", "{458E0600-CC4F-47FB-9A8A-FB7CB4A1D04D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

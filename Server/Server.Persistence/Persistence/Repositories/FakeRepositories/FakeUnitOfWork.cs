@@ -1,4 +1,4 @@
-﻿namespace Server.Persistence.Repositories.FakeRepositories;
+﻿namespace Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 
 internal class FakeUnitOfWork : IUnitOfWork
 {
@@ -11,8 +11,8 @@ internal class FakeUnitOfWork : IUnitOfWork
     {
         _users = new(() => new FakeUserRepository());
         _chats = new(() => new FakeChatRepository());
-        _chatMembers = new (() => new FakeChatMemberRepository());
-        _messages = new (() => new FakeMessageRepository());
+        _chatMembers = new(() => new FakeChatMemberRepository());
+        _messages = new(() => new FakeMessageRepository());
     }
 
     public IRepository<User> UserRepository => _users.Value;

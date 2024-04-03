@@ -6,6 +6,7 @@ using Server.Application.ChatUseCases.Commands;
 using Server.Application.ChatUseCases.Queries;
 using Server.Application.MessageUseCases.Commands;
 using Server.Application.MessageUseCases.Queries;
+using Server.Infrastructure.Authentification;
 
 namespace Server.Services;
 
@@ -17,10 +18,12 @@ internal interface IApplicationService
 internal class ApplicationService : IApplicationService
 {
     private readonly IMediator _mediator;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-    public ApplicationService(IMediator mediator)
+    public ApplicationService(IMediator mediator, IJwtTokenGenerator tokenGenerator)
     {
         _mediator = mediator;
+        _jwtTokenGenerator = tokenGenerator;
     }
 
     public async Task Run()
@@ -101,8 +104,10 @@ internal class ApplicationService : IApplicationService
                     password = Console.ReadLine();
                     user = new User(name, login, password);
                     user = await _mediator.Send(new AddUserRequest(user));
+                    user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
                     Console.WriteLine($"Added user:" +
-                                      $"\nname: {user.Name}, login: {user.Login} , password:  {user.Password}, id:{user.Id}");
+                                      $"\nname: {user.Name}, login: {user.Login} , password:  {user.Password}, id:{user.Id}\n" +
+                                      $"Generated token {user.AuthorizationToken}");
                     break;
 
                 case "5":

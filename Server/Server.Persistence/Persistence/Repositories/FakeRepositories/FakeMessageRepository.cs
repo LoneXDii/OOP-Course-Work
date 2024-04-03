@@ -1,7 +1,7 @@
 ﻿using Server.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace Server.Persistence.Repositories.FakeRepositories;
+namespace Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 
 internal class FakeMessageRepository : IRepository<Message>
 {
@@ -13,7 +13,7 @@ internal class FakeMessageRepository : IRepository<Message>
         {
             var message = new Message($"message {i}");
             message.SenderId = Random.Shared.Next(1, 10);
-            if(message.SenderId <= 5)
+            if (message.SenderId <= 5)
             {
                 message.ChatId = 1;
             }
@@ -55,7 +55,7 @@ internal class FakeMessageRepository : IRepository<Message>
     public async Task UpdateAsync(Message entity, CancellationToken cancellationToken = default)
     {
         var message = await FirstOrDefaultAsync(m => m.Id == entity.Id, cancellationToken);
-        if(message is null) return;
+        if (message is null) return;
         message.Text = entity.Text;
     }
 

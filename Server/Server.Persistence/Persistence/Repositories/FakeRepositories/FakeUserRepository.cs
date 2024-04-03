@@ -1,7 +1,7 @@
 ﻿using Server.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace Server.Persistence.Repositories.FakeRepositories;
+namespace Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 
 internal class FakeUserRepository : IRepository<User>
 {
@@ -9,7 +9,7 @@ internal class FakeUserRepository : IRepository<User>
 
     public FakeUserRepository()
     {
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             var user = new User($"User {i}", $"User{i}", $"password{i}");
             user.AuthorizationToken = $"auth{1}";

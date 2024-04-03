@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Server.Persistence.Repositories.FakeRepositories;
+namespace Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 
 internal class FakeChatRepository : IRepository<Chat>
 {
