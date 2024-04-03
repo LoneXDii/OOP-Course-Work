@@ -50,7 +50,8 @@ internal class ApplicationService : IApplicationService
                               "\n17.Delete user from chat (userId, chatId)" +
                               "\n18.Get user by id (userId)" +
                               "\n19.Get chat by id (chatId)" +
-                              "\n20.Get message by id (messageId)");
+                              "\n20.Get message by id (messageId)" +
+                              "\n21.Get chat messages (chatId)");
 
             string param = Console.ReadLine();
             if (param is null) continue;
@@ -254,6 +255,15 @@ internal class ApplicationService : IApplicationService
                         break;
                     }
                     Console.WriteLine($"Text = {ms.Text}, SendTime = {ms.SendTime}, SenderId = {ms.SenderId}, ChatId = {ms.ChatId}, Id = {ms.Id}");
+                    break;
+
+                case "21":
+                    chatId = Convert.ToInt32(Console.ReadLine());
+                    messages = await _mediator.Send(new GetChatMessagesRequest(chatId));
+                    foreach (var m in messages)
+                    {
+                        Console.WriteLine($"Text = {m.Text}, SendTime = {m.SendTime}, SenderId = {m.SenderId}, ChatId = {m.ChatId}, Id = {m.Id}");
+                    }
                     break;
 
                 default:

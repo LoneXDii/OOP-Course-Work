@@ -1,4 +1,4 @@
-﻿namespace Server.Application.MessageUseCases.Queries;
+﻿namespace Server.Application.ChatUseCases.Queries;
 
 public sealed record GetUserChatMessagesRequest(int userId, int chatId) : IRequest<IEnumerable<Message>> { }
 
