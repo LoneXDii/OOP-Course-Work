@@ -51,7 +51,8 @@ internal class ApplicationService : IApplicationService
                               "\n18.Get user by id (userId)" +
                               "\n19.Get chat by id (chatId)" +
                               "\n20.Get message by id (messageId)" +
-                              "\n21.Get chat messages (chatId)");
+                              "\n21.Get chat messages (chatId)" +
+                              "\n22.Authorize user (login, password)");
 
             string param = Console.ReadLine();
             if (param is null) continue;
@@ -264,6 +265,21 @@ internal class ApplicationService : IApplicationService
                     {
                         Console.WriteLine($"Text = {m.Text}, SendTime = {m.SendTime}, SenderId = {m.SenderId}, ChatId = {m.ChatId}, Id = {m.Id}");
                     }
+                    break;
+
+                case "22":
+                    login = Console.ReadLine();
+                    password = Console.ReadLine();
+                    var usr = await _mediator.Send(new AuthorizeUserRequest(login, password));
+                    if (usr is null)
+                    {
+                        Console.WriteLine("No such user");
+                        break;
+                    }
+                    usr.AuthorizationToken = _jwtTokenGenerator.CreateToken(usr.Id, usr.Login, usr.Password);
+                    Console.WriteLine($"Added user:" +
+                                      $"\nname: {usr.Name}, login: {usr.Login} , password:  {usr.Password}, id:{usr.Id}\n" +
+                                      $"Generated token {usr.AuthorizationToken}");
                     break;
 
                 default:
