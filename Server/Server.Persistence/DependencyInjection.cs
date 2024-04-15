@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
 
-namespace Server.Persistence;
+namespace Server.Infrastructure;
 
 public static class DependencyInjection
 {
