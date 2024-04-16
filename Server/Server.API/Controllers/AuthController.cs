@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.API.SerialzationLib;
 using Server.Infrastructure.Authentification;
 
 namespace Server.API.Controllers;
@@ -7,6 +8,8 @@ namespace Server.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    private readonly MySerializer<User> _userSerializer;
+
     private readonly IMediator _mediator;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
@@ -14,6 +17,8 @@ public class AuthController : ControllerBase
     {
         _mediator = mediator;
         _jwtTokenGenerator = jwtTokenGenerator;
+
+        _userSerializer = MySerializer<User>.GetInstance();
     }
 
     [HttpPost("register/name={name}&login={login}&password={password}")]
@@ -22,7 +27,8 @@ public class AuthController : ControllerBase
         var user = new User(name, login, password);
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
-        return Ok(user);
+        //return Ok(user);
+        return Ok(_userSerializer.SerializeJson(user));
     }
 
     [HttpGet("authorize/login={login}&password={password}")]
@@ -34,6 +40,7 @@ public class AuthController : ControllerBase
             return NotFound();
         }
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
-        return Ok(user);
+        //return Ok(user);
+        return Ok(_userSerializer.SerializeJson(user));
     }
 }

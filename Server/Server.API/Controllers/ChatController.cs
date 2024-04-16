@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Server.API.SerialzationLib;
 
 namespace Server.API.Controllers;
 
@@ -7,11 +8,21 @@ namespace Server.API.Controllers;
 //[Authorize]
 public class ChatController : Controller
 {
+    private readonly MySerializer<Chat> _chatSerializer;
+    private readonly MySerializer<Message> _messageSerializer;
+    private readonly MySerializer<List<Message>> _messagesSerializer;
+    private readonly MySerializer<List<User>> _membersSerializer;
+
     private readonly IMediator _mediator;
 
     public ChatController(IMediator mediator)
     {
         _mediator = mediator;
+
+        _chatSerializer = MySerializer<Chat>.GetInstance();
+        _messageSerializer = MySerializer<Message>.GetInstance();
+        _messagesSerializer = MySerializer<List<Message>>.GetInstance();
+        _membersSerializer = MySerializer<List<User>>.GetInstance();
     }
 
     [HttpPost("create/name={name}&creatorId={id:int}")]
@@ -20,7 +31,8 @@ public class ChatController : Controller
         var chat = new Chat(name);
         chat.CreatorId = id;
         chat = await _mediator.Send(new AddChatRequest(chat));
-        return Ok(chat);
+        //return Ok(chat);
+        return Ok(_chatSerializer.SerializeJson(chat));
     }
 
     [HttpPost("update/id={id:int}&name={name}")]
@@ -33,7 +45,8 @@ public class ChatController : Controller
         }
         chat.Name = name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));
-        return Ok(chat);
+        //return Ok(chat);
+        return Ok(_chatSerializer.SerializeJson(chat));
     }
 
     [HttpDelete("delete/id={id:int}")]
@@ -50,7 +63,8 @@ public class ChatController : Controller
         message.SenderId = senderId;
         message.ChatId = chatId;
         message = await _mediator.Send(new AddMessageRequest(message));
-        return Ok(message);
+        //return Ok(message);
+        return Ok(_messageSerializer.SerializeJson(message));
     }
 
     [HttpPost("updateMessage/id={id:int}&text={text}")]
@@ -63,7 +77,8 @@ public class ChatController : Controller
         }
         message.Text = text;
         message = await _mediator.Send(new UpdateMessageRequest(message));
-        return Ok(message);
+        //return Ok(message);
+        return Ok(_messageSerializer.SerializeJson(message));
     }
 
     [HttpDelete("deleteMessage/id={id:int}")]
@@ -101,7 +116,8 @@ public class ChatController : Controller
         {
             return NotFound();
         }
-        return Ok(messages);
+        //return Ok(messages);
+        return Ok(_messagesSerializer.SerializeJson(messages.ToList()));
     }
 
     [HttpGet("getMembers/chatId={id:int}")]
@@ -112,6 +128,7 @@ public class ChatController : Controller
         {
             return NotFound();
         }
-        return Ok(members);
+        //return Ok(members);
+        return Ok(_membersSerializer.SerializeJson(members.ToList()));
     }
 }
