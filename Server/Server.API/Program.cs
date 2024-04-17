@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using Server.Application.Temp;
 using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Persistence.Data;
 using System.Reflection;
@@ -29,6 +29,8 @@ var options = new DbContextOptionsBuilder<AppDbContext>()
 var config = new ConfigurationManager();
 builder.Services.AddInfrastructure(config, options)
                 .AddApplication();
+
+//DbInitializer.Initialize(builder.Services.BuildServiceProvider()).Wait();
 
 var app = builder.Build();
 

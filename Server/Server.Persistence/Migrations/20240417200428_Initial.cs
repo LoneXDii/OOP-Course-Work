@@ -34,7 +34,7 @@ namespace Server.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false)
+                    CreatorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,7 +44,7 @@ namespace Server.Infrastructure.Migrations
                         column: x => x.CreatorId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,7 +54,7 @@ namespace Server.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: true),
-                    ChatId = table.Column<int>(type: "int", nullable: false)
+                    ChatId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,12 +64,13 @@ namespace Server.Infrastructure.Migrations
                         column: x => x.ChatId,
                         principalTable: "Chats",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_ChatMembers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +82,7 @@ namespace Server.Infrastructure.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SendTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: true),
-                    ChatId = table.Column<int>(type: "int", nullable: false)
+                    ChatId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,12 +92,13 @@ namespace Server.Infrastructure.Migrations
                         column: x => x.ChatId,
                         principalTable: "Chats",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Messages_Users_SenderId",
                         column: x => x.SenderId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(

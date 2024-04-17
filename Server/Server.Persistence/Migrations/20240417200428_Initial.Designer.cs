@@ -12,7 +12,7 @@ using Server.Infrastructure.Persistence.Data;
 namespace Server.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240417192144_Initial")]
+    [Migration("20240417200428_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace Server.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -55,7 +55,7 @@ namespace Server.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChatId")
+                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -78,7 +78,7 @@ namespace Server.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ChatId")
+                    b.Property<int?>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("SendTime")
@@ -134,8 +134,7 @@ namespace Server.Infrastructure.Migrations
                     b.HasOne("Server.Domain.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.ChatMember", b =>
@@ -143,12 +142,12 @@ namespace Server.Infrastructure.Migrations
                     b.HasOne("Server.Domain.Entities.Chat", null)
                         .WithMany()
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Server.Domain.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Server.Domain.Entities.Message", b =>
@@ -156,12 +155,12 @@ namespace Server.Infrastructure.Migrations
                     b.HasOne("Server.Domain.Entities.Chat", null)
                         .WithMany()
                         .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Server.Domain.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("SenderId");
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

@@ -8,12 +8,12 @@ public class ChatMember : Entity
         ChatId = 0;
     }
 
-    public ChatMember(int userId, int chatId)
+    public ChatMember(int? userId, int chatId)
     {
         UserId = userId;
         ChatId = chatId;
     }
 
     public int? UserId { get; set; }
-    public int ChatId { get; set; }
+    public int? ChatId { get; set; }
 }

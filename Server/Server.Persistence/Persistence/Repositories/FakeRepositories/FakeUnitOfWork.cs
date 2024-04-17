@@ -9,10 +9,10 @@ internal class FakeUnitOfWork : IUnitOfWork
 
     public FakeUnitOfWork()
     {
-        _users = new(() => new FakeUserRepository());
-        _chats = new(() => new FakeChatRepository());
-        _chatMembers = new(() => new FakeChatMemberRepository());
-        _messages = new(() => new FakeMessageRepository());
+        _users = new Lazy<IRepository<User>>(() => new FakeUserRepository());
+        _chats = new Lazy<IRepository<Chat>>(() => new FakeChatRepository());
+        _chatMembers = new Lazy<IRepository<ChatMember>>(() => new FakeChatMemberRepository());
+        _messages = new Lazy<IRepository<Message>>(() => new FakeMessageRepository());
     }
 
     public IRepository<User> UserRepository => _users.Value;

@@ -2,12 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Infrastructure.Authentification;
-using Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Persistence.Data;
+using Server.Infrastructure.Persistence.Repositories;
 
 namespace Server.Infrastructure;
 
@@ -24,7 +24,7 @@ public static class DependencyInjection
 
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
-        services.AddSingleton<IUnitOfWork, FakeUnitOfWork>();
+        services.AddSingleton<IUnitOfWork, EfUnitOfWork>();
         return services;
     }
 
@@ -55,12 +55,4 @@ public static class DependencyInjection
 
         return services;
     }
-
-    //DB DI
-    //public static IServiceCollection AddPersistence(this IServiceCollection services, DbContextOptions options)
-    //{
-    //    services.AddPersistence()
-    //            .AddSingleton<AppDbContext>(new AppDbContext((DbContextOptions<AppDbContext>)options));
-    //    return services;
-    //}
 }
