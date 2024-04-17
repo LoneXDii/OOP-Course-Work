@@ -6,14 +6,17 @@ using Server.Infrastructure.Persistence.Repositories.FakeRepositories;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Server.Infrastructure.Persistence.Data;
 
 namespace Server.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager manager)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager manager
+                                                       ,DbContextOptions options)
     {
-        services.AddPersistence()
+        services.AddPersistence(options)
                 .AddAuth(manager);
 
         return services;
@@ -22,6 +25,13 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddSingleton<IUnitOfWork, FakeUnitOfWork>();
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(this IServiceCollection services, DbContextOptions options)
+    {
+        services.AddPersistence()
+                .AddSingleton(new AppDbContext((DbContextOptions<AppDbContext>)options));
         return services;
     }
 

@@ -6,8 +6,8 @@ public class Message : Entity
     {
         Text = text;
     }
-    public string Text { get; set; }
+    public string Text { get; set; } = "";
     public DateTime SendTime {  get; set; } = DateTime.Now;
-    public int SenderId { get; set; }
+    public int? SenderId { get; set; }
     public int ChatId { get; set; }
 }
