@@ -2,6 +2,7 @@ using Server.Application.Temp;
 using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Persistence.Data;
 using System.Reflection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 string settingsStream = "Server.API.appsettings.json";
 
@@ -19,10 +20,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connStr = builder.Configuration
-                     .GetConnectionString("MSSQLServerConnection");
+                     .GetConnectionString("MySQLConnection");
+ServerVersion vesrion = ServerVersion.AutoDetect(connStr);
 
 var options = new DbContextOptionsBuilder<AppDbContext>()
-                  .UseSqlServer(connStr)
+                  .UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 36)))
                   .Options;
 
 
