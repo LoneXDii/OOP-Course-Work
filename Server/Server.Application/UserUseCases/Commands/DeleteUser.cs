@@ -6,17 +6,11 @@ internal class DeleteUserRequestHandler(IUnitOfWork unitOfWork) : IRequestHandle
 {
     public async Task Handle(DeleteUserRequest request, CancellationToken cancellationToken = default)
     {
-        var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == request.userId, cancellationToken);
+        var user = await unitOfWork.UserRepository.GetByIdAsync(request.userId, cancellationToken);
 
         if (user is null) return;
 
         await unitOfWork.UserRepository.DeleteAsync(user, cancellationToken);
-        
-        var members = await unitOfWork.ChatMemberRepository.ListAsync(m => m.UserId == request.userId, cancellationToken);
-        foreach (var member in members)
-        {
-            await unitOfWork.ChatMemberRepository.DeleteAsync(member, cancellationToken);
-        }
 
         await unitOfWork.SaveAllAsync();
     }

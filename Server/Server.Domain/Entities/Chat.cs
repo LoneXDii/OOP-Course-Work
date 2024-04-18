@@ -8,5 +8,5 @@ public class Chat : Entity
     }
 
     public string Name { get; set; }
-    public int? CreatorId { get; set; }
+    public List<User> Users { get; set; } = new();
 }

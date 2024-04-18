@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Server.API.DTO;
 using Server.API.SerialzationLib;
+using Server.API.DTO;
+using System.Collections;
 
 namespace Server.API.Controllers;
 
@@ -8,34 +12,37 @@ namespace Server.API.Controllers;
 //[Authorize]
 public class ChatController : Controller
 {
-    private readonly MySerializer<Chat> _chatSerializer;
-    private readonly MySerializer<Message> _messageSerializer;
-    private readonly MySerializer<List<Message>> _messagesSerializer;
-    private readonly MySerializer<List<User>> _membersSerializer;
+    private readonly MySerializer<ChatDTO> _chatSerializer;
+    private readonly MySerializer<MessageDTO> _messageSerializer;
+    private readonly MySerializer<List<MessageDTO>> _messagesSerializer;
+    private readonly MySerializer<List<UserDTO>> _membersSerializer;
 
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
 
-    public ChatController(IMediator mediator)
+    public ChatController(IMediator mediator, IMapper mapper)
     {
         _mediator = mediator;
+        _mapper = mapper;
 
-        _chatSerializer = MySerializer<Chat>.GetInstance();
-        _messageSerializer = MySerializer<Message>.GetInstance();
-        _messagesSerializer = MySerializer<List<Message>>.GetInstance();
-        _membersSerializer = MySerializer<List<User>>.GetInstance();
+        _chatSerializer = MySerializer<ChatDTO>.GetInstance();
+        _messageSerializer = MySerializer<MessageDTO>.GetInstance();
+        _messagesSerializer = MySerializer<List<MessageDTO>>.GetInstance();
+        _membersSerializer = MySerializer<List<UserDTO>>.GetInstance();
     }
 
     [HttpPost("create/name={name}&creatorId={id:int}")]
     public async Task<IActionResult> CreateChat(string name, int id)
     {
         var chat = new Chat(name);
-        chat.CreatorId = id;
+        chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(id)));
         chat = await _mediator.Send(new AddChatRequest(chat));
-        //return Ok(chat);
-        return Ok(_chatSerializer.SerializeJson(chat));
+        var chatDto = _mapper.Map<ChatDTO>(chat);
+        //return Ok(chatDto);
+        return Ok(_chatSerializer.SerializeJson(chatDto));
     }
 
-    [HttpPost("update/id={id:int}&name={name}")]
+    [HttpPut("update/id={id:int}&name={name}")]
     public async Task<IActionResult> UpdateChat(int id, string name)
     {
         var chat = await _mediator.Send(new GetChatByIdRequest(id));
@@ -45,8 +52,9 @@ public class ChatController : Controller
         }
         chat.Name = name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));
-        //return Ok(chat);
-        return Ok(_chatSerializer.SerializeJson(chat));
+        var chatDto = _mapper.Map<ChatDTO>(chat);
+        //return Ok(chatDto);
+        return Ok(_chatSerializer.SerializeJson(chatDto));
     }
 
     [HttpDelete("delete/id={id:int}")]
@@ -60,14 +68,15 @@ public class ChatController : Controller
     public async Task<IActionResult> AddMessage(string text, int senderId, int chatId)
     {
         var message = new Message(text);
-        message.SenderId = senderId;
+        message.User = await _mediator.Send(new GetUserByIdRequest(senderId));
         message.ChatId = chatId;
         message = await _mediator.Send(new AddMessageRequest(message));
-        //return Ok(message);
-        return Ok(_messageSerializer.SerializeJson(message));
+        var messageDto = _mapper.Map<MessageDTO>(message);
+        //return Ok(messageDto);
+        return Ok(_messageSerializer.SerializeJson(messageDto));
     }
 
-    [HttpPost("updateMessage/id={id:int}&text={text}")]
+    [HttpPut("updateMessage/id={id:int}&text={text}")]
     public async Task<IActionResult> UpdateMessage(int id, string text)
     {
         var message = await _mediator.Send(new GetMessageByIdRequest(id));
@@ -77,8 +86,9 @@ public class ChatController : Controller
         }
         message.Text = text;
         message = await _mediator.Send(new UpdateMessageRequest(message));
-        //return Ok(message);
-        return Ok(_messageSerializer.SerializeJson(message));
+        var messageDto = _mapper.Map<MessageDTO>(message);
+        //return Ok(messageDto);
+        return Ok(_messageSerializer.SerializeJson(messageDto));
     }
 
     [HttpDelete("deleteMessage/id={id:int}")]
@@ -116,8 +126,9 @@ public class ChatController : Controller
         {
             return NotFound();
         }
-        //return Ok(messages);
-        return Ok(_messagesSerializer.SerializeJson(messages.ToList()));
+        var messagesDto = _mapper.Map<IEnumerable<MessageDTO>>(messages);
+        //return Ok(messagesDto);
+        return Ok(_messagesSerializer.SerializeJson(messagesDto.ToList()));
     }
 
     [HttpGet("getMembers/chatId={id:int}")]
@@ -128,7 +139,8 @@ public class ChatController : Controller
         {
             return NotFound();
         }
-        //return Ok(members);
-        return Ok(_membersSerializer.SerializeJson(members.ToList()));
+        var membersDto = _mapper.Map<List<UserDTO>>(members);
+        //return Ok(membersDto);
+        return Ok(_membersSerializer.SerializeJson(membersDto.ToList()));
     }
 }

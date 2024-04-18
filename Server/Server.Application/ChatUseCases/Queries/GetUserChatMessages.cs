@@ -6,7 +6,7 @@ internal class GetUserChatMessagesRequestHandler(IUnitOfWork unitOfWork) : IRequ
 {
     public async Task<IEnumerable<Message>> Handle(GetUserChatMessagesRequest request, CancellationToken cancellationToken = default)
     {
-        var messages = await unitOfWork.MessageRepository.ListAsync(m => m.SenderId == request.userId && m.ChatId == request.chatId
+        var messages = await unitOfWork.MessageRepository.ListAsync(m => m.UserId == request.userId && m.ChatId == request.chatId
                                                                     , cancellationToken);
         return messages;
     }

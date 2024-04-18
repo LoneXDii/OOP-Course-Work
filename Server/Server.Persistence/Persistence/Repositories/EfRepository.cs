@@ -28,8 +28,8 @@ internal class EfRepository<T> : IRepository<T> where T : Entity
                 query = query.Include(property);
             }
         }
-
-        return await query.ElementAtAsync(id, cancellationToken);
+        query = query.Where(e => e.Id == id);
+        return query.First();
     }
 
     public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)

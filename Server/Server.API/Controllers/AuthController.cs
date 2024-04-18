@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Server.API.SerialzationLib;
 using Server.Infrastructure.Authentification;
+using Server.API.DTO;
 
 namespace Server.API.Controllers;
 
@@ -8,17 +10,19 @@ namespace Server.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly MySerializer<User> _userSerializer;
+    private readonly MySerializer<UserDTO> _userSerializer;
 
     private readonly IMediator _mediator;
+    private readonly IMapper _mapper;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
 
-    public AuthController(IMediator mediator, IJwtTokenGenerator jwtTokenGenerator)
+    public AuthController(IMediator mediator, IMapper mapper, IJwtTokenGenerator jwtTokenGenerator)
     {
         _mediator = mediator;
+        _mapper = mapper;
         _jwtTokenGenerator = jwtTokenGenerator;
 
-        _userSerializer = MySerializer<User>.GetInstance();
+        _userSerializer = MySerializer<UserDTO>.GetInstance();
     }
 
     [HttpPost("register/name={name}&login={login}&password={password}")]
@@ -27,8 +31,9 @@ public class AuthController : ControllerBase
         var user = new User(name, login, password);
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
-        //return Ok(user);
-        return Ok(_userSerializer.SerializeJson(user));
+        var userDto = _mapper.Map<UserDTO>(user);
+        //return Ok(userDto);
+        return Ok(_userSerializer.SerializeJson(userDto));
     }
 
     [HttpGet("authorize/login={login}&password={password}")]
@@ -40,7 +45,8 @@ public class AuthController : ControllerBase
             return NotFound();
         }
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
-        //return Ok(user);
-        return Ok(_userSerializer.SerializeJson(user));
+        var userDto = _mapper.Map<UserDTO>(user);
+        //return Ok(userDto);
+        return Ok(_userSerializer.SerializeJson(userDto));
     }
 }

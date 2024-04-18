@@ -12,12 +12,6 @@ internal class DeleteUserRequestHandler(IUnitOfWork unitOfWork) : IRequestHandle
 
         await unitOfWork.ChatRepository.DeleteAsync(chat, cancellationToken);
 
-        var members = await unitOfWork.ChatMemberRepository.ListAsync(m => m.ChatId == request.chatId, cancellationToken);
-        foreach (var member in members)
-        {
-            await unitOfWork.ChatMemberRepository.DeleteAsync(member, cancellationToken);
-        }
-
         await unitOfWork.SaveAllAsync();
     }
 }

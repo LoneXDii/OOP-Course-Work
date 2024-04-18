@@ -6,15 +6,17 @@ internal class GetChatMembersRequestHandler(IUnitOfWork unitOfWork) : IRequestHa
 {
     public async Task<IEnumerable<User>> Handle(GetChatMembersRequest request, CancellationToken cancellationToken = default)
     {
-        var members = await unitOfWork.ChatMemberRepository.ListAsync(m => m.ChatId == request.chatId, cancellationToken);
-        List<User> users = new();
+        //var members = await unitOfWork.ChatMemberRepository.ListAsync(m => m.ChatId == request.chatId, cancellationToken);
+        //List<User> users = new();
 
-        foreach (var member in members)
-        {
-            var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == member.UserId, cancellationToken);
-            if (user is null) continue;
-            users.Add(user);
-        }
+        //foreach (var member in members)
+        //{
+        //    var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == member.UserId, cancellationToken);
+        //    if (user is null) continue;
+        //    users.Add(user);
+        //}
+        var chat = await unitOfWork.ChatRepository.GetByIdAsync(request.chatId, cancellationToken, c => c.Users);
+        var users = chat.Users as IReadOnlyList<User>;
         return users;
     }
 }

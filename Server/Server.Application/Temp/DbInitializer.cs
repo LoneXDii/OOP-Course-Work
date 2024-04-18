@@ -20,49 +20,60 @@ public class DbInitializer
         }
         await unitOfWork.SaveAllAsync();
 
+        var a = unitOfWork.UserRepository;
+
         for (int i = 0; i < 2; i++)
         {
             var chat = new Chat($"Chat {i}");
-            if (i == 0)
-            {
-                chat.CreatorId = Random.Shared.Next(1, 5);
-            }
-            else
-            {
-                chat.CreatorId = Random.Shared.Next(6, 10);
-            }
             await unitOfWork.ChatRepository.AddAsync(chat);
         }
         await unitOfWork.SaveAllAsync();
 
+        var b = unitOfWork.ChatRepository;
+
         for (int i = 0; i < 100; i++)
         {
             var message = new Message($"message {i}");
-            message.SenderId = Random.Shared.Next(1, 10);
-            if (message.SenderId <= 5)
+            int userId = Random.Shared.Next(1, 10);
+            message.User = await unitOfWork.UserRepository.GetByIdAsync(userId);
+            if (message.User.Id <= 5)
             {
-                message.ChatId = 1;
+                var chat = await unitOfWork.ChatRepository.GetByIdAsync(1);
+                message.Chat = chat;
             }
             else
             {
-                message.ChatId = 2;
+                var chat = await unitOfWork.ChatRepository.GetByIdAsync(2);
+                message.Chat = chat;
             }
             await unitOfWork.MessageRepository.AddAsync(message);
         }
         await unitOfWork.SaveAllAsync();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; i < 11; i++)
         {
-            ChatMember member = new ChatMember(0, 0);
+            //ChatMember member = new ChatMember(0, 0);
+            //if (i < 5)
+            //{
+            //    member = new ChatMember(i + 1, 1);
+            //}
+            //else
+            //{
+            //    member = new ChatMember(i + 1, 2);
+            //}
+            //await unitOfWork.ChatMemberRepository.AddAsync(member);
             if (i < 5)
             {
-                member = new ChatMember(i + 1, 1);
+                var chat = await unitOfWork.ChatRepository.GetByIdAsync(1, default, c => c.Users);
+                var user = await unitOfWork.UserRepository.GetByIdAsync(i);
+                chat.Users.Add(user);
             }
             else
             {
-                member = new ChatMember(i + 1, 2);
+                var chat = await unitOfWork.ChatRepository.GetByIdAsync(2, default, c => c.Users);
+                var user = await unitOfWork.UserRepository.GetByIdAsync(i);
+                chat.Users.Add(user);
             }
-            await unitOfWork.ChatMemberRepository.AddAsync(member);
         }
         await unitOfWork.SaveAllAsync();
     }

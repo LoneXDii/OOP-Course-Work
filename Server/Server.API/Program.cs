@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Persistence.Data;
 using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Server.API.Mapping;
 
 string settingsStream = "Server.API.appsettings.json";
 
@@ -33,6 +34,8 @@ builder.Services.AddInfrastructure(config, options)
                 .AddApplication();
 
 //DbInitializer.Initialize(builder.Services.BuildServiceProvider()).Wait();
+
+builder.Services.AddAutoMapper(typeof(AppMappingProfile));
 
 var app = builder.Build();
 
