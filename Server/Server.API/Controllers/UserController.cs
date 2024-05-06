@@ -52,8 +52,7 @@ public class UserController : Controller
     {
         var chats = await _mediator.Send(new GetUserChatsRequest(id));
         var chatsDto = _mapper.Map<IEnumerable<ChatDTO>>(chats);
-        //return Ok(chatsDto);
-        return Ok(_chatsSerializer.SerializeJson(chatsDto.ToList()));
+        return Ok(chatsDto);
     }
 
     [HttpGet("chatMessages/userId={userId:int}&chatId={chatId:int}")]
@@ -61,7 +60,6 @@ public class UserController : Controller
     {
         var messages = await _mediator.Send(new GetUserChatMessagesRequest(userId, chatId));
         var messagesDto = _mapper.Map<IEnumerable<MessageDTO>>(messages);
-        //return Ok(messagesDto);
-        return Ok(_messagesSerializer.SerializeJson(messagesDto.ToList()));
+        return Ok(messagesDto);
     }
 }

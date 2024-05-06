@@ -32,8 +32,7 @@ public class AuthController : ControllerBase
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
         var userDto = _mapper.Map<UserDTO>(user);
-        //return Ok(userDto);
-        return Ok(_userSerializer.SerializeJson(userDto));
+        return Ok(userDto);
     }
 
     [HttpGet("authorize/login={login}&password={password}")]
@@ -46,7 +45,6 @@ public class AuthController : ControllerBase
         }
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
         var userDto = _mapper.Map<UserDTO>(user);
-        //return Ok(userDto);
-        return Ok(_userSerializer.SerializeJson(userDto));
+        return Ok(userDto);
     }
 }

@@ -38,8 +38,7 @@ public class ChatController : Controller
         chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(id)));
         chat = await _mediator.Send(new AddChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
-        //return Ok(chatDto);
-        return Ok(_chatSerializer.SerializeJson(chatDto));
+        return Ok(chatDto);
     }
 
     [HttpPut("update/id={id:int}&name={name}")]
@@ -53,8 +52,7 @@ public class ChatController : Controller
         chat.Name = name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
-        //return Ok(chatDto);
-        return Ok(_chatSerializer.SerializeJson(chatDto));
+        return Ok(chatDto);
     }
 
     [HttpDelete("delete/id={id:int}")]
@@ -72,8 +70,7 @@ public class ChatController : Controller
         message.ChatId = chatId;
         message = await _mediator.Send(new AddMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
-        //return Ok(messageDto);
-        return Ok(_messageSerializer.SerializeJson(messageDto));
+        return Ok(messageDto);
     }
 
     [HttpPut("updateMessage/id={id:int}&text={text}")]
@@ -87,8 +84,7 @@ public class ChatController : Controller
         message.Text = text;
         message = await _mediator.Send(new UpdateMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
-        //return Ok(messageDto);
-        return Ok(_messageSerializer.SerializeJson(messageDto));
+        return Ok(messageDto);
     }
 
     [HttpDelete("deleteMessage/id={id:int}")]
@@ -127,8 +123,7 @@ public class ChatController : Controller
             return NotFound();
         }
         var messagesDto = _mapper.Map<IEnumerable<MessageDTO>>(messages);
-        //return Ok(messagesDto);
-        return Ok(_messagesSerializer.SerializeJson(messagesDto.ToList()));
+        return Ok(messagesDto);
     }
 
     [HttpGet("getMembers/chatId={id:int}")]
@@ -140,7 +135,6 @@ public class ChatController : Controller
             return NotFound();
         }
         var membersDto = _mapper.Map<List<UserDTO>>(members);
-        //return Ok(membersDto);
-        return Ok(_membersSerializer.SerializeJson(membersDto.ToList()));
+        return Ok(membersDto);
     }
 }
