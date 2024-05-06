@@ -12,28 +12,21 @@ namespace Server.API.Controllers;
 //[Authorize]
 public class ChatController : Controller
 {
-    private readonly MySerializer<ChatDTO> _chatSerializer;
-    private readonly MySerializer<MessageDTO> _messageSerializer;
-    private readonly MySerializer<List<MessageDTO>> _messagesSerializer;
-    private readonly MySerializer<List<UserDTO>> _membersSerializer;
-
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
 
-    public ChatController(IMediator mediator, IMapper mapper)
+    public ChatController(IMediator mediator, IMapper mapper, ILogger<ChatController> logger)
     {
         _mediator = mediator;
         _mapper = mapper;
-
-        _chatSerializer = MySerializer<ChatDTO>.GetInstance();
-        _messageSerializer = MySerializer<MessageDTO>.GetInstance();
-        _messagesSerializer = MySerializer<List<MessageDTO>>.GetInstance();
-        _membersSerializer = MySerializer<List<UserDTO>>.GetInstance();
+        _logger = logger;
     }
 
     [HttpPost("create/name={name}&creatorId={id:int}")]
     public async Task<IActionResult> CreateChat(string name, int id)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var chat = new Chat(name);
         chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(id)));
         chat = await _mediator.Send(new AddChatRequest(chat));
@@ -44,6 +37,7 @@ public class ChatController : Controller
     [HttpPut("update/id={id:int}&name={name}")]
     public async Task<IActionResult> UpdateChat(int id, string name)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var chat = await _mediator.Send(new GetChatByIdRequest(id));
         if(chat is null)
         {
@@ -58,6 +52,7 @@ public class ChatController : Controller
     [HttpDelete("delete/id={id:int}")]
     public async Task<IActionResult> DeleteChat(int id)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         await _mediator.Send(new DeleteChatRequest(id));
         return Ok();
     }
@@ -65,6 +60,7 @@ public class ChatController : Controller
     [HttpPost("addMessage/text={text}&senderId={senderId:int}&chatId={chatId:int}")]
     public async Task<IActionResult> AddMessage(string text, int senderId, int chatId)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var message = new Message(text);
         message.User = await _mediator.Send(new GetUserByIdRequest(senderId));
         message.ChatId = chatId;
@@ -76,6 +72,7 @@ public class ChatController : Controller
     [HttpPut("updateMessage/id={id:int}&text={text}")]
     public async Task<IActionResult> UpdateMessage(int id, string text)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var message = await _mediator.Send(new GetMessageByIdRequest(id));
         if(message is null)
         {
@@ -90,6 +87,7 @@ public class ChatController : Controller
     [HttpDelete("deleteMessage/id={id:int}")]
     public async Task<IActionResult> DeleteMessage(int id)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         await _mediator.Send(new DeleteMessageRequest(id));
         return Ok();
     }
@@ -97,6 +95,7 @@ public class ChatController : Controller
     [HttpPost("addUser/userId={userId:int}&chatId={chatId:int}")]
     public async Task<IActionResult> AddUserToChat(int userId, int chatId)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var user = await _mediator.Send(new GetUserByIdRequest(userId));
         var chat = await _mediator.Send(new GetChatByIdRequest(chatId));
         if (user is null || chat is null)
@@ -110,6 +109,7 @@ public class ChatController : Controller
     [HttpDelete("deleteUser/userId={userId:int}&chatId={chatId:int}")]
     public async Task<IActionResult> DeleteUserFromChat(int userId, int chatId)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         await _mediator.Send(new DeleteUserFromChatRequest(userId, chatId));
         return Ok();
     }
@@ -117,6 +117,7 @@ public class ChatController : Controller
     [HttpGet("getMessages/chatId={id:int}")]
     public async Task<IActionResult> GetChatMessages(int id)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var messages = await _mediator.Send(new GetChatMessagesRequest(id));
         if(messages is null)
         {
@@ -129,6 +130,7 @@ public class ChatController : Controller
     [HttpGet("getMembers/chatId={id:int}")]
     public async Task<IActionResult> GetChatMembers(int id)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var members = await _mediator.Send(new GetChatMembersRequest(id));
         if(members is null)
         {

@@ -10,24 +10,24 @@ namespace Server.API.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly MySerializer<UserDTO> _userSerializer;
-
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly ILogger _logger;
 
-    public AuthController(IMediator mediator, IMapper mapper, IJwtTokenGenerator jwtTokenGenerator)
+    public AuthController(IMediator mediator, IMapper mapper, IJwtTokenGenerator jwtTokenGenerator,
+                          ILogger<AuthController> logger)
     {
         _mediator = mediator;
         _mapper = mapper;
         _jwtTokenGenerator = jwtTokenGenerator;
-
-        _userSerializer = MySerializer<UserDTO>.GetInstance();
+        _logger = logger;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserDTO RequestUser)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var user = _mapper.Map<User>(RequestUser);
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
@@ -38,6 +38,7 @@ public class AuthController : ControllerBase
     [HttpGet("authorize/login={login}&password={password}")]
     public async Task<IActionResult> Authorize(string login, string password)
     {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
         var user = await _mediator.Send(new AuthorizeUserRequest(login, password));
         if (user is null)
         {
