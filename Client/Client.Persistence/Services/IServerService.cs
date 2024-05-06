@@ -4,5 +4,8 @@ namespace Client.Persistence.Services;
 
 internal interface IServerService
 {
-    User Login(string login, string password);
+    User LoginUser(string login, string password);
+    User RegisterUser(string username, string login, string password);
+    User UpdateUser(User user);
+    void DeleteUser(User user);
 }

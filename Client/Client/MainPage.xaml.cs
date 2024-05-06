@@ -4,13 +4,13 @@ namespace Client
 {
     public partial class MainPage : ContentPage
     {
-        private IUnitOfWork _UnitOfWork;
+        private IUnitOfWork _unitOfWork;
         int count = 0;
 
         public MainPage(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
-            _UnitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
 
         private void OnCounterClicked(object sender, EventArgs e)
@@ -25,8 +25,8 @@ namespace Client
             SemanticScreenReader.Announce(CounterBtn.Text);
 
             //test requests
-            _UnitOfWork.Login("User0", "password0");
-
+            _unitOfWork.User.Login("UserClient1", "NewPass222");
+            _unitOfWork.User.Delete();
         }
     }
 

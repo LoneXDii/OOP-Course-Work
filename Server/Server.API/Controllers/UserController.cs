@@ -25,19 +25,20 @@ public class UserController : Controller
         _messagesSerializer = MySerializer<List<MessageDTO>>.GetInstance();
     }
 
-    [HttpPut("update/id={id:int}&name={name}&login={login}&password={password}")]
-    public async Task<IActionResult> UpdateUser(int id, string name, string login, string password)
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateUser(UserDTO requestUser)
     {
-        var user = await _mediator.Send(new GetUserByIdRequest(id));
+        var user = await _mediator.Send(new GetUserByIdRequest(requestUser.Id));
         if (user is null)
         {
             return NotFound();
         }
-        user.Login = login;
-        user.Password = password;
-        user.Name = name;
+        user.Login = requestUser.Login;
+        user.Password = requestUser.Password;
+        user.Name = requestUser.Name;
         await _mediator.Send(new UpdateUserRequest(user));
-        return Ok();
+        var userDto = _mapper.Map<UserDTO>(user);
+        return Ok(userDto);
     }
 
     [HttpDelete("delete/id={id:int}")]

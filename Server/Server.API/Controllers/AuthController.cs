@@ -25,10 +25,10 @@ public class AuthController : ControllerBase
         _userSerializer = MySerializer<UserDTO>.GetInstance();
     }
 
-    [HttpPost("register/name={name}&login={login}&password={password}")]
-    public async Task<IActionResult> Register(string name, string login, string password)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(UserDTO RequestUser)
     {
-        var user = new User(name, login, password);
+        var user = _mapper.Map<User>(RequestUser);
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
         var userDto = _mapper.Map<UserDTO>(user);
