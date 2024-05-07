@@ -5,7 +5,7 @@ namespace Client.Pages;
 
 public partial class CurrentChatPage : ContentPage
 {
-	private IUnitOfWork _unitOfWork;
+	private readonly IUnitOfWork _unitOfWork;
 	private Chat _currentChat;
 
 	public CurrentChatPage(IUnitOfWork unitOfWork, Chat currentChat)
