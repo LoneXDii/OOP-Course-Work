@@ -1,5 +1,4 @@
-﻿using Client.Domain.Abstractions;
-using Client.Persistence.Repositories;
+﻿using Client.Persistence.Repositories;
 using Client.Persistence.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime.CompilerServices;

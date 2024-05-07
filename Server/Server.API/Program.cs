@@ -20,8 +20,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connStr = builder.Configuration
-                     .GetConnectionString("MySQLConnection");
+var connStr = builder.Configuration.GetConnectionString("MySQLConnection");
 ServerVersion vesrion = ServerVersion.AutoDetect(connStr);
 
 var options = new DbContextOptionsBuilder<AppDbContext>()

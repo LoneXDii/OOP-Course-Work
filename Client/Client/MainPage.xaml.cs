@@ -1,4 +1,4 @@
-﻿using Client.Domain.Abstractions;
+﻿using Client.Persistence.Repositories;
 
 namespace Client
 {
@@ -25,8 +25,10 @@ namespace Client
             SemanticScreenReader.Announce(CounterBtn.Text);
 
             //test requests
-            _unitOfWork.User.Login("UserClient1", "NewPass222");
-            _unitOfWork.User.Delete();
+            _unitOfWork.User.Login("User0", "password0");
+            _unitOfWork.ChatRepository.GetFromServer(_unitOfWork.User.GetUser());
+            _unitOfWork.CurrentChat = _unitOfWork.ChatRepository.GetChats()[0];
+            _unitOfWork.MessageRepository.GetFromServer(_unitOfWork.CurrentChat);
         }
     }
 

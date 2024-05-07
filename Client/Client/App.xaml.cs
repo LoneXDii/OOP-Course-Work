@@ -1,12 +1,15 @@
-﻿namespace Client
+﻿using Client.Pages;
+using Client.Persistence.Repositories;
+
+namespace Client
 {
     public partial class App : Application
     {
-        public App()
+        public App(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            MainPage = new LogInPage(unitOfWork);
         }
     }
 }

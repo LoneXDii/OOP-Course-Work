@@ -1,11 +1,10 @@
-﻿using Client.Domain.Abstractions;
-using Client.Domain.Entitites;
+﻿using Client.Domain.Entitites;
 using Client.Persistence.Services;
 using System.Linq.Expressions;
 
 namespace Client.Persistence.Repositories;
 
-internal class ChatRepository : IRepository<Chat>
+public class ChatRepository
 {
     private readonly IServerService _serverService;
     protected List<Chat> _entities = new();
@@ -16,38 +15,13 @@ internal class ChatRepository : IRepository<Chat>
 
     }
 
-    public Task<Chat?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public void GetFromServer(User user)
     {
-        throw new NotImplementedException();
+        _entities = _serverService.GetUserChats(user);
     }
 
-    public Task<IReadOnlyList<Chat>> ListAllAsync(CancellationToken cancellationToken = default)
+    public IReadOnlyList<Chat> GetChats()
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<IReadOnlyList<Chat>> ListAsync(Expression<Func<Chat, bool>> filter, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task AddAsync(Chat entity, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateAsync(Chat entity, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(Chat entity, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<Chat?> FirstOrDefaultAsync(Expression<Func<Chat, bool>> filter, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
+        return _entities;
     }
 }

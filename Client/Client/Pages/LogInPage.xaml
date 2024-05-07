@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.Pages.LogInPage"
+             Title="LogInPage">
+    <Grid RowDefinitions="*"
+          ColumnDefinitions="*">
+
+        <Label Grid.Column="0"
+               Grid.Row="0"
+               VerticalOptions="Start"
+               HorizontalOptions="Center"
+               Margin="0, 20, 0 ,0"
+               Text="Добро пожаловать!"
+        />
+
+        <Grid Grid.Column="0"
+              Grid.Row="0"
+              RowDefinitions="*"
+              ColumnDefinitions="*"
+              HorizontalOptions="Center"
+              VerticalOptions="Center">
+
+            <VerticalStackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center">
+                <Entry Placeholder="Логин"
+                       x:Name="loginEntry"
+                       HorizontalOptions="Center"
+                       WidthRequest="400"/>
+
+                <Entry Placeholder="Пароль"
+                       x:Name="passwordEntry"
+                       HorizontalOptions="Center"
+                       IsPassword="True"
+                       WidthRequest="400"/>
+
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <Button x:Name="loginButton"
+                            Text="Войти"
+                            Margin="5"
+                            WidthRequest="200"
+                            Clicked="OnLoginClicked"/>
+                    <Button x:Name="registerButton"
+                            Text="Зарегистрироваться"
+                            Margin="5"
+                            WidthRequest="200"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+            
+            
+            
+            
+            
+        </Grid>
+
+    </Grid>
+</ContentPage>

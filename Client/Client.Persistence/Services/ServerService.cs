@@ -1,7 +1,6 @@
 ﻿using Client.Domain.Entitites;
-using System.Net.Http;
+using System;
 using System.Net.Http.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Client.Persistence.Services;
 
@@ -55,6 +54,27 @@ internal class ServerService : IServerService
     {
         string request = $"api/User/delete/id={user.Id}";
         var response = _httpClient.DeleteAsync(request).Result;
-        //status code checking
+    }
+
+    public List<Chat> GetUserChats(User user)
+    {
+        string request = $"api/User/chats/userId={user.Id}";
+        var chats = _httpClient.GetFromJsonAsync<List<Chat>>(request).Result;
+        if (chats is null)
+        {
+            throw new NullReferenceException("Something went wrong");
+        }
+        return chats;
+    }
+
+    public List<Message> GetChatMessages(Chat chat)
+    {
+        string request = $"api/Chat/getMessages/chatId={chat.Id}";
+        var messages = _httpClient.GetFromJsonAsync<List<Message>>(request).Result;
+        if (messages is null)
+        {
+            throw new NullReferenceException("Something went wrong");
+        }
+        return messages;
     }
 }

@@ -1,10 +1,9 @@
 ﻿using Client.Domain.Entitites;
-using Client.Domain.Abstractions;
 using Client.Persistence.Services;
 
 namespace Client.Persistence.Repositories;
 
-internal class UserController : IUserController
+public class UserController
 {
     private User? _user = null;
     private readonly IServerService _serverService;

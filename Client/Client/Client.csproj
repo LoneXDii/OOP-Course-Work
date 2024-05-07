@@ -63,11 +63,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Pages\" />
+	  <ProjectReference Include="..\Client.Persistence\Client.Persistence.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Client.Persistence\Client.Persistence.csproj" />
+	  <MauiXaml Update="Pages\LogInPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

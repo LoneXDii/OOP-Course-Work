@@ -1,4 +1,5 @@
-﻿using Client.Persistence;
+﻿using Client.Pages;
+using Client.Persistence;
 using Microsoft.Extensions.Logging;
 
 namespace Client;
