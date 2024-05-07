@@ -18,5 +18,4 @@ internal class UnitOfWork : IUnitOfWork
     public ChatRepository ChatRepository { get; private set; }
     public MessageRepository MessageRepository { get; private set; }
     public UserController User { get; private set; }
-    public Chat? CurrentChat { get; set; }
 }

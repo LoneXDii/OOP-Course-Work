@@ -18,7 +18,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddPersistence()
-                        .AddSingleton<MainPage>();
+                        .AddSingleton<ChatsPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

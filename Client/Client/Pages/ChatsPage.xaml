@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.Pages.ChatsPage"
+             Title="ChatsPage"
+             Loaded="OnPageLoaded">
+    <VerticalStackLayout>
+        <CollectionView x:Name="ChatView"
+                        ItemsLayout="VerticalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="5"
+                            StrokeShape="RoundRectangle 40, 40, 40, 40">
+                        <VerticalStackLayout>
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnGetsurePrimaryTapped"
+                                                      Buttons="Primary"
+                                                      CommandParameter="{Binding}"
+                                />
+                            </VerticalStackLayout.GestureRecognizers>
+                            <Label Text="{Binding Name}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Start"
+                                   Margin="10"
+                            />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

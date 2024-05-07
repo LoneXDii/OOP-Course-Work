@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.Pages.CurrentChatPage"
+             Title="CurrentChatPage">
+    <Grid ColumnDefinitions="*"
+          RowDefinitions="*">
+        <CollectionView x:Name="MessageView"
+                        ItemsLayout="VerticalList"
+                        Grid.Column="0"
+                        Grid.Row="0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="5"
+                        StrokeShape="RoundRectangle 40, 40, 40, 40">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Text}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Start"
+                               Margin="10"
+                        />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
