@@ -4,6 +4,7 @@ using Server.Infrastructure.Persistence.Data;
 using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Server.API.Mapping;
+using Server.API.Hubs;
 
 string settingsStream = "Server.API.appsettings.json";
 
@@ -13,6 +14,7 @@ var a = Assembly.GetExecutingAssembly();
 using var stream = a.GetManifestResourceStream(settingsStream);
 builder.Configuration.AddJsonStream(stream);
 
+builder.Services.AddSignalR();
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -50,6 +52,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chat");
 
 app.Run();
 

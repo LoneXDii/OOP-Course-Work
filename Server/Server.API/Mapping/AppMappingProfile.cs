@@ -9,7 +9,8 @@ public class AppMappingProfile : Profile
     {
         CreateMap<User, UserDTO>();
         CreateMap<Chat, ChatDTO>();
-        CreateMap<Message, MessageDTO>();
+        CreateMap<Message, MessageDTO>()
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User == null ? "Deleted" : src.User.Name));
         CreateMap<UserDTO, User>();
         CreateMap<ChatDTO, Chat>();
         CreateMap<MessageDTO, Message>();

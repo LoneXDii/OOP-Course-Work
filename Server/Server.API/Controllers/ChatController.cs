@@ -57,13 +57,14 @@ public class ChatController : Controller
         return Ok();
     }
 
-    [HttpPost("addMessage/text={text}&senderId={senderId:int}&chatId={chatId:int}")]
-    public async Task<IActionResult> AddMessage(string text, int senderId, int chatId)
+    [HttpPost("addMessage")]
+    public async Task<IActionResult> AddMessage(MessageDTO requestMessage)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var message = new Message(text);
-        message.User = await _mediator.Send(new GetUserByIdRequest(senderId));
-        message.ChatId = chatId;
+        var message = new Message(requestMessage.Text);
+        message.User = await _mediator.Send(new GetUserByIdRequest((int)requestMessage.UserId));
+        message.ChatId = requestMessage.ChatId;
+        message.SendTime = DateTime.Now;
         message = await _mediator.Send(new AddMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
         return Ok(messageDto);
