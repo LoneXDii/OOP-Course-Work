@@ -1,12 +1,14 @@
 ﻿using Client.Domain.Entitites;
 using Client.Persistence.Services;
 using System.Collections.ObjectModel;
+using System.Reflection;
 
 namespace Client.Persistence.Repositories;
 
 public class MessageRepository
 {
     private readonly IServerService _serverService;
+    private Chat _currentChat = new();
 
     public MessageRepository(IServerService serverService)
     {
@@ -18,6 +20,7 @@ public class MessageRepository
 
     public void GetFromServer(Chat chat)
     {
+        _currentChat = chat;
         Messages = new ObservableCollection<Message>(_serverService.GetChatMessages(chat));
     }
 
@@ -28,6 +31,9 @@ public class MessageRepository
 
     private void GetFromHub(Message message)
     {
-        Messages.Add(message);
+        if (message.ChatId == _currentChat.Id)
+        {
+            Messages.Add(message);
+        }
     }
 }

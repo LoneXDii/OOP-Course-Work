@@ -21,12 +21,17 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="5"
-                        StrokeShape="RoundRectangle 40, 40, 40, 40">
+                        StrokeShape="RoundRectangle 30, 30, 30, 30">
                         <VerticalStackLayout>
+                            <Label Text="{Binding UserName}"
+                                   HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
+                                   VerticalOptions="Start"
+                                   Margin="8"
+                            />
                             <Label Text="{Binding Text}"
-                               HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
-                               VerticalOptions="Start"
-                               Margin="10"
+                                HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
+                                VerticalOptions="Start"
+                                Margin="8"
                             />
                         </VerticalStackLayout>
                     </Border>

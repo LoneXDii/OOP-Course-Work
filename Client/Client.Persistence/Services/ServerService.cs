@@ -18,7 +18,6 @@ internal class ServerService : IServerService
 
         _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/chat")
                                                        .Build();
-
         _chatHubConnection.On<Message>("RecieveSendMessage", (message) =>
         {
             GetMessageFromHubEvent?.Invoke(message);
@@ -101,7 +100,7 @@ internal class ServerService : IServerService
         {
             throw new NullReferenceException("Something went wrong");
         }
-        Task.Run(() => _chatHubConnection.InvokeAsync("SendMessage", message)).Wait();
+        Task.Run(() => _chatHubConnection.InvokeAsync("SendMessage", resMessage)).Wait();
         return resMessage;
     }
 }
