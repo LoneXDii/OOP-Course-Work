@@ -1,25 +1,33 @@
 ﻿using Client.Domain.Entitites;
 using Client.Persistence.Services;
+using System.Collections.ObjectModel;
 
 namespace Client.Persistence.Repositories;
 
 public class MessageRepository
 {
     private readonly IServerService _serverService;
-    protected List<Message> _entities = new();
 
     public MessageRepository(IServerService serverService)
     {
         _serverService = serverService;
+        _serverService.GetMessageFromHubEvent += GetFromHub;
     }
+
+    public ObservableCollection<Message> Messages { get; private set; } = new();
 
     public void GetFromServer(Chat chat)
     {
-        _entities = _serverService.GetChatMessages(chat);
+        Messages = new ObservableCollection<Message>(_serverService.GetChatMessages(chat));
     }
 
-    public IReadOnlyList<Message> GetMessages()
+    public void SendToServer(Message message)
     {
-        return _entities;
+        _serverService.SendMessage(message);
+    }
+
+    private void GetFromHub(Message message)
+    {
+        Messages.Add(message);
     }
 }

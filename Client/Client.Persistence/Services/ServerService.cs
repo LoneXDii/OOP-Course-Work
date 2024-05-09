@@ -1,4 +1,5 @@
 ﻿using Client.Domain.Entitites;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Net.Http.Json;
 
@@ -6,11 +7,24 @@ namespace Client.Persistence.Services;
 
 internal class ServerService : IServerService
 {
-    private HttpClient _httpClient;
+    private readonly HttpClient _httpClient;
+    private readonly HubConnection _chatHubConnection;
+
+    public event Action<Message>? GetMessageFromHubEvent;
 
     public ServerService(HttpClient httpClient)
     {
-        this._httpClient = httpClient;
+        _httpClient = httpClient;
+
+        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/chat")
+                                                       .Build();
+
+        _chatHubConnection.On<Message>("RecieveSendMessage", (message) =>
+        {
+            GetMessageFromHubEvent?.Invoke(message);
+        });
+
+        Task.Run(() => _chatHubConnection.StartAsync()).Wait();
     }
 
     public User LoginUser(string login, string password)
@@ -76,5 +90,18 @@ internal class ServerService : IServerService
             throw new NullReferenceException("Something went wrong");
         }
         return messages;
+    }
+
+    public Message SendMessage(Message message)
+    {
+        string request = $"api/Chat/addMessage";
+        var response = _httpClient.PostAsJsonAsync(request, message).Result;
+        var resMessage = response.Content.ReadFromJsonAsync<Message>().Result;
+        if (resMessage is null)
+        {
+            throw new NullReferenceException("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection.InvokeAsync("SendMessage", message)).Wait();
+        return resMessage;
     }
 }

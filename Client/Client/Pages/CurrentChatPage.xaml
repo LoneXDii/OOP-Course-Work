@@ -12,11 +12,12 @@
     </ContentPage.Resources>
     
     <Grid ColumnDefinitions="*"
-          RowDefinitions="*">
-        <CollectionView x:Name="MessageView"
+          RowDefinitions="8*, *">
+        <CollectionView x:Name="messageView"
                         ItemsLayout="VerticalList"
                         Grid.Column="0"
-                        Grid.Row="0">
+                        Grid.Row="0"
+                        ItemsUpdatingScrollMode="KeepScrollOffset">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="5"
@@ -26,11 +27,22 @@
                                HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
                                VerticalOptions="Start"
                                Margin="10"
-                        />
+                            />
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        
+        <HorizontalStackLayout Grid.Column="0"
+                               Grid.Row="1">
+            <Entry x:Name="messageEntry"
+                   Placeholder="Введите свое сообщение"/>
+            <Button x:Name="sendMessageButton"
+                    WidthRequest="50"
+                    HorizontalOptions="End"
+                    Text="send"
+                    Clicked="OnSendButtonClicked"/>
+        </HorizontalStackLayout>
     </Grid>
 </ContentPage>
