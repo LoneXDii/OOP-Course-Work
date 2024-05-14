@@ -2,7 +2,7 @@ using Server.Application.Temp;
 using Microsoft.EntityFrameworkCore;
 using Server.Infrastructure.Persistence.Data;
 using System.Reflection;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.OpenApi.Models;
 using Server.API.Mapping;
 using Server.API.Hubs;
 
@@ -20,7 +20,36 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Name = "Bearer",
+                In = ParameterLocation.Header,
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
+
+
 
 var connStr = builder.Configuration.GetConnectionString("MySQLConnection");
 ServerVersion vesrion = ServerVersion.AutoDetect(connStr);
@@ -29,9 +58,7 @@ var options = new DbContextOptionsBuilder<AppDbContext>()
                   .UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 36)))
                   .Options;
 
-
-var config = new ConfigurationManager();
-builder.Services.AddInfrastructure(config, options)
+builder.Services.AddInfrastructure(options)
                 .AddApplication();
 
 //DbInitializer.Initialize(builder.Services.BuildServiceProvider()).Wait();
@@ -49,6 +76,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

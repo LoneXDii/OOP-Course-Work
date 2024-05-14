@@ -13,11 +13,10 @@ namespace Server.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, ConfigurationManager manager
-                                                       ,DbContextOptions options)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, DbContextOptions options)
     {
         services.AddPersistence(options)
-                .AddAuth(manager);
+                .AddAuth();
 
         return services;
     }
@@ -35,23 +34,21 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddAuth(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddAuth(this IServiceCollection services)
     {
-        var jwtSettings = new JwtSettings();
-
-        configuration.Bind(JwtSettings.SectionName, jwtSettings);
-
-        services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>()
                 .AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.Issuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
-                });
+                .AddJwtBearer(opt => 
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = JwtSettings.Issuer,
+                        ValidAudience = JwtSettings.Audience,
+                        IssuerSigningKey = JwtSettings.GetSymmetricSecurityKey()
+                    });
 
         return services;
     }

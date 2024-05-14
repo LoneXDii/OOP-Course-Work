@@ -8,27 +8,20 @@ namespace Server.Infrastructure.Authentification;
 
 internal class JwtTokenGenerator : IJwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings;
-
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
-    {
-        _jwtSettings = jwtSettings.Value;
-    }
-
     public string CreateToken(int id, string login, string password)
     {
-        var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
-                                                 SecurityAlgorithms.HmacSha256Signature);
-
         var claims = new[] {
             new Claim(JwtRegisteredClaimNames.Name, login),
-            new Claim(JwtRegisteredClaimNames.Nonce, password),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, id.ToString())
+            new Claim("Password", password),
+            new Claim("Id", id.ToString())
         };
 
-        var token = new JwtSecurityToken(issuer: _jwtSettings.Issuer, expires: DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes),
-                                         claims: claims, signingCredentials: credentials);
+        var token = new JwtSecurityToken(
+                  issuer: JwtSettings.Issuer,
+                  audience: JwtSettings.Audience,
+                  expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(JwtSettings.ExpiryMinutes)),
+                  claims: claims,
+                  signingCredentials: new SigningCredentials(JwtSettings.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }

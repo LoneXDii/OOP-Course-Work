@@ -4,6 +4,7 @@ using Server.API.DTO;
 using Server.API.SerialzationLib;
 using Server.API.DTO;
 using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Server.API.Controllers;
 
@@ -115,6 +116,7 @@ public class ChatController : Controller
         return Ok();
     }
 
+    [Authorize]
     [HttpGet("getMessages/chatId={id:int}")]
     public async Task<IActionResult> GetChatMessages(int id)
     {

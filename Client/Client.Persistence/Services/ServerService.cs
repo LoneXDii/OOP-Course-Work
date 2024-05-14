@@ -9,6 +9,7 @@ internal class ServerService : IServerService
 {
     private readonly HttpClient _httpClient;
     private readonly HubConnection _chatHubConnection;
+    //private string _token = "";
 
     public event Action<Message>? GetMessageFromHubEvent;
 
@@ -35,6 +36,9 @@ internal class ServerService : IServerService
         {
             throw new NullReferenceException("No such user");
         }
+        //_token = user.AuthorizationToken;
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
         return user;
     }
 
@@ -48,6 +52,9 @@ internal class ServerService : IServerService
         {
             throw new NullReferenceException("Something went wrong");
         }
+        //_token = user.AuthorizationToken;
+        _httpClient.DefaultRequestHeaders.Clear();
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
         return user;
     }
 
@@ -83,7 +90,9 @@ internal class ServerService : IServerService
     public List<Message> GetChatMessages(Chat chat)
     {
         string request = $"api/Chat/getMessages/chatId={chat.Id}";
-        var messages = _httpClient.GetFromJsonAsync<List<Message>>(request).Result;
+        List<Message>? messages = null;
+        messages = _httpClient.GetFromJsonAsync<List<Message>>(request).Result;
+
         if (messages is null)
         {
             throw new NullReferenceException("Something went wrong");
