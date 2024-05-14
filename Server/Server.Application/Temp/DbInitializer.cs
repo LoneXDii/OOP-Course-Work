@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Server.Domain.Entities;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Server.Application.Temp;
 
@@ -14,7 +16,10 @@ public class DbInitializer
 
         for (int i = 0; i < 10; i++)
         {
-            var user = new User($"User {i}", $"User{i}", $"password{i}");
+            var password = $"password{i}";
+            using SHA256 hash = SHA256.Create();
+            password = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
+            var user = new User($"User {i}", $"User{i}", password);
             user.AuthorizationToken = $"auth{1}";
             await unitOfWork.UserRepository.AddAsync(user);
         }

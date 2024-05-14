@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:Client.ValueConverters"
+             xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
              x:Class="Client.Pages.CurrentChatPage"
              Title="CurrentChatPage">
 
@@ -19,7 +20,7 @@
                         Grid.Row="0"
                         ItemsUpdatingScrollMode="KeepScrollOffset">
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="models:Message">
                     <Border Margin="5"
                         StrokeShape="RoundRectangle 30, 30, 30, 30">
                         <VerticalStackLayout>

@@ -8,8 +8,7 @@ namespace Client
         public App(IUnitOfWork unitOfWork)
         {
             InitializeComponent();
-
-            MainPage = new LogInPage(unitOfWork);
+            MainPage = new NavigationPage(new LogInPage(unitOfWork));
         }
     }
 }

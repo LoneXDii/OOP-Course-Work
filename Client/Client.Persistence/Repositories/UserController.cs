@@ -29,8 +29,8 @@ public class UserController
             throw new NullReferenceException("No user");
         }
         _user.Name = username;
-        _user.Password = password;
-        _user = _serverService.UpdateUser(_user);
+        //_user.Password = password;
+        _user = _serverService.UpdateUser(_user, password);
     }
 
     public void Delete()

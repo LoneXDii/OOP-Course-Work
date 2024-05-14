@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.API.SerialzationLib;
+using Microsoft.AspNetCore.Authorization;
 using Server.API.DTO;
 using AutoMapper;
 
@@ -7,7 +7,7 @@ namespace Server.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class UserController : Controller
 {
     private readonly IMediator _mediator;
@@ -22,17 +22,17 @@ public class UserController : Controller
     }
 
     [HttpPut("update")]
-    public async Task<IActionResult> UpdateUser(UserDTO requestUser)
+    public async Task<IActionResult> UpdateUser(KeyValuePair<string, UserDTO> request)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var user = await _mediator.Send(new GetUserByIdRequest(requestUser.Id));
+        var user = await _mediator.Send(new GetUserByIdRequest(request.Value.Id));
         if (user is null)
         {
             return NotFound();
         }
-        user.Login = requestUser.Login;
-        user.Password = requestUser.Password;
-        user.Name = requestUser.Name;
+        user.Login = request.Value.Login;
+        user.Password = request.Key;
+        user.Name = request.Value.Name;
         await _mediator.Send(new UpdateUserRequest(user));
         var userDto = _mapper.Map<UserDTO>(user);
         return Ok(userDto);

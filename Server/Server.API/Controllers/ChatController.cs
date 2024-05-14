@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Server.API.DTO;
 using Server.API.SerialzationLib;
-using Server.API.DTO;
 using System.Collections;
 using Microsoft.AspNetCore.Authorization;
 
@@ -10,7 +9,7 @@ namespace Server.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class ChatController : Controller
 {
     private readonly IMediator _mediator;
@@ -116,7 +115,6 @@ public class ChatController : Controller
         return Ok();
     }
 
-    [Authorize]
     [HttpGet("getMessages/chatId={id:int}")]
     public async Task<IActionResult> GetChatMessages(int id)
     {

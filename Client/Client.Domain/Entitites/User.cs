@@ -5,7 +5,6 @@ public class User : Entity, ICloneable
     public string AuthorizationToken { get; set; } = "";
     public string Name { get; set; } = "";
     public string Login { get; set; } = "";
-    public string Password { get; set; } = "";
 
     public object Clone()
     {

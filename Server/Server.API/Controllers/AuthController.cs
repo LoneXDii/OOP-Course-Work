@@ -25,10 +25,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(UserDTO RequestUser)
+    public async Task<IActionResult> Register(KeyValuePair<string, UserDTO> request)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var user = _mapper.Map<User>(RequestUser);
+        var user = _mapper.Map<User>(request.Value);
+        user.Password = request.Key;
         user = await _mediator.Send(new AddUserRequest(user));
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
         var userDto = _mapper.Map<UserDTO>(user);

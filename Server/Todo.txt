@@ -1,8 +1,8 @@
-move sender name to ChatDTO
+remove auth tokens from users in responses (send only in authorize or login request)
 
 
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 remove unused usings
 add errorrs to server API and Status code checking to client
 fix possibility to create similar users
-Add password hashing to client
+

@@ -24,4 +24,9 @@ public partial class LogInPage : ContentPage
 			await DisplayAlert("Произошла ошибка", "Вы ввели некорректные данные", "OK");
 		}
 	}
+
+	private async void OnRegisterClicked(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new RegisterPage(_unitOfWork));
+	}
 }

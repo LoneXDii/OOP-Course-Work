@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Net.Http.Json;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Client.Persistence.Services;
 
@@ -30,6 +32,8 @@ internal class ServerService : IServerService
     public User LoginUser(string login, string password)
     {
         User? user;
+        using SHA256 hash = SHA256.Create();
+        password = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
         string request = $"api/Auth/authorize/login={login}&password={password}";
         user = _httpClient.GetFromJsonAsync<User>(request).Result;
         if (user is null)
@@ -44,13 +48,15 @@ internal class ServerService : IServerService
 
     public User RegisterUser(string username, string login, string password)
     {
-        User? user = new User() { Name = username, Login = login, Password = password };
+        User? user = new User() { Name = username, Login = login };
+        using SHA256 hash = SHA256.Create();
+        password = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
         string request = $"api/Auth/register";
-        var response = _httpClient.PostAsJsonAsync(request, user).Result;
+        var response = _httpClient.PostAsJsonAsync(request, new KeyValuePair<string, User>(password, user)).Result;
         user = response.Content.ReadFromJsonAsync<User>().Result;
-        if (user is null)
+        if (user is null || (int)response.StatusCode != 200)
         {
-            throw new NullReferenceException("Something went wrong");
+            throw new Exception("Something went wrong");
         }
         //_token = user.AuthorizationToken;
         _httpClient.DefaultRequestHeaders.Clear();
@@ -58,7 +64,8 @@ internal class ServerService : IServerService
         return user;
     }
 
-    public User UpdateUser(User user) 
+    //Update this 
+    public User UpdateUser(User user, string password) 
     {
         string request = $"api/User/update";
         var response = _httpClient.PutAsJsonAsync(request, user).Result;
