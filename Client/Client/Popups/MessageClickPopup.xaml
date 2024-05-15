@@ -3,12 +3,20 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            x:Class="Client.Popups.MessageClickPopup"
-           CanBeDismissedByTappingOutsideOfPopup="True">
+           CanBeDismissedByTappingOutsideOfPopup="True"
+           Color="Transparent">
     
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid ColumnDefinitions="*"
+          RowDefinitions="auto, auto"
+          BackgroundColor="#1F1F1F">
+        <Button Text="Редактировать"
+                WidthRequest="200"
+                Margin="5"
+                Grid.Row="0"
+                Clicked="OnEditClicked"/>
+        <Button Text="Удалить"
+                WidthRequest="200"
+                Margin="5"
+                Grid.Row="1"/>
+    </Grid>
 </mct:Popup>

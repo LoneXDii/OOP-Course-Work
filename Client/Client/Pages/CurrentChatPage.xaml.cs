@@ -34,8 +34,18 @@ public partial class CurrentChatPage : ContentPage
 		_unitOfWork.MessageRepository.SendToServer(message);
 	}
 
-	private void OnGetsureTapped(object sender, EventArgs e)
+	private async void OnGetsureTapped(object sender, TappedEventArgs e)
 	{
-		this.ShowPopup(new MessageClickPopup());
+		var vertStack = sender as VerticalStackLayout;
+		var message = e.Parameter as Message;
+		if (vertStack is null || message is null)
+		{
+			return;
+		}
+		if (message.UserId != _unitOfWork.User.GetUser().Id)
+		{
+			return;
+		}
+		await this.ShowPopupAsync(new MessageClickPopup(vertStack, _unitOfWork, message));
 	}
 }

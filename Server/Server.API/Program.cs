@@ -81,7 +81,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<ChatHub>("/chat");
+app.MapHub<MessenderHub>("/messenger");
 
 app.Run();
 

@@ -6,6 +6,8 @@ namespace Client.Persistence.Services;
 public interface IServerService
 {
     public event Action<Message>? GetMessageFromHubEvent;
+    public event Action<Message>? DeleteMessageFromHubEvent;
+    public event Action<Message>? UpdateMessageFromHubEvent;
     User LoginUser(string login, string password);
     User RegisterUser(string username, string login, string password);
     User UpdateUser(User user, string password);

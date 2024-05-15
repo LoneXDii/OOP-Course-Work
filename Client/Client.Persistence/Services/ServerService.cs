@@ -11,19 +11,31 @@ internal class ServerService : IServerService
 {
     private readonly HttpClient _httpClient;
     private readonly HubConnection _chatHubConnection;
-    //private string _token = "";
+    
 
     public event Action<Message>? GetMessageFromHubEvent;
+    public event Action<Message>? DeleteMessageFromHubEvent;
+    public event Action<Message>? UpdateMessageFromHubEvent;
 
     public ServerService(HttpClient httpClient)
     {
         _httpClient = httpClient;
 
-        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/chat")
+        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger")
                                                        .Build();
-        _chatHubConnection.On<Message>("RecieveSendMessage", (message) =>
+        _chatHubConnection.On<Message>("SendMessage", (message) =>
         {
             GetMessageFromHubEvent?.Invoke(message);
+        });
+
+        _chatHubConnection.On<Message>("DeleteMessage", (message) =>
+        {
+            DeleteMessageFromHubEvent?.Invoke(message);
+        });
+
+        _chatHubConnection.On<Message>("UpdateMessage", (message) =>
+        {
+            UpdateMessageFromHubEvent?.Invoke(message);
         });
 
         Task.Run(() => _chatHubConnection.StartAsync()).Wait();

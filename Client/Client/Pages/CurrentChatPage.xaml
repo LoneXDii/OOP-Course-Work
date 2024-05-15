@@ -22,7 +22,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Message">
                     <Border Margin="5"
-                        StrokeShape="RoundRectangle 30, 30, 30, 30">
+                            StrokeShape="RoundRectangle 30, 30, 30, 30">
                         <VerticalStackLayout>
                             <VerticalStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnGetsureTapped"
