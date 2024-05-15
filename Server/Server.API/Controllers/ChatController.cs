@@ -70,16 +70,16 @@ public class ChatController : Controller
         return Ok(messageDto);
     }
 
-    [HttpPut("updateMessage/id={id:int}&text={text}")]
-    public async Task<IActionResult> UpdateMessage(int id, string text)
+    [HttpPut("updateMessage")]
+    public async Task<IActionResult> UpdateMessage(MessageDTO reqMessage)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var message = await _mediator.Send(new GetMessageByIdRequest(id));
+        var message = await _mediator.Send(new GetMessageByIdRequest(reqMessage.Id));
         if(message is null)
         {
             return NotFound();
         }
-        message.Text = text;
+        message.Text = reqMessage.Text;
         message = await _mediator.Send(new UpdateMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
         return Ok(messageDto);

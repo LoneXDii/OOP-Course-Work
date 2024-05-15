@@ -1,5 +1,4 @@
 ﻿using Client.Domain.Entitites;
-using static Client.Persistence.Services.ServerService;
 
 namespace Client.Persistence.Services;
 
@@ -16,4 +15,5 @@ public interface IServerService
     List<Message> GetChatMessages(Chat chat);
     Message SendMessage(Message message);
     void DeleteMessage(Message message);
+    void UpdateMessage(Message message);
 }

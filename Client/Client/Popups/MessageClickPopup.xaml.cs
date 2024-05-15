@@ -16,12 +16,12 @@ public partial class MessageClickPopup : Popup
 		_message = message;
 	}
 
-	private void OnEditClicked(object sender, EventArgs e)
+	private async void OnEditClicked(object sender, EventArgs e)
 	{
-		Close();
+		await CloseAsync(true);
 	}
 
-	private void OnDeleteClicked(object sender, EventArgs e)
+	private async void OnDeleteClicked(object sender, EventArgs e)
 	{
 		try
 		{
@@ -29,7 +29,7 @@ public partial class MessageClickPopup : Popup
 		}
 		finally
 		{
-			Close();
+			await CloseAsync(false);
 		}
 	}
 }

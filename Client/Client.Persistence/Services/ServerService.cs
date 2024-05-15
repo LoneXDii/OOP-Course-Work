@@ -1,6 +1,5 @@
 ﻿using Client.Domain.Entitites;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -141,5 +140,17 @@ internal class ServerService : IServerService
             throw new Exception("Something went wrong");
         }
         Task.Run(() => _chatHubConnection.InvokeAsync("DeleteMessage", message)).Wait();
+    }
+
+    public void UpdateMessage(Message message)
+    {
+        string request = $"api/Chat/updateMessage";
+        var response = _httpClient.PutAsJsonAsync(request, message).Result;
+        var messageRes = response.Content.ReadFromJsonAsync<Message>().Result;
+        if (messageRes is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection.InvokeAsync("UpdateMessage", message)).Wait();
     }
 }

@@ -15,6 +15,7 @@ public class MessageRepository
         _serverService = serverService;
         _serverService.GetMessageFromHubEvent += GetFromHub;
         _serverService.DeleteMessageFromHubEvent += DeleteFromHub;
+        _serverService.UpdateMessageFromHubEvent += UpdateFromHub;
     }
 
     public ObservableCollection<Message> Messages { get; private set; } = new();
@@ -35,6 +36,10 @@ public class MessageRepository
         _serverService.DeleteMessage(message);
     }
 
+    public void Update(Message message) { 
+        _serverService.UpdateMessage(message);
+    }
+
     private void GetFromHub(Message message)
     {
         if (message.ChatId == _currentChat.Id)
@@ -53,6 +58,21 @@ public class MessageRepository
                 return;
             }
             Messages.Remove(tempMessage);
+        }
+    }
+
+    private void UpdateFromHub(Message message)
+    {
+        if (message.ChatId == _currentChat.Id)
+        {
+            var tempMessage = Messages.FirstOrDefault(m => m.Id == message.Id);
+            if (tempMessage is null)
+            {
+                return;
+            }
+            var index = Messages.IndexOf(tempMessage);
+            Messages.RemoveAt(index);
+            Messages.Insert(index, message);
         }
     }
 }

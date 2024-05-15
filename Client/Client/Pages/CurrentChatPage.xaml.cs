@@ -2,7 +2,6 @@ using Client.Domain.Entitites;
 using Client.Persistence.Repositories;
 using Client.Popups;
 using CommunityToolkit.Maui.Views;
-using System.Runtime.CompilerServices;
 
 namespace Client.Pages;
 
@@ -10,6 +9,8 @@ public partial class CurrentChatPage : ContentPage
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private Chat _currentChat;
+	private bool is_editing = false;
+	private Message? _edited_message = null;
 
 	public CurrentChatPage(IUnitOfWork unitOfWork, Chat currentChat)
 	{
@@ -23,6 +24,14 @@ public partial class CurrentChatPage : ContentPage
 	private void OnSendButtonClicked(object sender, EventArgs e)
 	{
 		string text = messageEntry.Text;
+		if (is_editing)
+		{
+			is_editing = false;
+			EditMessage(_edited_message);
+			_edited_message = null;
+            messageEntry.Text = String.Empty;
+            return;
+		}
 		if (text == "")
 			return;
 		var message = new Message
@@ -32,6 +41,17 @@ public partial class CurrentChatPage : ContentPage
 			ChatId = _currentChat.Id
 		};
 		_unitOfWork.MessageRepository.Add(message);
+		messageEntry.Text = String.Empty;
+	}
+
+	private void EditMessage(Message? message)
+	{
+		if (message is null)
+		{
+			return;
+		}
+		message.Text = messageEntry.Text;
+		_unitOfWork.MessageRepository.Update(message);
 	}
 
 	private async void OnGetsureTapped(object sender, TappedEventArgs e)
@@ -46,6 +66,15 @@ public partial class CurrentChatPage : ContentPage
 		{
 			return;
 		}
-		await this.ShowPopupAsync(new MessageClickPopup(vertStack, _unitOfWork, message));
+		var result = await this.ShowPopupAsync(new MessageClickPopup(vertStack, _unitOfWork, message));
+		if (result is bool BoolResult)
+		{
+			if (BoolResult)
+			{
+				is_editing = true;
+				_edited_message = message;
+			    messageEntry.Text = message.Text;
+			}
+		}
 	}
 }
