@@ -1,5 +1,7 @@
 using Client.Domain.Entitites;
 using Client.Persistence.Repositories;
+using Client.Popups;
+using CommunityToolkit.Maui.Views;
 using System.Runtime.CompilerServices;
 
 namespace Client.Pages;
@@ -30,5 +32,10 @@ public partial class CurrentChatPage : ContentPage
 			ChatId = _currentChat.Id
 		};
 		_unitOfWork.MessageRepository.SendToServer(message);
+	}
+
+	private void OnGetsureTapped(object sender, EventArgs e)
+	{
+		this.ShowPopup(new MessageClickPopup());
 	}
 }

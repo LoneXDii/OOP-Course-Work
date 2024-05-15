@@ -1,6 +1,6 @@
 ﻿using Client.Pages;
 using Client.Persistence;
-using Client.ValueConverters;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace Client;
@@ -12,6 +12,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

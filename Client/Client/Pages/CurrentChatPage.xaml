@@ -24,6 +24,13 @@
                     <Border Margin="5"
                         StrokeShape="RoundRectangle 30, 30, 30, 30">
                         <VerticalStackLayout>
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnGetsureTapped"
+                                                      Buttons="Primary,Secondary"
+                                                      CommandParameter="{Binding}"
+                                />
+                            </VerticalStackLayout.GestureRecognizers>
+                            
                             <Label Text="{Binding UserName}"
                                    HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
                                    VerticalOptions="Start"
