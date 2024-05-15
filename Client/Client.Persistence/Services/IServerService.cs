@@ -15,4 +15,5 @@ public interface IServerService
     List<Chat> GetUserChats(User user);
     List<Message> GetChatMessages(Chat chat);
     Message SendMessage(Message message);
+    void DeleteMessage(Message message);
 }

@@ -131,4 +131,15 @@ internal class ServerService : IServerService
         Task.Run(() => _chatHubConnection.InvokeAsync("SendMessage", resMessage)).Wait();
         return resMessage;
     }
+
+    public void DeleteMessage(Message message)
+    {
+        string request = $"api/Chat/deleteMessage/id={message.Id}";
+        var responce = _httpClient.DeleteAsync(request).Result;
+        if ((int)responce.StatusCode != 200)
+        {
+            throw new Exception("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection.InvokeAsync("DeleteMessage", message)).Wait();
+    }
 }

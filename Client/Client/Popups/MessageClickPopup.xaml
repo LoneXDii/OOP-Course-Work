@@ -17,6 +17,7 @@
         <Button Text="Удалить"
                 WidthRequest="200"
                 Margin="5"
-                Grid.Row="1"/>
+                Grid.Row="1"
+                Clicked="OnDeleteClicked"/>
     </Grid>
 </mct:Popup>

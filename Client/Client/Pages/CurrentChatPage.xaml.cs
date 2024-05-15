@@ -31,7 +31,7 @@ public partial class CurrentChatPage : ContentPage
 			UserId = _unitOfWork.User.GetUser().Id,
 			ChatId = _currentChat.Id
 		};
-		_unitOfWork.MessageRepository.SendToServer(message);
+		_unitOfWork.MessageRepository.Add(message);
 	}
 
 	private async void OnGetsureTapped(object sender, TappedEventArgs e)

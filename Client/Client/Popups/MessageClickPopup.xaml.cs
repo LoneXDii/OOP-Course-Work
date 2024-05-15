@@ -20,4 +20,16 @@ public partial class MessageClickPopup : Popup
 	{
 		Close();
 	}
+
+	private void OnDeleteClicked(object sender, EventArgs e)
+	{
+		try
+		{
+			_unitOfWork.MessageRepository.Delete(_message);
+		}
+		finally
+		{
+			Close();
+		}
+	}
 }
