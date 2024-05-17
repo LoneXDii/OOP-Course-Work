@@ -1,4 +1,6 @@
-﻿namespace Client.Persistence.Repositories;
+﻿using Client.Domain.Entitites;
+
+namespace Client.Persistence.Repositories;
 
 public interface IUnitOfWork
 { 
@@ -6,4 +8,6 @@ public interface IUnitOfWork
     MessageRepository MessageRepository { get; }
     ChatMembersRepository ChatMembersRepository { get; }
     UserController User { get; }
+
+    List<User> AllUsers();
 }

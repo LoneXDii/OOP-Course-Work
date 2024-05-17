@@ -25,7 +25,8 @@
                         Text="Add"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill"
-                        Margin="1"/>
+                        Margin="1"
+                        Clicked="OnAddUserClicked"/>
             </Grid>
         </Border>
         <CollectionView x:Name="chatMembersView"

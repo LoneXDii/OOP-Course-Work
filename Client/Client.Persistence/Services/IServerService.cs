@@ -8,7 +8,8 @@ public interface IServerService
     public event Action<Message>? DeleteMessageHubEvent;
     public event Action<Message>? UpdateMessageHubEvent;
     public event Action<User, Chat>? DeleteChatMemberHubEvent;
-    public event Action<Chat>? UpdateChatHubEvent; 
+    public event Action<Chat>? UpdateChatHubEvent;
+    List<User> GetAllUsers();
     User LoginUser(string login, string password);
     User RegisterUser(string username, string login, string password);
     User UpdateUser(User user, string password);

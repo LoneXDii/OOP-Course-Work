@@ -55,6 +55,17 @@ internal class ServerService : IServerService
         Task.Run(() => _chatHubConnection.StartAsync()).Wait();
     }
 
+    public List<User> GetAllUsers()
+    {
+        string request = $"api/User/allUsers";
+        var users = _httpClient.GetFromJsonAsync<List<User>>(request).Result;
+        if (users is null)
+        {
+            throw new NullReferenceException("Something went wrong");
+        }
+        return users;
+    }
+
     public User LoginUser(string login, string password)
     {
         User? user;

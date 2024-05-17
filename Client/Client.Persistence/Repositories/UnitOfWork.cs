@@ -1,4 +1,5 @@
-﻿using Client.Persistence.Services;
+﻿using Client.Domain.Entitites;
+using Client.Persistence.Services;
 
 namespace Client.Persistence.Repositories;
 
@@ -19,4 +20,9 @@ internal class UnitOfWork : IUnitOfWork
     public ChatMembersRepository ChatMembersRepository { get; private set; }
     public MessageRepository MessageRepository { get; private set; }
     public UserController User { get; private set; }
+
+    public List<User> AllUsers()
+    {
+        return _serverService.GetAllUsers();
+    } 
 }

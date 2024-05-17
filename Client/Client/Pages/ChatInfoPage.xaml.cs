@@ -4,7 +4,7 @@ using Client.Popups;
 using CommunityToolkit.Maui.Views;
 
 namespace Client.Pages;
-//rename chat, add and delete users in chat, exit from chat
+//rename+ chat, add and delete+ users in chat, exit from chat
 public partial class ChatInfoPage : ContentPage
 {
 	private readonly IUnitOfWork _unitOfWork;
@@ -42,4 +42,9 @@ public partial class ChatInfoPage : ContentPage
 			chatNameLabel.Text = stringResult;
 		}
 	}
+
+	private async void OnAddUserClicked(object sender, EventArgs e)
+	{
+        var result = await this.ShowPopupAsync(new FindUserPopup(_unitOfWork));
+    }
 }
