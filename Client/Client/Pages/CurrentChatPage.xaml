@@ -65,15 +65,21 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
         
-        <HorizontalStackLayout Grid.Column="0"
-                               Grid.Row="2">
-            <Entry x:Name="messageEntry"
-                   Placeholder="Введите свое сообщение"/>
-            <Button x:Name="sendMessageButton"
-                    WidthRequest="50"
-                    HorizontalOptions="End"
+        <Grid Grid.Column="0"
+              Grid.Row="2"
+              ColumnDefinitions="9*,*">
+            <Entry Grid.Column="0"
+                   x:Name="messageEntry"
+                   Placeholder="Введите свое сообщение"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Fill"/>
+            <Button Grid.Column="1"
+                    x:Name="sendMessageButton"
+                    WidthRequest="80"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Fill"
                     Text="send"
                     Clicked="OnSendButtonClicked"/>
-        </HorizontalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

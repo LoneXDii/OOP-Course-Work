@@ -7,22 +7,42 @@
              Loaded="OnPageLoaded">
     <Grid RowDefinitions="*, 8*"
           ColumnDefinitions="*">
-        <Border>
-            <!--Info about chat (name and it's editing)-->
+        <Border Grid.Row="0">
+            <Grid ColumnDefinitions="12*,*,*">
+
+                <Button Grid.Column="1"
+                        Text="Edit"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill"
+                        Margin="1"/>
+
+                <Button Grid.Column="2"
+                        Text="Add"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Fill"
+                        Margin="1"/>
+            </Grid>
         </Border>
         <CollectionView x:Name="chatMembersView"
-                        ItemsLayout="VerticalList">
+                        ItemsLayout="VerticalList"
+                        Grid.Row="1">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Name}"
+                        <Grid ColumnDefinitions="9*,*">
+                            <Label Grid.Column="0"
+                                   Text="{Binding Name}"
                                    HorizontalOptions="Start"
                                    VerticalOptions="Start"
                                    Margin="10"
                             />
-                        </VerticalStackLayout>
+                            <Button Grid.Column="1"
+                                    BackgroundColor="Red"
+                                    Text="Delete"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Fill"/>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

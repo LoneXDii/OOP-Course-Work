@@ -15,6 +15,7 @@ public class ChatMembersRepository
     }
 
     public ObservableCollection<User> Members { get; private set; } = new();
+    public Chat CurrentChat { get { return _currentChat; } }
 
     public void GetFromServer(Chat chat)
     {

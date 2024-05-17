@@ -1,3 +1,4 @@
+add signalR signals for chat members adding and deleting, for renaming chats
 add info is message editing to client current chat
 
 
