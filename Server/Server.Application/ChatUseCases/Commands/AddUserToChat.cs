@@ -8,8 +8,10 @@ internal class AddUserToChatRequestHandler(IUnitOfWork unitOfWork) : IRequestHan
         var user = await unitOfWork.UserRepository.GetByIdAsync(request.userId, cancellationToken);
         var chat = await unitOfWork.ChatRepository.GetByIdAsync(request.chatId, cancellationToken, c => c.Users);
         if (user is null || chat is null) return;
-        chat.Users.Add(user);
-
-        await unitOfWork.SaveAllAsync();
+        if (!chat.Users.Contains(user))
+        {
+            chat.Users.Add(user);
+            await unitOfWork.SaveAllAsync();
+        }
     }
 }

@@ -93,17 +93,17 @@ public class ChatController : Controller
         return Ok();
     }
 
-    [HttpPost("addUser/userId={userId:int}&chatId={chatId:int}")]
-    public async Task<IActionResult> AddUserToChat(int userId, int chatId)
+    [HttpPost("addUser")]
+    public async Task<IActionResult> AddUserToChat(UserAndChatDTO requestData)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var user = await _mediator.Send(new GetUserByIdRequest(userId));
-        var chat = await _mediator.Send(new GetChatByIdRequest(chatId));
+        var user = await _mediator.Send(new GetUserByIdRequest(requestData.UserId));
+        var chat = await _mediator.Send(new GetChatByIdRequest(requestData.ChatId));
         if (user is null || chat is null)
         {
             return NotFound();
         }
-        await _mediator.Send(new AddUserToChatRequest(userId, chatId));
+        await _mediator.Send(new AddUserToChatRequest(requestData.UserId, requestData.ChatId));
         return Ok();
     }
 

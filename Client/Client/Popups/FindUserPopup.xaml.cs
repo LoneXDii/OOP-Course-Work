@@ -16,7 +16,7 @@ public partial class FindUserPopup : Popup
 		_users = _unitOfWork.AllUsers();
 	}
 
-	private void OnSearchButonTextChanged(object sender, EventArgs e)
+	private void OnSearchBarTextChanged(object sender, EventArgs e)
 	{
 		if (userSearchBar.Text != "")
 		{
@@ -26,6 +26,17 @@ public partial class FindUserPopup : Popup
 		else
 		{
 			usersView.IsVisible = false;
+		}
+	}
+
+	private async void OnAddButtonCliched(object sender, EventArgs e)
+	{
+		var button = sender as Button;
+		var parameter = button?.CommandParameter as User;
+		if (parameter is not null)
+		{
+			_unitOfWork.ChatMembersRepository.Add(parameter);
+			await CloseAsync();
 		}
 	}
 }

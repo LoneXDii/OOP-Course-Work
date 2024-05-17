@@ -13,6 +13,7 @@ public class ChatMembersRepository
     {
         _serverService = serverService;
         _serverService.DeleteChatMemberHubEvent += DeleteFromHub;
+        _serverService.AddChatMemberHubEvent += AddFromHub;
     }
 
     public ObservableCollection<User> Members { get; private set; } = new();
@@ -29,6 +30,11 @@ public class ChatMembersRepository
         _serverService.DeleteChatMember(_currentChat, user);
     }
 
+    public void Add(User user)
+    {
+        _serverService.AddChatMember(_currentChat, user);
+    }
+
     private void DeleteFromHub(User user, Chat chat)
     {
         if (chat.Id == _currentChat.Id)
@@ -38,6 +44,14 @@ public class ChatMembersRepository
             {
                 Members.Remove(tempMemeber);
             }
+        }
+    }
+
+    private void AddFromHub(User user, Chat chat)
+    {
+        if (chat.Id == _currentChat.Id)
+        {
+            Members.Add(user);
         }
     }
 }

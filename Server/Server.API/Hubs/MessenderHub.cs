@@ -25,6 +25,11 @@ public class MessenderHub : Hub
         await Clients.All.SendAsync("DeleteChatMember", user, chat);
     }
 
+    public async Task AddChatMember(UserDTO user, ChatDTO chat)
+    {
+        await Clients.All.SendAsync("AddChatMember", user, chat);
+    }
+
     public async Task UpdateChat(ChatDTO chat)
     {
         await Clients.All.SendAsync("UpdateChat", chat);

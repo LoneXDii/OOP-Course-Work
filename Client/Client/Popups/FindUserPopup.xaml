@@ -19,7 +19,7 @@
                    VerticalOptions="Fill"
                    WidthRequest="200"
                    HeightRequest="50"
-                   TextChanged="OnSearchButonTextChanged"/>
+                   TextChanged="OnSearchBarTextChanged"/>
 
         <CollectionView x:Name="usersView"
                         Grid.Row="1"
@@ -27,7 +27,7 @@
                         HorizontalOptions="Center"
                         VerticalOptions="FillAndExpand"
                         IsVisible="True">
-            
+            <!--Add binding to button visibility (if search not for chat adding)-->
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
@@ -41,7 +41,8 @@
 
                             <Button Grid.Column="1"
                                     Text="Add"
-                                    CommandParameter="{Binding}"/>
+                                    CommandParameter="{Binding}"
+                                    Clicked="OnAddButtonCliched"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

@@ -14,6 +14,8 @@ internal class UnitOfWork : IUnitOfWork
         ChatRepository = new ChatRepository(serverService);
         ChatMembersRepository = new ChatMembersRepository(serverService);
         MessageRepository = new MessageRepository(serverService);
+
+        _serverService.AddChatMemberHubEvent += AddAsMemberFromHub;
     }
 
     public ChatRepository ChatRepository { get; private set; }
@@ -24,5 +26,13 @@ internal class UnitOfWork : IUnitOfWork
     public List<User> AllUsers()
     {
         return _serverService.GetAllUsers();
-    } 
+    }
+
+    private void AddAsMemberFromHub(User user, Chat chat)
+    {
+        if (User.GetUser().Id == user.Id)
+        {
+            ChatRepository.Chats.Add(chat);
+        }
+    }
 }

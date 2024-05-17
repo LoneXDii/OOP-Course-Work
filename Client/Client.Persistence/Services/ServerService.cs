@@ -1,5 +1,6 @@
 ﻿using Client.Domain.Entitites;
 using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -16,6 +17,7 @@ internal class ServerService : IServerService
     public event Action<Message>? DeleteMessageHubEvent;
     public event Action<Message>? UpdateMessageHubEvent;
     public event Action<User, Chat>? DeleteChatMemberHubEvent;
+    public event Action<User, Chat>? AddChatMemberHubEvent;
     public event Action<Chat>? UpdateChatHubEvent;
 
     public ServerService(HttpClient httpClient)
@@ -45,6 +47,11 @@ internal class ServerService : IServerService
         _chatHubConnection.On<User, Chat>("DeleteChatMember", (user, chat) =>
         {
             DeleteChatMemberHubEvent?.Invoke(user, chat);
+        });
+
+        _chatHubConnection.On<User, Chat>("AddChatMember", (user, chat) =>
+        {
+            AddChatMemberHubEvent?.Invoke(user, chat);
         });
 
         _chatHubConnection.On<Chat>("UpdateChat", (chat) =>
@@ -210,6 +217,19 @@ internal class ServerService : IServerService
         }
         Task.Run(() => _chatHubConnection?.InvokeAsync("DeleteChatMember", user, chat)).Wait();
     }
+
+    public void AddChatMember(Chat chat, User user)
+    {
+        string request = $"api/Chat/addUser";
+        var requestData = new { UserId = user.Id, ChatId = chat.Id};
+        var response = _httpClient.PostAsJsonAsync(request, requestData).Result;
+        if ((int)response.StatusCode != 200)
+        {
+            throw new Exception("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection?.InvokeAsync("AddChatMember", user, chat)).Wait();
+    }
+
     public void UpdateChat(Chat chat)
     {
         string request = $"api/Chat/update";
