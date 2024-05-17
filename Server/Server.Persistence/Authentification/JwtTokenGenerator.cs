@@ -12,7 +12,6 @@ internal class JwtTokenGenerator : IJwtTokenGenerator
     {
         var claims = new[] {
             new Claim(JwtRegisteredClaimNames.Name, login),
-            new Claim("Password", password),
             new Claim("Id", id.ToString())
         };
 

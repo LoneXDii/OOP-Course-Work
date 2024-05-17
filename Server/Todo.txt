@@ -1,5 +1,5 @@
 remove auth tokens from users in responses (send only in authorize or login request)
-
+remake KeyValue pairs as new DTO-s
 add info is message editing to client current chat
 
 
@@ -7,3 +7,7 @@ rebuild use casese for update (get by id in update use case, not in API controll
 remove unused usings
 fix possibility to create similar users
 update signalR (as Egor Azarov)
+
+//Features may be added
+Add avas
+Forgot password

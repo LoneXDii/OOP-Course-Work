@@ -30,7 +30,6 @@ public class UserController : Controller
         {
             return NotFound();
         }
-        user.Login = request.Value.Login;
         user.Password = request.Key;
         user.Name = request.Value.Name;
         await _mediator.Send(new UpdateUserRequest(user));

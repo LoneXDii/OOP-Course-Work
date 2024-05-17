@@ -51,6 +51,10 @@ internal class ServerService : IServerService
         {
             throw new NullReferenceException("No such user");
         }
+        if (user.AuthorizationToken is null)
+        {
+            throw new Exception("Something went wrong");
+        }
         //_token = user.AuthorizationToken;
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
@@ -62,10 +66,15 @@ internal class ServerService : IServerService
         User? user = new User() { Name = username, Login = login };
         using SHA256 hash = SHA256.Create();
         password = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(password)));
+        user.Password = password;
         string request = $"api/Auth/register";
-        var response = _httpClient.PostAsJsonAsync(request, new KeyValuePair<string, User>(password, user)).Result;
+        var response = _httpClient.PostAsJsonAsync(request,user).Result;
         user = response.Content.ReadFromJsonAsync<User>().Result;
         if (user is null || (int)response.StatusCode != 200)
+        {
+            throw new Exception("Something went wrong");
+        }
+        if (user.AuthorizationToken == "")
         {
             throw new Exception("Something went wrong");
         }

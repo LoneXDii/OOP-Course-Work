@@ -6,8 +6,13 @@ internal class AddUserRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<A
 {
     public async Task<User> Handle(AddUserRequest request, CancellationToken cancellationToken = default)
     {
-        await unitOfWork.UserRepository.AddAsync(request.user, cancellationToken);
-        await unitOfWork.SaveAllAsync();
-        return request.user;
+        var user = await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Login == request.user.Login, cancellationToken);
+        if (user is null)
+        {
+            await unitOfWork.UserRepository.AddAsync(request.user, cancellationToken);
+            await unitOfWork.SaveAllAsync();
+            return request.user;
+        }
+        throw new Exception("There is user with such login");
     }
 }
