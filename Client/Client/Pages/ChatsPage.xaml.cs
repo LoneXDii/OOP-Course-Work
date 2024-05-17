@@ -16,7 +16,7 @@ public partial class ChatsPage : ContentPage
 	private void OnPageLoaded(object sender, EventArgs e)
 	{
 		_unitOfWork.ChatRepository.GetFromServer(_unitOfWork.User.GetUser());
-		ChatView.ItemsSource = _unitOfWork.ChatRepository.GetChats();
+		ChatView.ItemsSource = _unitOfWork.ChatRepository.Chats;
 	}
 
 	private async void OnGetsurePrimaryTapped(object sender, TappedEventArgs e)

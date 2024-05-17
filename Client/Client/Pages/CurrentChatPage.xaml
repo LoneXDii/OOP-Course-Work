@@ -13,11 +13,24 @@
     </ContentPage.Resources>
     
     <Grid ColumnDefinitions="*"
-          RowDefinitions="8*, *">
+          RowDefinitions="* ,8*, *">
+        <Border Grid.Column="0"
+                Grid.Row="0">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnChatNameTapped"
+                                      Buttons="Primary,Secondary"/>
+            </Border.GestureRecognizers>
+            <Grid RowDefinitions="*"
+                  ColumnDefinitions="*">
+                <Label x:Name="chatNameLabel"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </Grid>
+        </Border>
         <CollectionView x:Name="messageView"
                         ItemsLayout="VerticalList"
                         Grid.Column="0"
-                        Grid.Row="0"
+                        Grid.Row="1"
                         ItemsUpdatingScrollMode="KeepScrollOffset">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Message">
@@ -25,7 +38,7 @@
                             StrokeShape="RoundRectangle 30, 30, 30, 30">
                         <VerticalStackLayout>
                             <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnGetsureTapped"
+                                <TapGestureRecognizer Tapped="OnMessageTapped"
                                                       Buttons="Primary,Secondary"
                                                       CommandParameter="{Binding}"
                                 />
@@ -53,7 +66,7 @@
         </CollectionView>
         
         <HorizontalStackLayout Grid.Column="0"
-                               Grid.Row="1">
+                               Grid.Row="2">
             <Entry x:Name="messageEntry"
                    Placeholder="Введите свое сообщение"/>
             <Button x:Name="sendMessageButton"

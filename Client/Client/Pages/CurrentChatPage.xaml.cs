@@ -18,6 +18,7 @@ public partial class CurrentChatPage : ContentPage
 		_unitOfWork = unitOfWork;
 		_currentChat = currentChat;
 		_unitOfWork.MessageRepository.GetFromServer(_currentChat);
+		chatNameLabel.Text = _currentChat.Name;
 		messageView.ItemsSource = _unitOfWork.MessageRepository.Messages;
 	}
 
@@ -54,7 +55,7 @@ public partial class CurrentChatPage : ContentPage
 		_unitOfWork.MessageRepository.Update(message);
 	}
 
-	private async void OnGetsureTapped(object sender, TappedEventArgs e)
+	private async void OnMessageTapped(object sender, TappedEventArgs e)
 	{
 		var vertStack = sender as VerticalStackLayout;
 		var message = e.Parameter as Message;
@@ -76,5 +77,10 @@ public partial class CurrentChatPage : ContentPage
 			    messageEntry.Text = message.Text;
 			}
 		}
+	}
+
+	private async void OnChatNameTapped(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new ChatInfoPage(_unitOfWork, _currentChat));
 	}
 }

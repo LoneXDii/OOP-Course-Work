@@ -55,7 +55,6 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
-        //_token = user.AuthorizationToken;
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
         return user;
@@ -78,7 +77,6 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
-        //_token = user.AuthorizationToken;
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
         return user;
@@ -161,5 +159,16 @@ internal class ServerService : IServerService
             throw new Exception("Something went wrong");
         }
         Task.Run(() => _chatHubConnection.InvokeAsync("UpdateMessage", message)).Wait();
+    }
+
+    public List<User> GetChatMembers(Chat chat)
+    {
+        string request = $"api/Chat/getMembers/chatId={chat.Id}";
+        var members = _httpClient.GetFromJsonAsync<List<User>>(request).Result;
+        if (members is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        return members;
     }
 }

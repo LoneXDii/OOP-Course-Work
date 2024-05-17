@@ -71,6 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\ChatInfoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\ChatsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

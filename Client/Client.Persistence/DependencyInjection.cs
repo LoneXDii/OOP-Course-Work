@@ -10,7 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddSingleton<IUnitOfWork, UnitOfWork>()
-                .AddTransient<IServerService, ServerService>()
+                .AddSingleton<IServerService, ServerService>()
                 .AddHttpClient<IServerService, ServerService>(opt => opt.BaseAddress = new Uri("https://localhost:7267/api"));
         return services;
     }

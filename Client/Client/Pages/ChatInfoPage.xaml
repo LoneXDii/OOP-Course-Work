@@ -2,26 +2,23 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
-             x:Class="Client.Pages.ChatsPage"
-             Title="ChatsPage"
+             x:Class="Client.Pages.ChatInfoPage"
+             Title="ChatInfoPage"
              Loaded="OnPageLoaded">
-    <Grid RowDefinitions="*"
+    <Grid RowDefinitions="*, 8*"
           ColumnDefinitions="*">
-        <CollectionView x:Name="ChatView"
+        <Border>
+            <!--Info about chat (name and it's editing)-->
+        </Border>
+        <CollectionView x:Name="chatMembersView"
                         ItemsLayout="VerticalList">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Chat">
+                <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
                         <VerticalStackLayout>
-                            <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnGetsurePrimaryTapped"
-                                                      Buttons="Primary"
-                                                      CommandParameter="{Binding}"
-                                />
-                            </VerticalStackLayout.GestureRecognizers>
                             <Label Text="{Binding Name}"
-                                   HorizontalOptions="Center"
+                                   HorizontalOptions="Start"
                                    VerticalOptions="Start"
                                    Margin="10"
                             />

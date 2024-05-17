@@ -62,4 +62,13 @@ public class UserController : Controller
         var messagesDto = _mapper.Map<IEnumerable<MessageDTO>>(messages);
         return Ok(messagesDto);
     }
+
+    [HttpGet("allUsers")]
+    public async Task<IActionResult> GetAllUsersRequest()
+    {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
+        var users = await _mediator.Send(new GetAllUsersRequest());
+        var usersDto = _mapper.Map<IEnumerable<UserDTO>>(users);
+        return Ok(usersDto);
+    }
 }
