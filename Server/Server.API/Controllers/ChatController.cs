@@ -34,16 +34,16 @@ public class ChatController : Controller
         return Ok(chatDto);
     }
 
-    [HttpPut("update/id={id:int}&name={name}")]
-    public async Task<IActionResult> UpdateChat(int id, string name)
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateChat(ChatDTO reqChat)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var chat = await _mediator.Send(new GetChatByIdRequest(id));
+        var chat = await _mediator.Send(new GetChatByIdRequest(reqChat.Id));
         if(chat is null)
         {
             return NotFound();
         }
-        chat.Name = name;
+        chat.Name = reqChat.Name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
         return Ok(chatDto);

@@ -68,9 +68,9 @@ public partial class CurrentChatPage : ContentPage
 			return;
 		}
 		var result = await this.ShowPopupAsync(new MessageClickPopup(vertStack, _unitOfWork, message));
-		if (result is bool BoolResult)
+		if (result is bool boolResult)
 		{
-			if (BoolResult)
+			if (boolResult)
 			{
 				is_editing = true;
 				_edited_message = message;

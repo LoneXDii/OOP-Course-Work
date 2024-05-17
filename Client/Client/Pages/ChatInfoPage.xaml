@@ -9,12 +9,17 @@
           ColumnDefinitions="*">
         <Border Grid.Row="0">
             <Grid ColumnDefinitions="12*,*,*">
-
+                <Label x:Name="chatNameLabel"
+                       Grid.Column="0"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Fill"/>
+                
                 <Button Grid.Column="1"
                         Text="Edit"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill"
-                        Margin="1"/>
+                        Margin="1"
+                        Clicked="OnEditChatEntyClicked"/>
 
                 <Button Grid.Column="2"
                         Text="Add"

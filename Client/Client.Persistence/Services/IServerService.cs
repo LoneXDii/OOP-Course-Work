@@ -8,6 +8,7 @@ public interface IServerService
     public event Action<Message>? DeleteMessageHubEvent;
     public event Action<Message>? UpdateMessageHubEvent;
     public event Action<User, Chat>? DeleteChatMemberHubEvent;
+    public event Action<Chat>? UpdateChatHubEvent; 
     User LoginUser(string login, string password);
     User RegisterUser(string username, string login, string password);
     User UpdateUser(User user, string password);
@@ -19,5 +20,5 @@ public interface IServerService
     void DeleteMessage(Message message);
     void UpdateMessage(Message message);
     void DeleteChatMember(Chat chat, User user);
-    void UpdateChatName(Chat chat);
+    void UpdateChat(Chat chat);
 }

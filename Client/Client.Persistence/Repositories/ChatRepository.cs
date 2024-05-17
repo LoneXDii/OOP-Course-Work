@@ -11,6 +11,7 @@ public class ChatRepository
     public ChatRepository(IServerService serverService)
     {
         _serverService = serverService;
+        _serverService.UpdateChatHubEvent += UpdateFromHub;
     }
 
     public ObservableCollection<Chat> Chats { get; private set; } = new();
@@ -18,5 +19,22 @@ public class ChatRepository
     public void GetFromServer(User user)
     {
         Chats = new ObservableCollection<Chat>(_serverService.GetUserChats(user));
+    }
+
+    public void Update(Chat chat)
+    {
+        _serverService.UpdateChat(chat);
+    }
+
+    private void UpdateFromHub(Chat chat)
+    {
+        var tempChat = Chats.FirstOrDefault(m => m.Id == chat.Id);
+        if (tempChat is null)
+        {
+            return;
+        }
+        var index = Chats.IndexOf(tempChat);
+        Chats.RemoveAt(index);
+        Chats.Insert(index, chat);
     }
 }

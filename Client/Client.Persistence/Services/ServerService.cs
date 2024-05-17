@@ -9,18 +9,22 @@ namespace Client.Persistence.Services;
 internal class ServerService : IServerService
 {
     private readonly HttpClient _httpClient;
-    private readonly HubConnection _chatHubConnection;
+    private HubConnection? _chatHubConnection;
     
 
     public event Action<Message>? GetMessageHubEvent;
     public event Action<Message>? DeleteMessageHubEvent;
     public event Action<Message>? UpdateMessageHubEvent;
     public event Action<User, Chat>? DeleteChatMemberHubEvent;
+    public event Action<Chat>? UpdateChatHubEvent;
 
     public ServerService(HttpClient httpClient)
     {
         _httpClient = httpClient;
+    }
 
+    private void ConnectToHub()
+    {
         _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger")
                                                        .Build();
         _chatHubConnection.On<Message>("SendMessage", (message) =>
@@ -43,6 +47,11 @@ internal class ServerService : IServerService
             DeleteChatMemberHubEvent?.Invoke(user, chat);
         });
 
+        _chatHubConnection.On<Chat>("UpdateChat", (chat) =>
+        {
+            UpdateChatHubEvent?.Invoke(chat);
+        });
+
         Task.Run(() => _chatHubConnection.StartAsync()).Wait();
     }
 
@@ -63,6 +72,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
+        ConnectToHub();
         return user;
     }
 
@@ -85,6 +95,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
+        ConnectToHub();
         return user;
     }
 
@@ -151,7 +162,7 @@ internal class ServerService : IServerService
         {
             throw new NullReferenceException("Something went wrong");
         }
-        Task.Run(() => _chatHubConnection.InvokeAsync("SendMessage", resMessage)).Wait();
+        Task.Run(() => _chatHubConnection?.InvokeAsync("SendMessage", resMessage)).Wait();
         return resMessage;
     }
 
@@ -163,7 +174,7 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
-        Task.Run(() => _chatHubConnection.InvokeAsync("DeleteMessage", message)).Wait();
+        Task.Run(() => _chatHubConnection?.InvokeAsync("DeleteMessage", message)).Wait();
     }
 
     public void UpdateMessage(Message message)
@@ -175,7 +186,7 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
-        Task.Run(() => _chatHubConnection.InvokeAsync("UpdateMessage", message)).Wait();
+        Task.Run(() => _chatHubConnection?.InvokeAsync("UpdateMessage", message)).Wait();
     }
 
     public void DeleteChatMember(Chat chat, User user)
@@ -186,10 +197,17 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
-        Task.Run(() => _chatHubConnection.InvokeAsync("DeleteChatMember", user, chat)).Wait();
+        Task.Run(() => _chatHubConnection?.InvokeAsync("DeleteChatMember", user, chat)).Wait();
     }
-    public void UpdateChatName(Chat chat)
+    public void UpdateChat(Chat chat)
     {
-
+        string request = $"api/Chat/update";
+        var response = _httpClient.PutAsJsonAsync(request, chat).Result;
+        var chatRes = response.Content.ReadFromJsonAsync<Chat>().Result;
+        if (chatRes is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection?.InvokeAsync("UpdateChat", chatRes)).Wait();
     }
 }
