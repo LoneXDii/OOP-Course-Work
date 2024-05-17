@@ -20,4 +20,14 @@ public partial class ChatInfoPage : ContentPage
 		_unitOfWork.ChatMembersRepository.GetFromServer(_currentChat);
 		chatMembersView.ItemsSource = _unitOfWork.ChatMembersRepository.Members;
 	}
+
+	private void OnDeleteUserClicked(object sender, EventArgs e)
+	{
+		var button = sender as Button;
+		var param = button?.CommandParameter as User;
+		if(param is not null)
+		{
+			_unitOfWork.ChatMembersRepository.Delete(param);
+		}
+	}
 }

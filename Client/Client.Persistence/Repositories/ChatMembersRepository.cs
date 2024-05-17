@@ -12,6 +12,7 @@ public class ChatMembersRepository
     public ChatMembersRepository(IServerService serverService)
     {
         _serverService = serverService;
+        _serverService.DeleteChatMemberHubEvent += DeleteFromHub;
     }
 
     public ObservableCollection<User> Members { get; private set; } = new();
@@ -21,5 +22,22 @@ public class ChatMembersRepository
     {
         _currentChat = chat;
         Members = new ObservableCollection<User>(_serverService.GetChatMembers(chat));
+    }
+
+    public void Delete(User user)
+    {
+        _serverService.DeleteChatMember(_currentChat, user);
+    }
+
+    private void DeleteFromHub(User user, Chat chat)
+    {
+        if (chat.Id == _currentChat.Id)
+        {
+            var tempMemeber = Members.FirstOrDefault(m => m.Id == user.Id);
+            if (tempMemeber is not null)
+            {
+                Members.Remove(tempMemeber);
+            }
+        }
     }
 }

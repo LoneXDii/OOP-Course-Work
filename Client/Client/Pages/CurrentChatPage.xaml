@@ -75,7 +75,6 @@
                    VerticalOptions="Fill"/>
             <Button Grid.Column="1"
                     x:Name="sendMessageButton"
-                    WidthRequest="80"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"
                     Text="send"

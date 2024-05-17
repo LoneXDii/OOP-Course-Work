@@ -12,9 +12,10 @@ internal class ServerService : IServerService
     private readonly HubConnection _chatHubConnection;
     
 
-    public event Action<Message>? GetMessageFromHubEvent;
-    public event Action<Message>? DeleteMessageFromHubEvent;
-    public event Action<Message>? UpdateMessageFromHubEvent;
+    public event Action<Message>? GetMessageHubEvent;
+    public event Action<Message>? DeleteMessageHubEvent;
+    public event Action<Message>? UpdateMessageHubEvent;
+    public event Action<User, Chat>? DeleteChatMemberHubEvent;
 
     public ServerService(HttpClient httpClient)
     {
@@ -24,17 +25,22 @@ internal class ServerService : IServerService
                                                        .Build();
         _chatHubConnection.On<Message>("SendMessage", (message) =>
         {
-            GetMessageFromHubEvent?.Invoke(message);
+            GetMessageHubEvent?.Invoke(message);
         });
 
         _chatHubConnection.On<Message>("DeleteMessage", (message) =>
         {
-            DeleteMessageFromHubEvent?.Invoke(message);
+            DeleteMessageHubEvent?.Invoke(message);
         });
 
         _chatHubConnection.On<Message>("UpdateMessage", (message) =>
         {
-            UpdateMessageFromHubEvent?.Invoke(message);
+            UpdateMessageHubEvent?.Invoke(message);
+        });
+
+        _chatHubConnection.On<User, Chat>("DeleteChatMember", (user, chat) =>
+        {
+            DeleteChatMemberHubEvent?.Invoke(user, chat);
         });
 
         Task.Run(() => _chatHubConnection.StartAsync()).Wait();
@@ -125,6 +131,17 @@ internal class ServerService : IServerService
         return messages;
     }
 
+    public List<User> GetChatMembers(Chat chat)
+    {
+        string request = $"api/Chat/getMembers/chatId={chat.Id}";
+        var members = _httpClient.GetFromJsonAsync<List<User>>(request).Result;
+        if (members is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        return members;
+    }
+
     public Message SendMessage(Message message)
     {
         string request = $"api/Chat/addMessage";
@@ -141,8 +158,8 @@ internal class ServerService : IServerService
     public void DeleteMessage(Message message)
     {
         string request = $"api/Chat/deleteMessage/id={message.Id}";
-        var responce = _httpClient.DeleteAsync(request).Result;
-        if ((int)responce.StatusCode != 200)
+        var response = _httpClient.DeleteAsync(request).Result;
+        if ((int)response.StatusCode != 200)
         {
             throw new Exception("Something went wrong");
         }
@@ -161,14 +178,18 @@ internal class ServerService : IServerService
         Task.Run(() => _chatHubConnection.InvokeAsync("UpdateMessage", message)).Wait();
     }
 
-    public List<User> GetChatMembers(Chat chat)
+    public void DeleteChatMember(Chat chat, User user)
     {
-        string request = $"api/Chat/getMembers/chatId={chat.Id}";
-        var members = _httpClient.GetFromJsonAsync<List<User>>(request).Result;
-        if (members is null)
+        string request = $"api/Chat/deleteUser/userId={user.Id}&chatId={chat.Id}";
+        var response = _httpClient.DeleteAsync(request).Result;
+        if ((int)response.StatusCode != 200)
         {
             throw new Exception("Something went wrong");
         }
-        return members;
+        Task.Run(() => _chatHubConnection.InvokeAsync("DeleteChatMember", user, chat)).Wait();
+    }
+    public void UpdateChatName(Chat chat)
+    {
+
     }
 }

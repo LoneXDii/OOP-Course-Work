@@ -41,7 +41,9 @@
                                     BackgroundColor="Red"
                                     Text="Delete"
                                     HorizontalOptions="Fill"
-                                    VerticalOptions="Fill"/>
+                                    VerticalOptions="Fill"
+                                    Clicked="OnDeleteUserClicked"
+                                    CommandParameter="{Binding}"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

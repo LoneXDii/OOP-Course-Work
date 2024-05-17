@@ -13,9 +13,9 @@ public class MessageRepository
     public MessageRepository(IServerService serverService)
     {
         _serverService = serverService;
-        _serverService.GetMessageFromHubEvent += GetFromHub;
-        _serverService.DeleteMessageFromHubEvent += DeleteFromHub;
-        _serverService.UpdateMessageFromHubEvent += UpdateFromHub;
+        _serverService.GetMessageHubEvent += GetFromHub;
+        _serverService.DeleteMessageHubEvent += DeleteFromHub;
+        _serverService.UpdateMessageHubEvent += UpdateFromHub;
     }
 
     public ObservableCollection<Message> Messages { get; private set; } = new();
@@ -53,11 +53,10 @@ public class MessageRepository
         if (message.ChatId == _currentChat.Id)
         {
             var tempMessage = Messages.FirstOrDefault(m => m.Id == message.Id);
-            if (tempMessage is null)
+            if (tempMessage is not null)
             {
-                return;
-            }
-            Messages.Remove(tempMessage);
+                Messages.Remove(tempMessage);
+            }   
         }
     }
 
