@@ -14,6 +14,7 @@ public interface IServerService
     User LoginUser(string login, string password);
     User RegisterUser(string username, string login, string password);
     User UpdateUsername(User user);
+    void UpdatePassword(User user, string oldPassword, string newPassowrd);
     void DeleteUser(User user);
     List<Chat> GetUserChats(User user);
     List<Message> GetChatMessages(Chat chat);

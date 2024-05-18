@@ -25,4 +25,20 @@ public partial class ProfilePage : ContentPage
 		await this.ShowPopupAsync(new ChangeUsernamePopup(_unitOfWork));
         usernameLabel.Text = _unitOfWork.User.GetUser().Name;
     }
+
+	private async void OnChangePasswordButtonClicked(object sender, EventArgs e)
+	{
+		var result = await this.ShowPopupAsync(new ChangePasswordPopup(_unitOfWork));
+		if (result is bool boolRes)
+		{
+			if (boolRes)
+			{
+                await DisplayAlert("Операция прошла успешно", "Пароль успешно изменен", "OK");
+            }
+			else
+			{
+                await DisplayAlert("Произошла ошибка", "Вы ввели некорректные данные", "OK");
+            }
+		}
+	}
 }

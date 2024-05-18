@@ -36,6 +36,24 @@ public class UserController : Controller
         return Ok(userDto);
     }
 
+    [HttpPut("updatePassword")]
+    public async Task<IActionResult> UpdateUserPassword(ChangePasswordDTO request)
+    {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
+        var user = await _mediator.Send(new GetUserByIdRequest(request.Id));
+        if (user is null)
+        {
+            return NotFound();
+        }
+        if (user.Password != request.OldPassword)
+        {
+            return BadRequest();
+        }
+        user.Password = request.NewPassword;
+        await _mediator.Send(new UpdateUserRequest(user));
+        return Ok();
+    }
+
     [HttpDelete("delete/id={id:int}")]
     public async Task<IActionResult> DeleteUser(int id)
     {

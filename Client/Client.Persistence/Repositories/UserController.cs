@@ -32,6 +32,15 @@ public class UserController
         _user = _serverService.UpdateUsername(_user);
     }
 
+    public void ChangePassword(string oldPassword, string newPassword)
+    {
+        if (_user is null)
+        {
+            throw new NullReferenceException("No user");
+        }
+        _serverService.UpdatePassword(_user, oldPassword, newPassword);
+    }
+
     public void Delete()
     {
         if (_user is null)

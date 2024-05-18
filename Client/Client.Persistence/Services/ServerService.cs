@@ -128,6 +128,21 @@ internal class ServerService : IServerService
         }
         return userRes;
     }
+    
+    //Hashing to update password
+    public void UpdatePassword(User user, string oldPassword, string newPassowrd)
+    {
+        string request = $"api/User/updatePassword";
+        using SHA256 hash = SHA256.Create();
+        oldPassword = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(oldPassword)));
+        newPassowrd = Convert.ToHexString(hash.ComputeHash(Encoding.UTF8.GetBytes(newPassowrd)));
+        var requestData = new { Id = user.Id, OldPassword = oldPassword, NewPassword = newPassowrd};
+        var response = _httpClient.PutAsJsonAsync(request, requestData).Result;
+        if ((int)response.StatusCode != 200)
+        {
+            throw new Exception("Something went wrong");
+        }
+    }
 
     public void DeleteUser(User user)
     {
