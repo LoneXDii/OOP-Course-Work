@@ -21,17 +21,16 @@ public class UserController : Controller
         _logger = logger;
     }
 
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateUser(KeyValuePair<string, UserDTO> request)
+    [HttpPut("updateName")]
+    public async Task<IActionResult> UpdateUser(UserDTO request)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var user = await _mediator.Send(new GetUserByIdRequest(request.Value.Id));
+        var user = await _mediator.Send(new GetUserByIdRequest(request.Id));
         if (user is null)
         {
             return NotFound();
         }
-        user.Password = request.Key;
-        user.Name = request.Value.Name;
+        user.Name = request.Name;
         await _mediator.Send(new UpdateUserRequest(user));
         var userDto = _mapper.Map<UserDTO>(user);
         return Ok(userDto);

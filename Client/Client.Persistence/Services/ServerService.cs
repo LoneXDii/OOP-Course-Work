@@ -117,10 +117,9 @@ internal class ServerService : IServerService
         return user;
     }
 
-    //Update this 
-    public User UpdateUser(User user, string password) 
+    public User UpdateUsername(User user) 
     {
-        string request = $"api/User/update";
+        string request = $"api/User/updateName";
         var response = _httpClient.PutAsJsonAsync(request, user).Result;
         var userRes = response.Content.ReadFromJsonAsync<User>().Result;
         if (userRes is null)

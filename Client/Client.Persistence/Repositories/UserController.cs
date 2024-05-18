@@ -22,15 +22,14 @@ public class UserController
         _user = _serverService.RegisterUser(username, login, password);
     }
 
-    public void Update(string username, string password)
+    public void Update(string username)
     {
         if (_user is null)
         {
             throw new NullReferenceException("No user");
         }
         _user.Name = username;
-        //_user.Password = password;
-        _user = _serverService.UpdateUser(_user, password);
+        _user = _serverService.UpdateUsername(_user);
     }
 
     public void Delete()

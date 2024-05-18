@@ -23,7 +23,8 @@
                     <Button Grid.Row="0"
                             Grid.Column="1"
                             Text="Edit"
-                            Margin="2"/>
+                            Margin="2"
+                            Clicked="OnChangeNameButtonClicked"/>
                 </Grid>
 
                 <Button Grid.Row="1"
