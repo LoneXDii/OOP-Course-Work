@@ -27,10 +27,8 @@ public partial class CurrentChatPage : ContentPage
 		string text = messageEntry.Text;
 		if (is_editing)
 		{
-			is_editing = false;
 			EditMessage(_edited_message);
-			_edited_message = null;
-            messageEntry.Text = String.Empty;
+			OnCancelEditingButtonClicked(sender, e);
             return;
 		}
 		if (text == "")
@@ -72,7 +70,9 @@ public partial class CurrentChatPage : ContentPage
 		{
 			if (boolResult)
 			{
-				is_editing = true;
+                editingInfoBorder.IsVisible = true;
+                updatingMessageTextLabel.Text = message.Text;
+                is_editing = true;
 				_edited_message = message;
 			    messageEntry.Text = message.Text;
 			}
@@ -83,4 +83,12 @@ public partial class CurrentChatPage : ContentPage
 	{
 		await Navigation.PushAsync(new ChatInfoPage(_unitOfWork, _currentChat));
 	}
+
+	private void OnCancelEditingButtonClicked(object sender, EventArgs e)
+	{
+		editingInfoBorder.IsVisible = false;
+		is_editing = false;
+        _edited_message = null;
+        messageEntry.Text = String.Empty;
+    }
 }

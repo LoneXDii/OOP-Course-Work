@@ -13,7 +13,7 @@
     </ContentPage.Resources>
     
     <Grid ColumnDefinitions="*"
-          RowDefinitions="* ,8*, *">
+          RowDefinitions="* ,8*, *, *">
         <Border Grid.Column="0"
                 Grid.Row="0">
             <Border.GestureRecognizers>
@@ -31,6 +31,7 @@
                         ItemsLayout="VerticalList"
                         Grid.Column="0"
                         Grid.Row="1"
+                        Grid.RowSpan="2"
                         ItemsUpdatingScrollMode="KeepScrollOffset">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Message">
@@ -64,9 +65,33 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        
+
+        <Border x:Name="editingInfoBorder"
+                IsVisible="False"
+                Grid.Row="2"
+                BackgroundColor="#1F1F1F">
+            <Grid RowDefinitions="*,*"
+                  ColumnDefinitions="9*,*">
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Text="Редактирование"
+                       HorizontalOptions="StartAndExpand"/>
+                <Label x:Name="updatingMessageTextLabel"
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       HorizontalOptions="StartAndExpand"/>
+                <Button Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="1"
+                        Margin="4"
+                        Text="Cancel"
+                        HorizontalOptions="Fill"
+                        Clicked="OnCancelEditingButtonClicked"/>
+            </Grid>
+        </Border>
+
         <Grid Grid.Column="0"
-              Grid.Row="2"
+              Grid.Row="3"
               ColumnDefinitions="9*,*">
             <Entry Grid.Column="0"
                    x:Name="messageEntry"
