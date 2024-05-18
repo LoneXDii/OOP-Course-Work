@@ -4,12 +4,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Client.Pages"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="Client">
 
+    <FlyoutItem Title="Чаты">
     <ShellContent Title="Чаты"
                   ContentTemplate="{DataTemplate pages:ChatsPage}"
                   Route="ChatsPage" />
+    </FlyoutItem>
 
+    <FlyoutItem Title="Аккаунт">
+        <ShellContent Title="Аккаунт"
+              ContentTemplate="{DataTemplate pages:ProfilePage}"
+              Route="ProfilePage" />
+    </FlyoutItem>
 
 </Shell>

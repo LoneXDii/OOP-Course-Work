@@ -1,6 +1,12 @@
+add profile (with name and password changing)
+add chat creating
+add user info page and user search
+add dialogues
+
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 remove unused usings
 update signalR (as Egor Azarov)
+Fix pages titles
 
 //Features may be added
 Add avas

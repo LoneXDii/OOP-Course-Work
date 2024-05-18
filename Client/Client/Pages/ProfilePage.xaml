@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Client.Pages.ProfilePage"
+             Title="ProfilePage">
+    <Grid RowDefinitions="*"
+          ColumnDefinitions="*">
+        <Border HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="500">
+            <Grid RowDefinitions="*,*"
+                  ColumnDefinitions="*,*">
+                <Grid Grid.Row="0"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      RowDefinitions="*"
+                      ColumnDefinitions="4*,*">
+                    
+                    <Label x:Name="usernameLabel"
+                           Grid.Row="0"
+                           Grid.Column="0"/>
+
+                    <Button Grid.Row="0"
+                            Grid.Column="1"
+                            Text="Edit"
+                            Margin="2"/>
+                </Grid>
+
+                <Button Grid.Row="1"
+                        Grid.Column="0"
+                        Text="ChangePass"
+                        Margin="2"/>
+
+                <Button Grid.Row="1"
+                        Grid.Column="1"
+                        Text="Exit"
+                        Margin="2"
+                        Clicked="OnExitButtonClicked"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>
