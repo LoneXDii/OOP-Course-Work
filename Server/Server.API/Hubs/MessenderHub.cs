@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Server.API.DTO;
 
 namespace Server.API.Hubs;
 
+[Authorize]
 public class MessenderHub : Hub
 {
     public async Task SendMessage(MessageDTO message)
@@ -33,5 +35,11 @@ public class MessenderHub : Hub
     public async Task UpdateChat(ChatDTO chat)
     {
         await Clients.All.SendAsync("UpdateChat", chat);
+    }
+
+    public override async Task<Task> OnConnectedAsync()
+    {
+        var res = Context.GetHttpContext()!.User;
+        return base.OnConnectedAsync();
     }
 }

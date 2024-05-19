@@ -103,6 +103,10 @@ public class ChatController : Controller
         {
             return NotFound();
         }
+        if (chat.IsDialogue)
+        {
+            return BadRequest();
+        }
         await _mediator.Send(new AddUserToChatRequest(requestData.UserId, requestData.ChatId));
         return Ok();
     }

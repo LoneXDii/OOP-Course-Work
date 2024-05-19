@@ -25,10 +25,13 @@ internal class ServerService : IServerService
         _httpClient = httpClient;
     }
 
-    private void ConnectToHub()
+    private void ConnectToHub(string token)
     {
-        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger")
-                                                       .Build();
+        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger", options =>
+        {
+            options.AccessTokenProvider = () => Task.FromResult(token);
+        })
+        .Build();
         _chatHubConnection.On<Message>("SendMessage", (message) =>
         {
             GetMessageHubEvent?.Invoke(message);
@@ -90,7 +93,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
-        ConnectToHub();
+        ConnectToHub(user.AuthorizationToken);
         return user;
     }
 
@@ -113,7 +116,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
-        ConnectToHub();
+        ConnectToHub(user.AuthorizationToken);
         return user;
     }
 
