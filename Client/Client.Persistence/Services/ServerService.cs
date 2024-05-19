@@ -263,4 +263,17 @@ internal class ServerService : IServerService
         }
         Task.Run(() => _chatHubConnection?.InvokeAsync("UpdateChat", chatRes)).Wait();
     }
+
+    public Chat CreateChat(string name, User creator)
+    {
+        string request = $"api/Chat/create";
+        var requestData = new { UserId = creator.Id, Name = name };
+        var response = _httpClient.PostAsJsonAsync(request, requestData).Result;
+        var chat = response.Content.ReadFromJsonAsync<Chat>().Result;
+        if (chat is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        return chat;
+    }
 }

@@ -11,6 +11,7 @@ add ! before . (instead of ?, this guarantee that value cannot be null)
 
 fix erorrs with one client connected from many instances of application
 
+fix db asynchronic work
 
 //Features may be added
 Add avas

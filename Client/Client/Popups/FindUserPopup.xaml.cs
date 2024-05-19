@@ -35,8 +35,15 @@ public partial class FindUserPopup : Popup
 		var parameter = button?.CommandParameter as User;
 		if (parameter is not null)
 		{
-			_unitOfWork.ChatMembersRepository.Add(parameter);
-			await CloseAsync();
+			try
+			{
+				_unitOfWork.ChatMembersRepository.Add(parameter);
+				await CloseAsync(true);
+			}
+			catch
+			{
+				await CloseAsync(false);
+			}
 		}
 	}
 }

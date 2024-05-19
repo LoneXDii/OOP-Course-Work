@@ -95,6 +95,9 @@
 	  <MauiXaml Update="Pages\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Popups\AddChatPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Popups\ChangeChatNamePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

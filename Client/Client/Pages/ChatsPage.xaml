@@ -5,6 +5,14 @@
              x:Class="Client.Pages.ChatsPage"
              Title="ChatsPage"
              Loaded="OnPageLoaded">
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add chat"
+                     Order="Primary"
+                     Clicked="OnAddChatClicked"/>
+    </ContentPage.ToolbarItems>
+    
+    
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
         <CollectionView x:Name="ChatView"

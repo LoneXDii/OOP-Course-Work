@@ -22,12 +22,12 @@ public class ChatController : Controller
         _logger = logger;
     }
 
-    [HttpPost("create/name={name}&creatorId={id:int}")]
-    public async Task<IActionResult> CreateChat(string name, int id)
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateChat(ChatCreationDTO requestData)
     {
         _logger.LogInformation($"Processing route: {Request.Path.Value}");
-        var chat = new Chat(name);
-        chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(id)));
+        var chat = new Chat(requestData.Name);
+        chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(requestData.UserId)));
         chat = await _mediator.Send(new AddChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
         _logger.LogInformation($"{Request.Path.Value}: 200 OK");
@@ -167,9 +167,17 @@ public class ChatController : Controller
             _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
             return BadRequest();
         }
-        await _mediator.Send(new AddUserToChatRequest(requestData.UserId, requestData.ChatId));
-        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
-        return Ok();
+        try
+        {
+            await _mediator.Send(new AddUserToChatRequest(requestData.UserId, requestData.ChatId));
+            _logger.LogInformation($"{Request.Path.Value}: 200 OK");
+            return Ok();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("deleteUser/userId={userId:int}&chatId={chatId:int}")]

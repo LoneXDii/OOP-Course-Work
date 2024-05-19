@@ -46,5 +46,12 @@ public partial class ChatInfoPage : ContentPage
 	private async void OnAddUserClicked(object sender, EventArgs e)
 	{
         var result = await this.ShowPopupAsync(new FindUserPopup(_unitOfWork));
+		if (result is bool boolRes)
+		{
+			if (!boolRes)
+			{
+                await DisplayAlert("Произошла ошибка", "Пользователь уже состоит в данном чате", "OK");
+            }
+		}
     }
 }

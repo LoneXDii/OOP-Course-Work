@@ -1,5 +1,7 @@
 using Client.Domain.Entitites;
 using Client.Persistence.Repositories;
+using Client.Popups;
+using CommunityToolkit.Maui.Views;
 
 namespace Client.Pages;
 
@@ -26,5 +28,10 @@ public partial class ChatsPage : ContentPage
 		{
             await Navigation.PushAsync(new CurrentChatPage(_unitOfWork, chat));
         }
+	}
+
+	private async void OnAddChatClicked(object sender, EventArgs e)
+	{
+		await this.ShowPopupAsync(new AddChatPopup(_unitOfWork));
 	}
 }

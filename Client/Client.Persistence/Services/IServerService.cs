@@ -25,4 +25,5 @@ public interface IServerService
     void DeleteChatMember(Chat chat, User user);
     void AddChatMember(Chat chat, User user);
     void UpdateChat(Chat chat);
+    Chat CreateChat(string name, User creator);
 }
