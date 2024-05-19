@@ -59,6 +59,7 @@ var options = new DbContextOptionsBuilder<AppDbContext>()
                   .Options;
 
 builder.Services.AddInfrastructure(options)
+                .AddDbContext<AppDbContext>(opt => opt.UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 36))), ServiceLifetime.Scoped)
                 .AddApplication();
 
 //DbInitializer.Initialize(builder.Services.BuildServiceProvider()).Wait();

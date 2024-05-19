@@ -11,7 +11,7 @@ add ! before . (instead of ?, this guarantee that value cannot be null)
 
 fix erorrs with one client connected from many instances of application
 
-fix db asynchronic work
+fix db asynchronic work?? (always works, but one time get 500 (add client try\catch))
 
 //Features may be added
 Add avas
