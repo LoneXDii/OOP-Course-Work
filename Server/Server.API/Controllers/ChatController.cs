@@ -183,6 +183,19 @@ public class ChatController : Controller
             return Forbid();
         }
 
+        var chat = await _mediator.Send(new GetChatByIdRequest(chatId));
+
+        if (chat is null)
+        {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
+            return NotFound();
+        }
+
+        if (chat.IsDialogue)
+        {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
+            return BadRequest();
+        }
         await _mediator.Send(new DeleteUserFromChatRequest(userId, chatId));
         _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok();

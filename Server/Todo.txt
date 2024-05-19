@@ -1,12 +1,12 @@
-compelte passowrd change (error messages)
 add chat creating
 add user info page and user search
 add dialogues
 
+password validation (add regex)
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 remove unused usings
-update signalR (as Egor Azarov)
 Fix pages titles
+Fix all warnings
 add ! before . (instead of ?, this guarantee that value cannot be null)
 
 fix erorrs with one client connected from many instances of application

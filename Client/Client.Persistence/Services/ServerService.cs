@@ -1,6 +1,5 @@
 ﻿using Client.Domain.Entitites;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -139,7 +138,6 @@ internal class ServerService : IServerService
         return userRes;
     }
     
-    //Hashing to update password
     public void UpdatePassword(User user, string oldPassword, string newPassowrd)
     {
         string request = $"api/User/updatePassword";

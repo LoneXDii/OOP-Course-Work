@@ -20,10 +20,23 @@ public partial class ChangePasswordPopup : Popup
 		string newPass = newPasswordEntry.Text;
 		string newPassRepeat = newPasswordRepeatEntry.Text;
 
-		if (newPass == oldPass || newPass != newPassRepeat || newPass == "")
+		if (newPass == oldPass)
 		{
-			await CloseAsync(false);
+			errorLabel.Text = "Старый и новый пароль не должны совпадать";
+			errorLabel.IsVisible = true;
+			return;
 		}
+		if (newPass != newPassRepeat) {
+            errorLabel.Text = "Пароли не совпадают";
+            errorLabel.IsVisible = true;
+            return;
+        }
+		if(newPass == "")
+		{
+            errorLabel.Text = "Некорректный пароль";
+            errorLabel.IsVisible = true;
+            return;
+        }
 
 		try
 		{
@@ -32,8 +45,9 @@ public partial class ChangePasswordPopup : Popup
 		}
 		catch
 		{
-            await CloseAsync(false);
+            errorLabel.Text = "Неверный пароль";
+            errorLabel.IsVisible = true;
+            return;
         }
-
     }
 }

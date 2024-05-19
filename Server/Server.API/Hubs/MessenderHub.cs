@@ -1,9 +1,6 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Server.API.Controllers;
 using Server.API.DTO;
-using Server.Domain.Entities;
 using System.Security.Claims;
 
 namespace Server.API.Hubs;
@@ -14,7 +11,6 @@ public class MessenderHub : Hub
     private readonly IMediator _mediator;
     private readonly ILogger _logger;
     private static Dictionary<int, string> _connections = new();
-    //add dictionary with userId and connectionId
 
     public MessenderHub(IMediator mediator, ILogger<MessenderHub> logger)
     {
