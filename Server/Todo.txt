@@ -1,5 +1,4 @@
 compelte passowrd change (error messages)
-
 add chat creating
 add user info page and user search
 add dialogues
@@ -8,6 +7,7 @@ rebuild use casese for update (get by id in update use case, not in API controll
 remove unused usings
 update signalR (as Egor Azarov)
 Fix pages titles
+add ! before . (instead of ?, this guarantee that value cannot be null)
 
 //Features may be added
 Add avas
