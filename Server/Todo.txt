@@ -1,6 +1,5 @@
 compelte passowrd change (error messages)
 
-add profile (with name and password changing)
 add chat creating
 add user info page and user search
 add dialogues

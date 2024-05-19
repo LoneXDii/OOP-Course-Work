@@ -7,6 +7,7 @@ public class Chat : Entity
         Name = name;
     }
 
+    public bool IsDialogue { get; set; } = false;
     public string Name { get; set; }
     public List<User> Users { get; set; } = new();
 }
