@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Server.API.SerialzationLib;
 using Server.Infrastructure.Authentification;
 using Server.API.DTO;
 

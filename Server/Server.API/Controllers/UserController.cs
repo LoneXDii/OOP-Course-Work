@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Server.API.DTO;
 using AutoMapper;
 using System.Security.Claims;
-using Azure.Core;
 
 namespace Server.API.Controllers;
 

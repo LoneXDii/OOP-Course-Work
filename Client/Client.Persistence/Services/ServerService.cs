@@ -65,6 +65,11 @@ internal class ServerService : IServerService
         Task.Run(() => _chatHubConnection.StartAsync()).Wait();
     }
 
+    private void DisconnectFromHub()
+    {
+        Task.Run(() => _chatHubConnection?.DisposeAsync()).Wait();
+    }
+
     public List<User> GetAllUsers()
     {
         string request = $"api/User/allUsers";
@@ -93,6 +98,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
+        DisconnectFromHub();
         ConnectToHub(user.AuthorizationToken);
         return user;
     }
@@ -116,6 +122,7 @@ internal class ServerService : IServerService
         }
         _httpClient.DefaultRequestHeaders.Clear();
         _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + user.AuthorizationToken);
+        DisconnectFromHub();
         ConnectToHub(user.AuthorizationToken);
         return user;
     }

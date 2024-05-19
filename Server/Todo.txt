@@ -9,10 +9,12 @@ update signalR (as Egor Azarov)
 Fix pages titles
 add ! before . (instead of ?, this guarantee that value cannot be null)
 
+fix erorrs with one client connected from many instances of application
+
+
 //Features may be added
 Add avas
 Forgot password
-update logger (log errors)
 add chat admins
 add chat description
 add notions about new messages
