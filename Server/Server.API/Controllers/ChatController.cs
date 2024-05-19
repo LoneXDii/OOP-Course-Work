@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Server.API.DTO;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using System.ComponentModel;
-using System.Diagnostics;
-using Server.Domain.Entities;
 
 namespace Server.API.Controllers;
 
@@ -33,6 +30,7 @@ public class ChatController : Controller
         chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(id)));
         chat = await _mediator.Send(new AddChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(chatDto);
     }
 
@@ -43,17 +41,20 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, reqChat.Id))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         var chat = await _mediator.Send(new GetChatByIdRequest(reqChat.Id));
         if (chat is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         chat.Name = reqChat.Name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));
         var chatDto = _mapper.Map<ChatDTO>(chat);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(chatDto);
     }
 
@@ -64,10 +65,12 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, id))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         await _mediator.Send(new DeleteChatRequest(id));
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok();
     }
 
@@ -78,6 +81,7 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, (int)reqMessage.ChatId!))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
@@ -87,6 +91,7 @@ public class ChatController : Controller
         message.SendTime = DateTime.Now;
         message = await _mediator.Send(new AddMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(messageDto);
     }
 
@@ -97,17 +102,20 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, (int)reqMessage.ChatId!) || !IsMessageSender(HttpContext, reqMessage))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         var message = await _mediator.Send(new GetMessageByIdRequest(reqMessage.Id));
         if(message is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         message.Text = reqMessage.Text;
         message = await _mediator.Send(new UpdateMessageRequest(message));
         var messageDto = _mapper.Map<MessageDTO>(message);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(messageDto);
     }
 
@@ -120,16 +128,19 @@ public class ChatController : Controller
 
         if(message is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
 
         if (!await IsChatMember(HttpContext, (int)message.ChatId!) 
             || !IsMessageSender(HttpContext, _mapper.Map<MessageDTO>(message)))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         await _mediator.Send(new DeleteMessageRequest(id));
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok();
     }
 
@@ -140,6 +151,7 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, requestData.ChatId))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
@@ -147,13 +159,16 @@ public class ChatController : Controller
         var chat = await _mediator.Send(new GetChatByIdRequest(requestData.ChatId));
         if (user is null || chat is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         if (chat.IsDialogue)
         {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
             return BadRequest();
         }
         await _mediator.Send(new AddUserToChatRequest(requestData.UserId, requestData.ChatId));
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok();
     }
 
@@ -164,10 +179,12 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, chatId))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         await _mediator.Send(new DeleteUserFromChatRequest(userId, chatId));
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok();
     }
 
@@ -178,15 +195,18 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, id))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         var messages = await _mediator.Send(new GetChatMessagesRequest(id));
         if(messages is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         var messagesDto = _mapper.Map<IEnumerable<MessageDTO>>(messages);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(messagesDto);
     }
 
@@ -197,15 +217,18 @@ public class ChatController : Controller
 
         if (!await IsChatMember(HttpContext, id))
         {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
             return Forbid();
         }
 
         var members = await _mediator.Send(new GetChatMembersRequest(id));
         if(members is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         var membersDto = _mapper.Map<List<UserDTO>>(members);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(membersDto);
     }
 

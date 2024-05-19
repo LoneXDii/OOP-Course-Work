@@ -34,10 +34,12 @@ public class AuthController : ControllerBase
         try
         {
             var userDto = _mapper.Map<UserWithTokenDTO>(user);
+            _logger.LogInformation($"{Request.Path.Value}: 200 OK");
             return Ok(userDto);
         }
         catch (Exception ex)
         {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
             return BadRequest(ex.Message);
         }
     }
@@ -49,10 +51,12 @@ public class AuthController : ControllerBase
         var user = await _mediator.Send(new AuthorizeUserRequest(login, password));
         if (user is null)
         {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
         }
         user.AuthorizationToken = _jwtTokenGenerator.CreateToken(user.Id, user.Login, user.Password);
         var userDto = _mapper.Map<UserWithTokenDTO>(user);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(userDto);
     }
 }
