@@ -17,9 +17,9 @@ public partial class LogInPage : ContentPage
 		try
 		{
 			_unitOfWork.User.Login(loginEntry.Text, passwordEntry.Text);
-			Application.Current.MainPage = new AppShell();
+			Application.Current!.MainPage = new AppShell();
 		}
-		catch (Exception ex)
+		catch
 		{
 			await DisplayAlert("Произошла ошибка", "Вы ввели некорректные данные", "OK");
 		}

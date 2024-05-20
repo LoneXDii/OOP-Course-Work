@@ -13,9 +13,9 @@ namespace Server.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, DbContextOptions options)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddPersistence(options)
+        services.AddPersistence()
                 .AddAuth();
 
         return services;
@@ -24,13 +24,6 @@ public static class DependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddScoped<IUnitOfWork, EfUnitOfWork>();
-        return services;
-    }
-
-    public static IServiceCollection AddPersistence(this IServiceCollection services, DbContextOptions options)
-    {
-        services.AddPersistence();
-                //.AddSingleton(new AppDbContext((DbContextOptions<AppDbContext>)options));
         return services;
     }
 

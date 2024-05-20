@@ -25,7 +25,7 @@ public partial class RegisterPage : ContentPage
 				return;
             }
 			_unitOfWork.User.Register(username, login, password);
-            Application.Current.MainPage = new AppShell();
+            Application.Current!.MainPage = new AppShell();
         }
 		catch (Exception)
 		{

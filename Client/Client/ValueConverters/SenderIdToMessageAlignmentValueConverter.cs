@@ -7,7 +7,7 @@ public class SenderIdToMessageAlignmentValueConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        var _unitOfWork = Application.Current.Handler.MauiContext
+        var _unitOfWork = Application.Current!.Handler.MauiContext!
                                                      .Services
                                                      .GetService<IUnitOfWork>();
         if (value is null || _unitOfWork is null)

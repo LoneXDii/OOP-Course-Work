@@ -49,20 +49,14 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-
-
 var connStr = builder.Configuration.GetConnectionString("MySQLConnection");
 ServerVersion vesrion = ServerVersion.AutoDetect(connStr);
 
-var options = new DbContextOptionsBuilder<AppDbContext>()
-                  .UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 36)))
-                  .Options;
-
-builder.Services.AddInfrastructure(options)
+builder.Services.AddInfrastructure()
                 .AddDbContext<AppDbContext>(opt =>
                     opt.UseMySql(connStr, new MySqlServerVersion(new Version(8, 0, 36)), 
-                        opt => opt.EnableRetryOnFailure())
-                        ,ServiceLifetime.Scoped)
+                                 opt => opt.EnableRetryOnFailure()),
+                    ServiceLifetime.Scoped)
                 .AddApplication();
 
 //DbInitializer.Initialize(builder.Services.BuildServiceProvider()).Wait();

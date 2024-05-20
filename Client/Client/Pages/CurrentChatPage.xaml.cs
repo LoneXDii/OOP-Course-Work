@@ -22,24 +22,40 @@ public partial class CurrentChatPage : ContentPage
 		messageView.ItemsSource = _unitOfWork.MessageRepository.Messages;
 	}
 
-	private void OnSendButtonClicked(object sender, EventArgs e)
+	private async void OnSendButtonClicked(object sender, EventArgs e)
 	{
 		string text = messageEntry.Text;
-		if (is_editing)
-		{
-			EditMessage(_edited_message);
-			OnCancelEditingButtonClicked(sender, e);
+        if (text == "")
             return;
+        if (is_editing)
+		{
+			try
+			{
+				EditMessage(_edited_message);
+				OnCancelEditingButtonClicked(sender, e);
+				return;
+			}
+			catch
+			{
+				await DisplayAlert("Произошла ошибка", "Ошибка редактирования сообщения", "OK");
+				return;
+			}
 		}
-		if (text == "")
-			return;
 		var message = new Message
 		{
 			Text = text,
 			UserId = _unitOfWork.User.GetUser().Id,
 			ChatId = _currentChat.Id
 		};
-		_unitOfWork.MessageRepository.Add(message);
+		try
+		{
+			_unitOfWork.MessageRepository.Add(message);
+		}
+		catch
+		{
+            await DisplayAlert("Произошла ошибка", "Ошибка редактирования сообщения", "OK");
+			return;
+        }
 		messageEntry.Text = String.Empty;
 	}
 

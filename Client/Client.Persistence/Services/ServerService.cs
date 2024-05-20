@@ -28,7 +28,7 @@ internal class ServerService : IServerService
     {
         _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger", options =>
         {
-            options.AccessTokenProvider = () => Task.FromResult(token);
+            options.AccessTokenProvider = () => Task.FromResult(token)!;
         })
         .Build();
         _chatHubConnection.On<Message>("SendMessage", (message) =>
