@@ -59,11 +59,15 @@ public class MessenderHub : Hub
         var clients = await GetChatConnetions(chat.Id);
         if (clients is not null)
         {
-            var addedUser = _connections[user.Id];
-            if (addedUser is not null)
+            try
             {
-                clients.Add(addedUser);
+                var addedUser = _connections[user.Id];
+                if (addedUser is not null)
+                {
+                    clients.Add(addedUser);
+                }
             }
+            catch{ }
             await Clients.Clients(clients).SendAsync("AddChatMember", user, chat);
         }
     }

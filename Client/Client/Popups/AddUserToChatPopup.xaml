@@ -3,11 +3,11 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
-           x:Class="Client.Popups.FindUserPopup"
+           x:Class="Client.Popups.AddUserToChatPopup"
            CanBeDismissedByTappingOutsideOfPopup="True"
            Color="Transparent"
            HorizontalOptions="Center">
-
+    
     <Grid RowDefinitions="*, 8*"
           WidthRequest="300"
           HeightRequest="500"
@@ -31,17 +31,17 @@
                 <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
-                        <Border.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnUserTapped"
-                                                  Buttons="Primary,Secondary"
-                                                  CommandParameter="{Binding}"/>
-                        </Border.GestureRecognizers>
-                        <Grid ColumnDefinitions="*">
+                        <Grid ColumnDefinitions="4*,*">
                             <Label Grid.Column="0"
                                    Text="{Binding Name}"
                                    HorizontalOptions="Fill"
                                    VerticalOptions="Fill"
                                    Margin="10"/>
+
+                            <Button Grid.Column="1"
+                                    Text="Add"
+                                    CommandParameter="{Binding}"
+                                    Clicked="OnAddButtonCliched"/>
                         </Grid>
                     </Border>
                 </DataTemplate>

@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var a = Assembly.GetExecutingAssembly();
 using var stream = a.GetManifestResourceStream(settingsStream);
-builder.Configuration.AddJsonStream(stream);
+builder.Configuration.AddJsonStream(stream!);
 
 builder.Services.AddSignalR();
 // Add services to the container.

@@ -20,8 +20,16 @@ public partial class ChangeChatNamePopup : Popup
 
 	private async void OnChangeNameClicked(object sender, EventArgs e)
 	{
+		string startName = _currentChat.Name;
 		_currentChat.Name = chatNameEntry.Text;
-		_unitOfWork.ChatRepository.Update(_currentChat);
+		try
+		{
+			_unitOfWork.ChatRepository.Update(_currentChat);
+		}
+		catch
+		{
+            await CloseAsync(startName);
+        }
 		await CloseAsync(_currentChat.Name);
 	}
 }

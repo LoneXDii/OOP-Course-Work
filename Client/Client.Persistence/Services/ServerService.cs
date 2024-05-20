@@ -11,7 +11,6 @@ internal class ServerService : IServerService
     private readonly HttpClient _httpClient;
     private HubConnection? _chatHubConnection;
     
-
     public event Action<Message>? GetMessageHubEvent;
     public event Action<Message>? DeleteMessageHubEvent;
     public event Action<Message>? UpdateMessageHubEvent;

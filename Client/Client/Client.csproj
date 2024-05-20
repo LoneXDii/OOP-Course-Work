@@ -74,6 +74,9 @@
 	  <Compile Update="Popups\ChangeUsernamePopup.xaml.cs">
 	    <DependentUpon>ChangeUsernamePopup.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Popups\AddUserToChatPopup.xaml.cs">
+	    <DependentUpon>AddUserToChatPopup.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -107,10 +110,16 @@
 	  <MauiXaml Update="Popups\ChangeUsernamePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Popups\AddUserToChatPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Popups\FindUserPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Popups\MessageClickPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Popups\UserInfoPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

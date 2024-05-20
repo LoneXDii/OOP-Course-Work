@@ -10,6 +10,9 @@
         <ToolbarItem Text="Add chat"
                      Order="Primary"
                      Clicked="OnAddChatClicked"/>
+        <ToolbarItem Text="Message user"
+                     Order="Primary"
+                     Clicked="OnMessageUserClicked"/>
     </ContentPage.ToolbarItems>
     
     

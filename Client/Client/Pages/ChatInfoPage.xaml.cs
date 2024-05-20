@@ -24,13 +24,20 @@ public partial class ChatInfoPage : ContentPage
 		chatMembersView.ItemsSource = _unitOfWork.ChatMembersRepository.Members;
 	}
 
-	private void OnDeleteUserClicked(object sender, EventArgs e)
+	private async void OnDeleteUserClicked(object sender, EventArgs e)
 	{
 		var button = sender as Button;
 		var param = button?.CommandParameter as User;
 		if(param is not null)
 		{
-			_unitOfWork.ChatMembersRepository.Delete(param);
+			try
+			{
+				_unitOfWork.ChatMembersRepository.Delete(param);
+			}
+			catch
+			{
+                await DisplayAlert("Произошла ошибка", "У вас нет прав на это действие", "OK");
+            }
 		}
 	}
 
@@ -45,7 +52,7 @@ public partial class ChatInfoPage : ContentPage
 
 	private async void OnAddUserClicked(object sender, EventArgs e)
 	{
-        var result = await this.ShowPopupAsync(new FindUserPopup(_unitOfWork));
+        var result = await this.ShowPopupAsync(new AddUserToChatPopup(_unitOfWork));
 		if (result is bool boolRes)
 		{
 			if (!boolRes)

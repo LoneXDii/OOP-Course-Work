@@ -34,4 +34,13 @@ public partial class ChatsPage : ContentPage
 	{
 		await this.ShowPopupAsync(new AddChatPopup(_unitOfWork));
 	}
+
+	private async void OnMessageUserClicked(object sender, EventArgs e)
+	{ 
+		var user = await this.ShowPopupAsync(new FindUserPopup(_unitOfWork));
+		if (user is User userRes)
+		{
+			int a = 1;
+		}
+	}
 }
