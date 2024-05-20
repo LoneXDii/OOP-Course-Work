@@ -97,7 +97,10 @@ public partial class CurrentChatPage : ContentPage
 
 	private async void OnChatNameTapped(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new ChatInfoPage(_unitOfWork, _currentChat));
+		if (!_currentChat.IsDialogue)
+		{
+			await Navigation.PushAsync(new ChatInfoPage(_unitOfWork, _currentChat));
+		}
 	}
 
 	private void OnCancelEditingButtonClicked(object sender, EventArgs e)

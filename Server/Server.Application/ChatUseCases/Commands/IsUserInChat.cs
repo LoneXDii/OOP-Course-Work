@@ -2,7 +2,7 @@
 
 public sealed record IsUserInChatRequest(int userId, int chatId) : IRequest<bool> { }
 
-internal class IsuserInChatRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<IsUserInChatRequest, bool>
+internal class IsUserInChatRequestHandler(IUnitOfWork unitOfWork) : IRequestHandler<IsUserInChatRequest, bool>
 {
     public async Task<bool> Handle(IsUserInChatRequest request, CancellationToken cancellationToken = default)
     {

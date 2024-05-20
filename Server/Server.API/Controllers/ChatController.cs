@@ -34,6 +34,34 @@ public class ChatController : Controller
         return Ok(chatDto);
     }
 
+    [HttpPost("createDialogue")]
+    public async Task<IActionResult> CreateDialogue(DialogueCreationDTO requestData)
+    {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
+
+        if (requestData.User1Id == requestData.User2Id)
+        {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
+            return BadRequest();
+        }
+
+        var dialogue = await _mediator.Send(new IsDialogueExistsRequest(requestData.User1Id, requestData.User2Id));
+        if (dialogue is not null)
+        {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
+            return BadRequest($"{dialogue.Id}");
+        }
+
+        var chat = new Chat($"Dialogue: {requestData.User1Name} & {requestData.User2Name}");
+        chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(requestData.User1Id)));
+        chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(requestData.User2Id)));
+        chat.IsDialogue = true;
+        chat = await _mediator.Send(new AddChatRequest(chat));
+        var chatDto = _mapper.Map<ChatDTO>(chat);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
+        return Ok(chatDto);
+    }
+
     [HttpPut("update")]
     public async Task<IActionResult> UpdateChat(ChatDTO reqChat)
     {
@@ -50,6 +78,11 @@ public class ChatController : Controller
         {
             _logger.LogError($"{Request.Path.Value}: 404 Not Found");
             return NotFound();
+        }
+        if (chat.IsDialogue)
+        {
+            _logger.LogError($"{Request.Path.Value}: 400 Bad Request");
+            return BadRequest();
         }
         chat.Name = reqChat.Name;
         chat = await _mediator.Send(new UpdateChatRequest(chat));

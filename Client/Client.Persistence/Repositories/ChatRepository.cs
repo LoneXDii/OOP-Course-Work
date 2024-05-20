@@ -31,6 +31,11 @@ public class ChatRepository
         Chats.Add(_serverService.CreateChat(name, user));
     }
 
+    public Chat CreateDialogue(User user1, User user2)
+    {
+        return _serverService.CreateDialogue(user1, user2);
+    }
+
     private void UpdateFromHub(Chat chat)
     {
         var tempChat = Chats.FirstOrDefault(m => m.Id == chat.Id);

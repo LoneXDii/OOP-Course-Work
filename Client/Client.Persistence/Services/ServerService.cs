@@ -1,5 +1,7 @@
 ﻿using Client.Domain.Entitites;
+using Client.Persistence.Exceptions;
 using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -273,6 +275,39 @@ internal class ServerService : IServerService
         {
             throw new Exception("Something went wrong");
         }
+        return chat;
+    }
+
+    public Chat CreateDialogue(User user1, User user2)
+    {
+        string request = $"api/Chat/createDialogue";
+        var requestData = new
+        {
+            User1Id = user1.Id,
+            User1Name = user1.Name,
+            User2Id = user2.Id,
+            User2Name = user2.Name
+        };
+        var response = _httpClient.PostAsJsonAsync(request, requestData).Result;
+        if ((int)response.StatusCode == 400)
+        {
+            var dialogueId = response.Content.ReadAsStringAsync().Result;
+            if (dialogueId is not null)
+            {
+                throw new DialogueExistException(dialogueId);
+            }
+            else
+            {
+                throw new Exception("Something went wrong");
+            }
+        }
+        var chat = response.Content.ReadFromJsonAsync<Chat>().Result;
+        if (chat is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        Task.Run(() => _chatHubConnection?.InvokeAsync("AddChatMember", user1, chat)).Wait();
+        Task.Run(() => _chatHubConnection?.InvokeAsync("AddChatMember", user2, chat)).Wait();
         return chat;
     }
 }

@@ -1,11 +1,15 @@
-add user info page and user search
 add dialogues
+
+update dialogue name while username updated (or bind name on client to other member Id (seems better))
+add chats sorting by last message date (IComparable on client, new field last message date (datetime), updated on 
+client and server (on client in SignalR AddMessage hub method))
+dont show chat on client if there is no messages
 
 password validation (add regex)
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 remove unused usings
 Fix pages titles
-Fix all warnings
+Fix all warnings (especially in API controllers)
 add ! before . (instead of ?, this guarantee that value cannot be null)
 
 fix erorrs with one client connected from many instances of application

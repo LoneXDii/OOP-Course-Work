@@ -1,4 +1,5 @@
 using Client.Domain.Entitites;
+using Client.Persistence.Exceptions;
 using Client.Persistence.Repositories;
 using Client.Popups;
 using CommunityToolkit.Maui.Views;
@@ -40,7 +41,35 @@ public partial class ChatsPage : ContentPage
 		var user = await this.ShowPopupAsync(new FindUserPopup(_unitOfWork));
 		if (user is User userRes)
 		{
-			int a = 1;
+			Chat? dialogue = null;
+			try
+			{
+				dialogue = _unitOfWork.ChatRepository.CreateDialogue(_unitOfWork.User.GetUser(), userRes);
+			}
+			catch (DialogueExistException ex)
+			{
+				try
+				{
+					var dialogueId = Convert.ToInt32(ex.Message);
+					dialogue = _unitOfWork.ChatRepository.Chats.FirstOrDefault(c => c.Id == dialogueId);
+				}
+				catch
+				{
+                    await DisplayAlert("Произошла ошибка", "Что-то пошло не так", "OK");
+					return;
+                }
+			}
+			catch
+			{
+                await DisplayAlert("Произошла ошибка", "Что-то пошло не так", "OK");
+                return;
+			}
+			if (dialogue is null)
+			{
+                await DisplayAlert("Произошла ошибка", "Что-то пошло не так", "OK");
+                return;
+            }
+			await Navigation.PushAsync(new CurrentChatPage(_unitOfWork, dialogue));
 		}
 	}
 }
