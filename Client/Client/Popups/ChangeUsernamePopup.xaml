@@ -5,11 +5,13 @@
              x:Class="Client.Popups.ChangeUsernamePopup"
              CanBeDismissedByTappingOutsideOfPopup="True"
              Color="Transparent">
+    
     <VerticalStackLayout>
         <Entry x:Name="userNameEntry"
            HorizontalOptions="Center"
            WidthRequest="250"
            Placeholder="Введите имя пользователя"/>
+        
         <Button Clicked="OnChangeNameClicked"
             WidthRequest="250"
             HorizontalOptions="Center"

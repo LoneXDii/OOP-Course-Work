@@ -6,6 +6,6 @@ internal class GetUserByIdRequestHandler(IUnitOfWork unitOfWork) : IRequestHandl
 {
     public async Task<User?> Handle(GetUserByIdRequest request, CancellationToken cancellationToken = default)
     {
-        return await unitOfWork.UserRepository.FirstOrDefaultAsync(u => u.Id == request.userId, cancellationToken);
+        return await unitOfWork.UserRepository.GetByIdAsync(request.userId, cancellationToken);
     }
 }

@@ -21,7 +21,8 @@ public partial class FindUserPopup : Popup
         if (userSearchBar.Text != "")
         {
             usersView.IsVisible = true;
-            usersView.ItemsSource = _users.Where(x => x.Name.StartsWith(userSearchBar.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+            User user = _unitOfWork.User.GetUser();
+            usersView.ItemsSource = _users.Where(x => x.Name.StartsWith(userSearchBar.Text, StringComparison.OrdinalIgnoreCase) && x.Id != user.Id).ToList();
         }
         else
         {

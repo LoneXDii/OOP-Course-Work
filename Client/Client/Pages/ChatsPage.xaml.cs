@@ -1,8 +1,10 @@
 using Client.Domain.Entitites;
 using Client.Persistence.Exceptions;
 using Client.Persistence.Repositories;
+using Client.Persistence.Services;
 using Client.Popups;
 using CommunityToolkit.Maui.Views;
+using System;
 
 namespace Client.Pages;
 
@@ -44,8 +46,18 @@ public partial class ChatsPage : ContentPage
 			Chat? dialogue = null;
 			try
 			{
-				dialogue = _unitOfWork.ChatRepository.CreateDialogue(_unitOfWork.User.GetUser(), userRes);
-			}
+				dialogue = _unitOfWork.ChatRepository.CreateDialogue(_unitOfWork.User.GetUser(), userRes);              
+                try
+                {
+                    var ids = dialogue.Name.Split('&');
+                    var u1Id = Convert.ToInt32(ids[0]);
+                    var u2Id = Convert.ToInt32(ids[1]);
+					_unitOfWork.ChatMembersRepository.GetFromServer(dialogue);
+					var member = _unitOfWork.ChatMembersRepository.Members.FirstOrDefault(u => u.Id != _unitOfWork.User.GetUser().Id);
+                    dialogue.Name = member is null ? "DELETED" : member.Name;
+                }
+                catch { }
+            }
 			catch (DialogueExistException ex)
 			{
 				try

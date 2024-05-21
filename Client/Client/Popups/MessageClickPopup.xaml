@@ -9,11 +9,13 @@
     <Grid ColumnDefinitions="*"
           RowDefinitions="auto, auto"
           BackgroundColor="#1F1F1F">
+        
         <Button Text="Редактировать"
                 WidthRequest="200"
                 Margin="5"
                 Grid.Row="0"
                 Clicked="OnEditClicked"/>
+        
         <Button Text="Удалить"
                 WidthRequest="200"
                 Margin="5"

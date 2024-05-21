@@ -32,6 +32,18 @@ internal class UnitOfWork : IUnitOfWork
     {
         if (User.GetUser().Id == user.Id)
         {
+            if (chat.IsDialogue)
+            {
+                var ids = chat.Name.Split('&');
+                try
+                {
+                    var u1Id = Convert.ToInt32(ids[0]);
+                    var u2Id = Convert.ToInt32(ids[1]);
+                    var member = _serverService.GetChatMembers(chat).FirstOrDefault(u => u.Id != user.Id);
+                    chat.Name = member is null ? "DELETED" : member.Name;
+                }
+                catch { }
+            }
             ChatRepository.Chats.Add(chat);
         }
     }

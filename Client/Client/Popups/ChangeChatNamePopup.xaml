@@ -5,11 +5,13 @@
              x:Class="Client.Popups.ChangeChatNamePopup"
              CanBeDismissedByTappingOutsideOfPopup="True"
              Color="Transparent">
+    
     <VerticalStackLayout>
         <Entry x:Name="chatNameEntry"
                HorizontalOptions="Center"
                WidthRequest="250"
                Placeholder="Введите название чата"/>
+        
         <Button Clicked="OnChangeNameClicked"
                 WidthRequest="250"
                 HorizontalOptions="Center"

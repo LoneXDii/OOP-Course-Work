@@ -36,6 +36,7 @@
                                                   Buttons="Primary,Secondary"
                                                   CommandParameter="{Binding}"/>
                         </Border.GestureRecognizers>
+                        
                         <Grid ColumnDefinitions="*">
                             <Label Grid.Column="0"
                                    Text="{Binding Name}"

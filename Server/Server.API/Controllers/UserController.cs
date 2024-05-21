@@ -106,6 +106,28 @@ public class UserController : Controller
         }
 
         var chats = await _mediator.Send(new GetUserChatsRequest(id));
+        var dialogues = chats?.Where(c => c.IsDialogue).ToList();
+
+        if (dialogues is not null)
+        {
+            foreach (var dialogue in dialogues)
+            {
+                var ids = dialogue.Name.Split('&');
+                try
+                {
+                    var u1Id = Convert.ToInt32(ids[0]);
+                    var u2Id = Convert.ToInt32(ids[1]);
+                    int searchedId = id == u1Id ? u2Id : u1Id;
+                    var user = await _mediator.Send(new GetUserByIdRequest(searchedId));
+                    dialogue.Name = user is null ? "DELETED" : user.Name;
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+        }
+
         var chatsDto = _mapper.Map<IEnumerable<ChatDTO>>(chats);
         _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(chatsDto);

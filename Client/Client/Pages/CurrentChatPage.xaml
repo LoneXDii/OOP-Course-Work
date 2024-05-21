@@ -37,29 +37,27 @@
                 <DataTemplate x:DataType="models:Message">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 30, 30, 30, 30">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMessageTapped"
+                                                  Buttons="Primary,Secondary"
+                                                  CommandParameter="{Binding}"/>
+                        </Border.GestureRecognizers>
+
                         <VerticalStackLayout>
-                            <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnMessageTapped"
-                                                      Buttons="Primary,Secondary"
-                                                      CommandParameter="{Binding}"
-                                />
-                            </VerticalStackLayout.GestureRecognizers>
-                            
                             <Label Text="{Binding UserName}"
                                    HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
                                    VerticalOptions="Start"
-                                   Margin="8"
-                            />
+                                   Margin="8"/>
+                            
                             <Label Text="{Binding Text}"
                                    HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
                                    VerticalOptions="Start"
-                                   Margin="8"
-                            />
+                                   Margin="8"/>
+                            
                             <Label Text="{Binding SendTime}"
                                    HorizontalOptions="{Binding UserId, Converter={StaticResource IdToAlignment}}"
                                    VerticalOptions="Start"
-                                   Margin="8"
-                            />
+                                   Margin="8"/>
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
@@ -76,10 +74,12 @@
                        Grid.Column="0"
                        Text="Редактирование"
                        HorizontalOptions="StartAndExpand"/>
+                
                 <Label x:Name="updatingMessageTextLabel"
                        Grid.Row="1"
                        Grid.Column="0"
                        HorizontalOptions="StartAndExpand"/>
+                
                 <Button Grid.Row="0"
                         Grid.RowSpan="2"
                         Grid.Column="1"
@@ -98,6 +98,7 @@
                    Placeholder="Введите свое сообщение"
                    HorizontalOptions="Fill"
                    VerticalOptions="Fill"/>
+            
             <Button Grid.Column="1"
                     x:Name="sendMessageButton"
                     HorizontalOptions="Fill"

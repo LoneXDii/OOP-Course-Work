@@ -21,7 +21,8 @@ public partial class AddUserToChatPopup : Popup
 		if (userSearchBar.Text != "")
 		{
 			usersView.IsVisible = true;
-            usersView.ItemsSource = _users.Where(x => x.Name.StartsWith(userSearchBar.Text, StringComparison.OrdinalIgnoreCase)).ToList();
+            usersView.ItemsSource = _users.Where(x => x.Name.StartsWith(userSearchBar.Text, StringComparison.OrdinalIgnoreCase)
+							&& !_unitOfWork.ChatMembersRepository.Members.Where(u => u.Id == x.Id).Any()).ToList();
         }
 		else
 		{

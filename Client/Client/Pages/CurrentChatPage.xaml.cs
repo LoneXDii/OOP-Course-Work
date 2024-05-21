@@ -71,7 +71,7 @@ public partial class CurrentChatPage : ContentPage
 
 	private async void OnMessageTapped(object sender, TappedEventArgs e)
 	{
-		var vertStack = sender as VerticalStackLayout;
+		var vertStack = sender as Border;
 		var message = e.Parameter as Message;
 		if (vertStack is null || message is null)
 		{

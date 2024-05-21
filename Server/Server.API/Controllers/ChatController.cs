@@ -52,7 +52,7 @@ public class ChatController : Controller
             return BadRequest($"{dialogue.Id}");
         }
 
-        var chat = new Chat($"Dialogue: {requestData.User1Name} & {requestData.User2Name}");
+        var chat = new Chat($"{requestData.User1Id}&{requestData.User2Id}");
         chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(requestData.User1Id)));
         chat.Users.Add(await _mediator.Send(new GetUserByIdRequest(requestData.User2Id)));
         chat.IsDialogue = true;

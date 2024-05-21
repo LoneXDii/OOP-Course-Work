@@ -5,17 +5,20 @@
              x:Class="Client.Popups.AddChatPopup"
              CanBeDismissedByTappingOutsideOfPopup="True"
              Color="Transparent">
+    
     <VerticalStackLayout HeightRequest="500">
         <Label x:Name="errorLabel"
                TextColor="Red"
                IsVisible="False"/>
+        
         <Entry x:Name="chatNameEntry"
-           HorizontalOptions="Center"
-           WidthRequest="250"
-           Placeholder="Введите название чата"/>
+               HorizontalOptions="Center"
+               WidthRequest="250"
+               Placeholder="Введите название чата"/>
+        
         <Button Clicked="OnCreateChatClicked"
-            WidthRequest="250"
-            HorizontalOptions="Center"
-            Text="Создать"/>
+                WidthRequest="250"
+                HorizontalOptions="Center"
+                Text="Создать"/>
     </VerticalStackLayout>
 </mct:Popup>

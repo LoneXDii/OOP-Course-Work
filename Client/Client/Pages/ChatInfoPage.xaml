@@ -5,6 +5,7 @@
              x:Class="Client.Pages.ChatInfoPage"
              Title="ChatInfoPage"
              Loaded="OnPageLoaded">
+    
     <Grid RowDefinitions="*, 8*"
           ColumnDefinitions="*">
         <Border Grid.Row="0">
@@ -41,8 +42,8 @@
                                    Text="{Binding Name}"
                                    HorizontalOptions="Start"
                                    VerticalOptions="Start"
-                                   Margin="10"
-                            />
+                                   Margin="10"/>
+                            
                             <Button Grid.Column="1"
                                     BackgroundColor="Red"
                                     Text="Delete"

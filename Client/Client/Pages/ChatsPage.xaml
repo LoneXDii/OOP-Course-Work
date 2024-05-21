@@ -15,7 +15,6 @@
                      Clicked="OnMessageUserClicked"/>
     </ContentPage.ToolbarItems>
     
-    
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
         <CollectionView x:Name="ChatView"
@@ -24,18 +23,17 @@
                 <DataTemplate x:DataType="models:Chat">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnGetsurePrimaryTapped"
+                                                  Buttons="Primary"
+                                                  CommandParameter="{Binding}"/>
+                        </Border.GestureRecognizers>
+                        
                         <VerticalStackLayout>
-                            <VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OnGetsurePrimaryTapped"
-                                                      Buttons="Primary"
-                                                      CommandParameter="{Binding}"
-                                />
-                            </VerticalStackLayout.GestureRecognizers>
                             <Label Text="{Binding Name}"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Start"
-                                   Margin="10"
-                            />
+                                   Margin="10"/>
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>

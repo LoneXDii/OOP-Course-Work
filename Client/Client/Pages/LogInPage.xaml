@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Client.Pages.LogInPage"
              Title="LogInPage">
+    
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
 
@@ -11,8 +12,7 @@
                VerticalOptions="Start"
                HorizontalOptions="Center"
                Margin="0, 20, 0 ,0"
-               Text="Добро пожаловать!"
-        />
+               Text="Добро пожаловать!"/>
 
         <Grid Grid.Column="0"
               Grid.Row="0"
@@ -40,6 +40,7 @@
                             Margin="5"
                             WidthRequest="200"
                             Clicked="OnLoginClicked"/>
+                    
                     <Button x:Name="registerButton"
                             Text="Зарегистрироваться"
                             Margin="5"
