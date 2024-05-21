@@ -2,19 +2,33 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
+             xmlns:icons="clr-namespace:Client.Icons"
              x:Class="Client.Pages.ChatsPage"
-             Title="ChatsPage"
+             Title="Чаты"
              Loaded="OnPageLoaded">
     
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add chat"
-                     Order="Primary"
-                     Clicked="OnAddChatClicked"/>
-        <ToolbarItem Text="Message user"
-                     Order="Primary"
-                     Clicked="OnMessageUserClicked"/>
+        <ToolbarItem Order="Primary"
+                     Clicked="OnAddChatClicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource  FontFamily="FluentIcons"
+                                  Glyph="{x:Static icons:Icons.AddCircle}"
+                                  Color="#9880e5"
+                                  Size="30"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+        <ToolbarItem Order="Primary"
+                     Clicked="OnMessageUserClicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource  FontFamily="FluentIcons"
+                                  Glyph="{x:Static icons:Icons.Chat}"
+                                  Color="#9880e5"
+                                  Size="30"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
-    
+
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
         <CollectionView x:Name="ChatView"

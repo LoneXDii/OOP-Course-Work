@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:Client.Icons"
              x:Class="Client.Pages.ProfilePage"
-             Title="ProfilePage">
+             Title="Аккаунт">
     
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
@@ -23,22 +24,43 @@
 
                     <Button Grid.Row="0"
                             Grid.Column="1"
-                            Text="Edit"
                             Margin="2"
-                            Clicked="OnChangeNameButtonClicked"/>
+                            Clicked="OnChangeNameButtonClicked">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FluentIcons"
+                                             Glyph="{x:Static icons:Icons.Edit}"
+                                             Color="#242424"
+                                             Size="25"/>
+                        </Button.ImageSource>
+                    </Button>
                 </Grid>
 
                 <Button Grid.Row="1"
                         Grid.Column="0"
-                        Text="ChangePass"
+                        Text="Сменить пароль"
                         Margin="2"
-                        Clicked="OnChangePasswordButtonClicked"/>
+                        Clicked="OnChangePasswordButtonClicked">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FluentIcons"
+                                         Glyph="{x:Static icons:Icons.Edit}"
+                                         Color="#242424"
+                                         Size="25"/>
+                    </Button.ImageSource>
+                </Button>
 
                 <Button Grid.Row="1"
                         Grid.Column="1"
-                        Text="Exit"
+                        Text="Выйти"
+                        BackgroundColor="Red"
                         Margin="2"
-                        Clicked="OnExitButtonClicked"/>
+                        Clicked="OnExitButtonClicked">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FluentIcons"
+                                         Glyph="{x:Static icons:Icons.LogOut}"
+                                         Color="#242424"
+                                         Size="25"/>
+                    </Button.ImageSource>
+                </Button>
             </Grid>
         </Border>
     </Grid>

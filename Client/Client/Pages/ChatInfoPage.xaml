@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
+             xmlns:icons="clr-namespace:Client.Icons"
              x:Class="Client.Pages.ChatInfoPage"
-             Title="ChatInfoPage"
              Loaded="OnPageLoaded">
     
     <Grid RowDefinitions="*, 8*"
@@ -14,20 +14,32 @@
                        Grid.Column="0"
                        HorizontalOptions="Fill"
                        VerticalOptions="Fill"/>
-                
+
                 <Button Grid.Column="1"
-                        Text="Edit"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill"
                         Margin="1"
-                        Clicked="OnEditChatEntyClicked"/>
+                        Clicked="OnEditChatEntyClicked">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FluentIcons"
+                                         Glyph="{x:Static icons:Icons.Edit}"
+                                         Color="#242424"
+                                         Size="25"/>
+                    </Button.ImageSource>
+                </Button>
 
                 <Button Grid.Column="2"
-                        Text="Add"
                         HorizontalOptions="Fill"
                         VerticalOptions="Fill"
                         Margin="1"
-                        Clicked="OnAddUserClicked"/>
+                        Clicked="OnAddUserClicked">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FluentIcons"
+                                         Glyph="{x:Static icons:Icons.PersonAdd}"
+                                         Color="#242424"
+                                         Size="25"/>
+                    </Button.ImageSource>
+                </Button>
             </Grid>
         </Border>
         <CollectionView x:Name="chatMembersView"
@@ -43,14 +55,20 @@
                                    HorizontalOptions="Start"
                                    VerticalOptions="Start"
                                    Margin="10"/>
-                            
+
                             <Button Grid.Column="1"
                                     BackgroundColor="Red"
-                                    Text="Delete"
                                     HorizontalOptions="Fill"
                                     VerticalOptions="Fill"
                                     Clicked="OnDeleteUserClicked"
-                                    CommandParameter="{Binding}"/>
+                                    CommandParameter="{Binding}">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FluentIcons"
+                                                     Glyph="{x:Static icons:Icons.PersonDelete}"
+                                                     Color="#242424"
+                                                     Size="25"/>
+                                </Button.ImageSource>
+                            </Button>
                         </Grid>
                     </Border>
                 </DataTemplate>

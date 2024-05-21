@@ -3,6 +3,7 @@
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
+           xmlns:icons="clr-namespace:Client.Icons"
            x:Class="Client.Popups.AddUserToChatPopup"
            CanBeDismissedByTappingOutsideOfPopup="True"
            Color="Transparent"
@@ -39,9 +40,15 @@
                                    Margin="10"/>
 
                             <Button Grid.Column="1"
-                                    Text="Add"
                                     CommandParameter="{Binding}"
-                                    Clicked="OnAddButtonCliched"/>
+                                    Clicked="OnAddButtonCliched">
+                                <Button.ImageSource>
+                                    <FontImageSource FontFamily="FluentIcons"
+                                                     Glyph="{x:Static icons:Icons.Add}"
+                                                     Color="#242424"
+                                                     Size="15"/>
+                                </Button.ImageSource>
+                            </Button>
                         </Grid>
                     </Border>
                 </DataTemplate>

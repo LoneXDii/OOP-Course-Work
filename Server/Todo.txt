@@ -4,7 +4,6 @@ client and server (on client in SignalR AddMessage hub method))
 password validation (add regex)
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 remove unused usings
-Fix pages titles
 Fix all warnings (especially in API controllers)
 
 fix erorrs with one client connected from many instances of application

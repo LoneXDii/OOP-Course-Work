@@ -2,6 +2,7 @@
 <mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           xmlns:icons="clr-namespace:Client.Icons"
            x:Class="Client.Popups.MessageClickPopup"
            CanBeDismissedByTappingOutsideOfPopup="True"
            Color="Transparent">
@@ -9,17 +10,32 @@
     <Grid ColumnDefinitions="*"
           RowDefinitions="auto, auto"
           BackgroundColor="#1F1F1F">
-        
+
         <Button Text="Редактировать"
                 WidthRequest="200"
                 Margin="5"
                 Grid.Row="0"
-                Clicked="OnEditClicked"/>
-        
+                Clicked="OnEditClicked">
+            <Button.ImageSource>
+                <FontImageSource FontFamily="FluentIcons"
+                                 Glyph="{x:Static icons:Icons.Edit}"
+                                 Color="#242424"
+                                 Size="20"/>
+            </Button.ImageSource>
+        </Button>
+
         <Button Text="Удалить"
                 WidthRequest="200"
                 Margin="5"
                 Grid.Row="1"
-                Clicked="OnDeleteClicked"/>
+                BackgroundColor="Red"
+                Clicked="OnDeleteClicked">
+            <Button.ImageSource>
+                <FontImageSource FontFamily="FluentIcons"
+                                 Glyph="{x:Static icons:Icons.Delete}"
+                                 Color="#242424"
+                                 Size="25"/>
+            </Button.ImageSource>
+        </Button>
     </Grid>
 </mct:Popup>

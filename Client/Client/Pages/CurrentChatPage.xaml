@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converters="clr-namespace:Client.ValueConverters"
              xmlns:models="clr-namespace:Client.Domain.Entitites;assembly=Client.Domain"
-             x:Class="Client.Pages.CurrentChatPage"
-             Title="CurrentChatPage">
+             xmlns:icons="clr-namespace:Client.Icons"
+             x:Class="Client.Pages.CurrentChatPage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -69,7 +69,7 @@
                 Grid.Row="2"
                 BackgroundColor="#1F1F1F">
             <Grid RowDefinitions="*,*"
-                  ColumnDefinitions="9*,*">
+                  ColumnDefinitions="12*,*">
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Text="Редактирование"
@@ -79,14 +79,20 @@
                        Grid.Row="1"
                        Grid.Column="0"
                        HorizontalOptions="StartAndExpand"/>
-                
+
                 <Button Grid.Row="0"
                         Grid.RowSpan="2"
                         Grid.Column="1"
                         Margin="4"
-                        Text="Cancel"
                         HorizontalOptions="Fill"
-                        Clicked="OnCancelEditingButtonClicked"/>
+                        Clicked="OnCancelEditingButtonClicked">
+                    <Button.ImageSource>
+                        <FontImageSource FontFamily="FluentIcons"
+                                         Glyph="{x:Static icons:Icons.EditOff}"
+                                         Color="#242424"
+                                         Size="20"/>
+                    </Button.ImageSource>
+                </Button>
             </Grid>
         </Border>
 
@@ -98,13 +104,19 @@
                    Placeholder="Введите свое сообщение"
                    HorizontalOptions="Fill"
                    VerticalOptions="Fill"/>
-            
+
             <Button Grid.Column="1"
                     x:Name="sendMessageButton"
                     HorizontalOptions="Fill"
                     VerticalOptions="Fill"
-                    Text="send"
-                    Clicked="OnSendButtonClicked"/>
+                    Clicked="OnSendButtonClicked">
+                <Button.ImageSource>
+                    <FontImageSource FontFamily="FluentIcons"
+                                     Glyph="{x:Static icons:Icons.Send}"
+                                     Color="#242424"
+                                     Size="25"/>
+                </Button.ImageSource>
+            </Button>
         </Grid>
     </Grid>
 </ContentPage>
