@@ -1,10 +1,13 @@
 using Client.Persistence.Repositories;
+using System.Text.RegularExpressions;
 
 namespace Client.Pages;
 
 public partial class RegisterPage : ContentPage
 {
 	private readonly IUnitOfWork _unitOfWork;
+	private readonly string passwordPattern = @"(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$";
+
 	public RegisterPage(IUnitOfWork unitOfWork)
 	{
 		InitializeComponent();
@@ -24,12 +27,25 @@ public partial class RegisterPage : ContentPage
                 await DisplayAlert("Произошла ошибка", "Пароли должны совпадать", "OK");
 				return;
             }
+			if (login.Contains(" "))
+			{
+                await DisplayAlert("Произошла ошибка", "Логин не может содержать пробелы", "OK");
+                return;
+            }
+			if (!Regex.IsMatch(password, passwordPattern))
+			{
+                await DisplayAlert("Некорректный пароль", "Пароль должен удовлетворять следующим требованиям:\n" +
+					"1. Длина не менее 8 символов\n" +
+					"2. Пароль должен содержать не менее 1 цифры\n" +
+					"3. Пароль должен содержать не менее 1 латинской буквы каждого регистра", "OK");
+                return;
+            }
 			_unitOfWork.User.Register(username, login, password);
             Application.Current!.MainPage = new AppShell();
         }
 		catch (Exception)
 		{
-            await DisplayAlert("Произошла ошибка", "Вы ввели некорректные данные", "OK");
+            await DisplayAlert("Произошла ошибка", "Пользователь с таким логином уже существует", "OK");
         }
 	}
 }
