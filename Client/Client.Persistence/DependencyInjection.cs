@@ -11,7 +11,7 @@ public static class DependencyInjection
     {
         services.AddSingleton<IUnitOfWork, UnitOfWork>()
                 .AddSingleton<IServerService, ServerService>()
-                .AddHttpClient<IServerService, ServerService>(opt => opt.BaseAddress = new Uri("https://localhost:7267/api"));
+                .AddHttpClient<IServerService, ServerService>(opt => opt.BaseAddress = new Uri("http://192.168.0.103:5115/api"));
         return services;
     }
 }

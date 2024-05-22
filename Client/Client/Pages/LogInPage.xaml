@@ -24,27 +24,27 @@
                                  HorizontalOptions="Center">
                 <Entry Placeholder="Логин"
                        x:Name="loginEntry"
-                       HorizontalOptions="Center"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"/>
+                       <!--HorizontalOptions="Center"-->
+                       <!--WidthRequest="400"-->
 
                 <Entry Placeholder="Пароль"
                        x:Name="passwordEntry"
-                       HorizontalOptions="Center"
-                       IsPassword="True"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"
+                       IsPassword="True"/>
 
-                <HorizontalStackLayout HorizontalOptions="Center">
+                <HorizontalStackLayout HorizontalOptions="Fill">
                     <Button x:Name="loginButton"
                             Text="Войти"
                             Margin="5"
-                            WidthRequest="200"
+                            HorizontalOptions="Fill"
                             Clicked="OnLoginClicked"
                             ContentLayout="Left, 10"/>
 
                     <Button x:Name="registerButton"
                             Text="Зарегистрироваться"
                             Margin="5"
-                            WidthRequest="200"
+                            HorizontalOptions="Fill"
                             Clicked="OnRegisterClicked"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>

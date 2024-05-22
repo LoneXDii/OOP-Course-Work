@@ -27,7 +27,7 @@ internal class ServerService : IServerService
 
     private void ConnectToHub(string token)
     {
-        _chatHubConnection = new HubConnectionBuilder().WithUrl("https://localhost:7267/messenger", options =>
+        _chatHubConnection = new HubConnectionBuilder().WithUrl("http://192.168.0.103:5115/messenger", options =>
         {
             options.AccessTokenProvider = () => Task.FromResult(token)!;
         })
