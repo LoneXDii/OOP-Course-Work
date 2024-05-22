@@ -13,7 +13,7 @@
     </ContentPage.Resources>
     
     <Grid ColumnDefinitions="*"
-          RowDefinitions="* ,8*, *, *">
+          RowDefinitions="* ,8*, auto, *">
         <Border Grid.Column="0"
                 Grid.Row="0">
             <Border.GestureRecognizers>
@@ -69,7 +69,7 @@
                 Grid.Row="2"
                 BackgroundColor="#1F1F1F">
             <Grid RowDefinitions="*,*"
-                  ColumnDefinitions="12*,*">
+                  ColumnDefinitions="*,auto">
                 <Label Grid.Row="0"
                        Grid.Column="0"
                        Text="Редактирование"
@@ -98,11 +98,12 @@
 
         <Grid Grid.Column="0"
               Grid.Row="3"
-              ColumnDefinitions="9*,*">
+              ColumnDefinitions="*,auto">
             <Entry Grid.Column="0"
                    x:Name="messageEntry"
                    Placeholder="Введите свое сообщение"
                    HorizontalOptions="Fill"
+                   VerticalTextAlignment="End"
                    VerticalOptions="Fill"/>
 
             <Button Grid.Column="1"

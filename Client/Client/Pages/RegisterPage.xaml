@@ -9,35 +9,32 @@
               Grid.Row="0"
               RowDefinitions="*"
               ColumnDefinitions="*"
-              HorizontalOptions="Center"
+              HorizontalOptions="Fill"
               VerticalOptions="Center">
             <VerticalStackLayout VerticalOptions="Center"
-                                 HorizontalOptions="Center">
+                                 HorizontalOptions="Center"
+                                 MaximumWidthRequest="400">
                 <Entry Placeholder="Имя пользователя"
                        x:Name="usernameEntry"
-                       HorizontalOptions="Center"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"/>
 
                 <Entry Placeholder="Логин"
                        x:Name="loginEntry"
-                       HorizontalOptions="Center"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"/>
 
                 <Entry Placeholder="Пароль"
                        x:Name="passwordEntry"
-                       HorizontalOptions="Center"
-                       IsPassword="True"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"
+                       IsPassword="True"/>
 
                 <Entry Placeholder="Повтор пароля"
                        x:Name="passwordRepeatEntry"
-                       HorizontalOptions="Center"
-                       IsPassword="True"
-                       WidthRequest="400"/>
+                       HorizontalOptions="Fill"
+                       IsPassword="True"/>
 
                 <Button Text="Зарегистрироваться"
                         Margin="5"
-                        WidthRequest="200"
+                        WidthRequest="300"
                         Clicked="OnRegisterClicked"/>
             </VerticalStackLayout>
         </Grid>

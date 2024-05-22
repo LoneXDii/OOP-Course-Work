@@ -5,7 +5,7 @@
              xmlns:icons="clr-namespace:Client.Icons"
              x:Class="Client.Pages.ChatsPage"
              Title="Чаты"
-             Loaded="OnPageLoaded">
+             Appearing="OnPageAppearing">
     
     <ContentPage.ToolbarItems>
         <ToolbarItem Order="Primary"

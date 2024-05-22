@@ -32,7 +32,7 @@
                 <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
-                        <Grid ColumnDefinitions="4*,*">
+                        <Grid ColumnDefinitions="*,auto">
                             <Label Grid.Column="0"
                                    Text="{Binding Name}"
                                    HorizontalOptions="Fill"

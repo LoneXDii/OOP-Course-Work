@@ -6,14 +6,14 @@
              x:Class="Client.Pages.ChatInfoPage"
              Loaded="OnPageLoaded">
     
-    <Grid RowDefinitions="*, 8*"
+    <Grid RowDefinitions="auto, *"
           ColumnDefinitions="*">
         <Border Grid.Row="0">
-            <Grid ColumnDefinitions="12*,*,*">
+            <Grid ColumnDefinitions="*,auto,auto">
                 <Label x:Name="chatNameLabel"
                        Grid.Column="0"
-                       HorizontalOptions="Fill"
-                       VerticalOptions="Fill"/>
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="CenterAndExpand"/>
 
                 <Button Grid.Column="1"
                         HorizontalOptions="Fill"
@@ -49,7 +49,7 @@
                 <DataTemplate x:DataType="models:User">
                     <Border Margin="5"
                             StrokeShape="RoundRectangle 40, 40, 40, 40">
-                        <Grid ColumnDefinitions="9*,*">
+                        <Grid ColumnDefinitions="*,auto">
                             <Label Grid.Column="0"
                                    Text="{Binding Name}"
                                    HorizontalOptions="Start"

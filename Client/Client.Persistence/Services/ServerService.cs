@@ -1,7 +1,6 @@
 ﻿using Client.Domain.Entitites;
 using Client.Persistence.Exceptions;
 using Microsoft.AspNetCore.SignalR.Client;
-using System;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text;

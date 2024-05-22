@@ -7,18 +7,20 @@
     
     <Grid RowDefinitions="*"
           ColumnDefinitions="*">
-        <Border HorizontalOptions="Center"
+        <Border HorizontalOptions="Fill"
                 VerticalOptions="Center"
-                WidthRequest="500">
-            <Grid RowDefinitions="*,*"
-                  ColumnDefinitions="*,*">
+                StrokeThickness="0"
+                MaximumWidthRequest="400">
+            <Grid RowDefinitions="*,*,*"
+                  ColumnDefinitions="*">
                 <Grid Grid.Row="0"
                       Grid.Column="0"
-                      Grid.ColumnSpan="2"
                       RowDefinitions="*"
                       ColumnDefinitions="4*,*">
                     
                     <Label x:Name="usernameLabel"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"
                            Grid.Row="0"
                            Grid.Column="0"/>
 
@@ -48,8 +50,8 @@
                     </Button.ImageSource>
                 </Button>
 
-                <Button Grid.Row="1"
-                        Grid.Column="1"
+                <Button Grid.Row="2"
+                        Grid.Column="0"
                         Text="Выйти"
                         BackgroundColor="Red"
                         Margin="2"

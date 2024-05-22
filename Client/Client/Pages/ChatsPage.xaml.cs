@@ -18,7 +18,7 @@ public partial class ChatsPage : ContentPage
 		_unitOfWork = unitOfWork;
 	}
 
-	private void OnPageLoaded(object sender, EventArgs e)
+	private void OnPageAppearing(object sender, EventArgs e)
 	{
 		_unitOfWork.ChatRepository.GetFromServer(_unitOfWork.User.GetUser());
 		ChatView.ItemsSource = _unitOfWork.ChatRepository.Chats;
