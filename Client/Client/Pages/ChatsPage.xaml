@@ -43,12 +43,31 @@
                                                   CommandParameter="{Binding}"/>
                         </Border.GestureRecognizers>
                         
-                        <VerticalStackLayout>
+                        <Grid RowDefinitions="auto, auto"
+                              ColumnDefinitions="*,*"
+                              HorizontalOptions="Fill">
                             <Label Text="{Binding Name}"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Start"
+                                   Grid.Row="0"
+                                   Grid.Column="0"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
                                    Margin="10"/>
-                        </VerticalStackLayout>
+
+                            <Label Text="{Binding LastMessageDate}"
+                                   Grid.Row="0"
+                                   Grid.Column="1"
+                                   HorizontalOptions="End"
+                                   VerticalOptions="Center"
+                                   Margin="10"/>
+
+                            <Label Text="{Binding LastMessage}"
+                                   Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Center"
+                                   Margin="10"/>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

@@ -1,9 +1,4 @@
-add chats sorting by last message date (IComparable on client, new field last message date (datetime), updated on 
-client and server (on client in SignalR AddMessage hub method))
-
 add multiline message entering
-
-password validation (add regex)
 
 rebuild use casese for update (get by id in update use case, not in API controller, remove this from API controllers)
 

@@ -193,6 +193,17 @@ internal class ServerService : IServerService
         return members;
     }
 
+    public Chat GetChatById(int id)
+    {
+        string request = $"api/Chat/getChat/id={id}";
+        var chat = _httpClient.GetFromJsonAsync<Chat>(request).Result;
+        if (chat is null)
+        {
+            throw new Exception("Something went wrong");
+        }
+        return chat;
+    }
+
     public Message SendMessage(Message message)
     {
         string request = $"api/Chat/addMessage";

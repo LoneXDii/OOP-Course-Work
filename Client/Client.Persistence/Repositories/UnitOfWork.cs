@@ -44,7 +44,16 @@ internal class UnitOfWork : IUnitOfWork
                 }
                 catch { }
             }
-            ChatRepository.Chats.Add(chat);
+            var tempChat = ChatRepository.Chats.FirstOrDefault(c => c.LastMessageDate <= chat.LastMessageDate);
+            if (tempChat is null)
+            {
+                ChatRepository.Chats.Add(chat);
+            }
+            else
+            {
+                int index = ChatRepository.Chats.IndexOf(tempChat);
+                ChatRepository.Chats.Insert(index, chat);
+            }
         }
     }
 }

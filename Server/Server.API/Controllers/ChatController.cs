@@ -119,7 +119,13 @@ public class ChatController : Controller
         }
 
         var message = new Message(reqMessage.Text);
-        message.User = await _mediator.Send(new GetUserByIdRequest((int)reqMessage.UserId));
+        var user = await _mediator.Send(new GetUserByIdRequest((int)reqMessage.UserId!));
+        if (user is null)
+        {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
+            return NotFound();
+        }
+        message.User = user;
         message.ChatId = reqMessage.ChatId;
         message.SendTime = DateTime.Now;
         message = await _mediator.Send(new AddMessageRequest(message));
@@ -284,6 +290,28 @@ public class ChatController : Controller
         var membersDto = _mapper.Map<List<UserDTO>>(members);
         _logger.LogInformation($"{Request.Path.Value}: 200 OK");
         return Ok(membersDto);
+    }
+
+    [HttpGet("getChat/id={id:int}")]
+    public async Task<IActionResult> GetChatById(int id)
+    {
+        _logger.LogInformation($"Processing route: {Request.Path.Value}");
+
+        if (!await IsChatMember(HttpContext, id))
+        {
+            _logger.LogError($"{Request.Path.Value}: 403 Forbidden");
+            return Forbid();
+        }
+
+        var chat = await _mediator.Send(new GetChatByIdRequest(id));
+        if (chat is null)
+        {
+            _logger.LogError($"{Request.Path.Value}: 404 Not Found");
+            return NotFound();
+        }
+        var chatDto =_mapper.Map<ChatDTO>(chat);
+        _logger.LogInformation($"{Request.Path.Value}: 200 OK");
+        return Ok(chatDto);
     }
 
     private async Task<bool> IsChatMember(HttpContext context, int chatId)
