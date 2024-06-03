@@ -1,5 +1,7 @@
 using Client.Persistence.Repositories;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+using Client.Entitites;
 
 namespace Client.Pages;
 
@@ -40,7 +42,11 @@ public partial class RegisterPage : ContentPage
 					"3. Пароль должен содержать не менее 1 латинской буквы каждого регистра", "OK");
                 return;
             }
-			_unitOfWork.User.Register(username, login, password);
+            string file = Path.Combine(FileSystem.Current.AppDataDirectory, "credentials.json");
+            string credentials = JsonSerializer.Serialize(
+                new Credentials { Login = login, Password = password });
+            File.WriteAllText(file, credentials);
+            _unitOfWork.User.Register(username, login, password);
             Application.Current!.MainPage = new AppShell();
         }
 		catch (Exception)

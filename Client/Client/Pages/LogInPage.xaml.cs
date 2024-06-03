@@ -1,4 +1,6 @@
 using Client.Persistence.Repositories;
+using System.Text.Json;
+using Client.Entitites;
 
 namespace Client.Pages;
 
@@ -12,11 +14,42 @@ public partial class LogInPage : ContentPage
 		_unitOfWork = unitOfWork;
 	}
 
-	private async void OnLoginClicked(object sender, EventArgs e)
+	private void OnPageLoaded(object sender, EventArgs e)
+	{
+        var dir = FileSystem.Current.AppDataDirectory;
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        try
+        {
+            string file = Path.Combine(FileSystem.Current.AppDataDirectory, "credentials.json");
+            string cerdentialsJson = File.ReadAllText(file);
+            var credentials = JsonSerializer.Deserialize<Credentials>(cerdentialsJson);
+            if (credentials is not null)
+            {
+                _unitOfWork.User.Login(credentials.Login!, credentials.Password!);
+                Application.Current!.MainPage = new AppShell();
+            }
+        }
+        catch {
+			return;
+		}
+    }
+
+    private async void OnLoginClicked(object sender, EventArgs e)
 	{
 		try
 		{
-			_unitOfWork.User.Login(loginEntry.Text, passwordEntry.Text);
+			if (RememberMeCheckBox.IsChecked)
+			{
+                string file = Path.Combine(FileSystem.Current.AppDataDirectory, "credentials.json");
+				string credentials = JsonSerializer.Serialize(
+					new Credentials { Login = loginEntry.Text, Password = passwordEntry.Text });
+				File.WriteAllText(file, credentials);
+			}
+            _unitOfWork.User.Login(loginEntry.Text, passwordEntry.Text);
 			Application.Current!.MainPage = new AppShell();
 		}
 		catch

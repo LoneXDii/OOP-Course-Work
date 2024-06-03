@@ -17,7 +17,9 @@ public partial class ProfilePage : ContentPage
 
 	private void OnExitButtonClicked(object sender, EventArgs e)
 	{
-		Application.Current!.MainPage = new NavigationPage(new LogInPage(_unitOfWork));
+        string file = Path.Combine(FileSystem.Current.AppDataDirectory, "credentials.json");
+        File.WriteAllText(file, "");
+        Application.Current!.MainPage = new NavigationPage(new LogInPage(_unitOfWork));
     }
 
 	private async void OnChangeNameButtonClicked(object sender, EventArgs e)
