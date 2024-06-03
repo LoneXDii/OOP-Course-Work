@@ -31,11 +31,11 @@ internal class DeleteMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHan
                 chat.LastMessageDate = mess.SendTime;
                 if (chat.IsDialogue)
                 {
-                    chat.LastMessage = $"{mess.Text}";
+                    chat.LastMessage = $"{mess.Text.Replace("\n", " ")}";
                 }
                 else
                 {
-                    chat.LastMessage = $"{mess.User.Name}: {mess.Text}";
+                    chat.LastMessage = $"{mess.User.Name}: {mess.Text.Replace("\n", " ")}";
                 }
             }
             catch {

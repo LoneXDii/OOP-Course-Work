@@ -9,6 +9,7 @@ internal class UpdateMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHan
 {
     public async Task<Message> Handle(UpdateMessageRequest request, CancellationToken cancellationToken = default)
     {
+        request.message.Text = request.message.Text.Replace("\r", "\n");
         await unitOfWork.MessageRepository.UpdateAsync(request.message, cancellationToken);
         await unitOfWork.SaveAllAsync();
 
@@ -35,11 +36,11 @@ internal class UpdateMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHan
                 chat.LastMessageDate = mess.SendTime;
                 if (chat.IsDialogue)
                 {
-                    chat.LastMessage = $"{mess.Text}";
+                    chat.LastMessage = $"{mess.Text.Replace("\n", " ")}";
                 }
                 else
                 {
-                    chat.LastMessage = $"{mess.User.Name}: {mess.Text}";
+                    chat.LastMessage = $"{mess.User.Name}: {mess.Text.Replace("\n", " ")}";
                 }
             }
             await unitOfWork.ChatRepository.UpdateAsync(chat);

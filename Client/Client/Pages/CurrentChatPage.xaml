@@ -99,7 +99,7 @@
         <Grid Grid.Column="0"
               Grid.Row="3"
               ColumnDefinitions="*,auto">
-            <Entry Grid.Column="0"
+            <Editor Grid.Column="0"
                    x:Name="messageEntry"
                    Placeholder="Введите свое сообщение"
                    HorizontalOptions="Fill"

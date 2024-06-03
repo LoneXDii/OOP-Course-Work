@@ -6,6 +6,7 @@ internal class AddMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHandle
 {
     public async Task<Message> Handle(AddMessageRequest request, CancellationToken cancellationToken = default)
     {
+        request.message.Text = request.message.Text.Replace("\r", "\n");
         await unitOfWork.MessageRepository.AddAsync(request.message, cancellationToken);
         if (request.message.ChatId is not null)
         {
@@ -18,11 +19,11 @@ internal class AddMessageRequestHandler(IUnitOfWork unitOfWork) : IRequestHandle
             chat.LastMessageDate = request.message.SendTime;
             if (chat.IsDialogue)
             {
-                chat.LastMessage = $"{request.message.Text}";
+                chat.LastMessage = $"{request.message.Text.Replace("\n", " ")}";
             }
             else
             {
-                chat.LastMessage = $"{request.message.User.Name}: {request.message.Text}";
+                chat.LastMessage = $"{request.message.User.Name}: {request.message.Text.Replace("\n", " ")}";
             }
             await unitOfWork.ChatRepository.UpdateAsync(chat);
         }

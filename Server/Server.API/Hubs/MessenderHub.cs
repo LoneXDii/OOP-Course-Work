@@ -85,7 +85,11 @@ public class MessenderHub : Hub
     {
         var id = Convert.ToInt32(Context.GetHttpContext()!.User.FindFirstValue("Id"));
         var connId = Context.ConnectionId;
-        _connections.Add(id, connId);
+        try
+        {
+            _connections.Add(id, connId);
+        }
+        catch { }
         _logger.LogInformation($"Client {Context.ConnectionId} connected to hub");
         return base.OnConnectedAsync();
     }
