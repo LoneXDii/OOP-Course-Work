@@ -49,7 +49,11 @@ public partial class RegisterPage : ContentPage
             _unitOfWork.User.Register(username, login, password);
             Application.Current!.MainPage = new AppShell();
         }
-		catch (Exception)
+        catch (AggregateException)
+        {
+            await DisplayAlert("Произошла ошибка", "Отсутствует подключение к серверу", "OK");
+        }
+        catch (Exception)
 		{
             await DisplayAlert("Произошла ошибка", "Пользователь с таким логином уже существует", "OK");
         }

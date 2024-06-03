@@ -14,7 +14,7 @@ public partial class LogInPage : ContentPage
 		_unitOfWork = unitOfWork;
 	}
 
-	private void OnPageLoaded(object sender, EventArgs e)
+	private async void OnPageLoaded(object sender, EventArgs e)
 	{
         var dir = FileSystem.Current.AppDataDirectory;
         if (!Directory.Exists(dir))
@@ -32,6 +32,10 @@ public partial class LogInPage : ContentPage
                 _unitOfWork.User.Login(credentials.Login!, credentials.Password!);
                 Application.Current!.MainPage = new AppShell();
             }
+        }
+		catch (AggregateException)
+		{
+            await DisplayAlert("Произошла ошибка", "Отсутствует подключение к серверу", "OK");
         }
         catch {
 			return;
@@ -52,7 +56,11 @@ public partial class LogInPage : ContentPage
             _unitOfWork.User.Login(loginEntry.Text, passwordEntry.Text);
 			Application.Current!.MainPage = new AppShell();
 		}
-		catch
+        catch (AggregateException)
+        {
+            await DisplayAlert("Произошла ошибка", "Отсутствует подключение к серверу", "OK");
+        }
+        catch
 		{
 			await DisplayAlert("Произошла ошибка", "Вы ввели некорректные данные", "OK");
 		}
