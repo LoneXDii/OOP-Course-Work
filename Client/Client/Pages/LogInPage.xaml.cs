@@ -70,4 +70,18 @@ public partial class LogInPage : ContentPage
 	{
 		await Navigation.PushAsync(new RegisterPage(_unitOfWork));
 	}
+
+	private void OnSeePasswordClicked(object sender, EventArgs e)
+	{
+		passwordEntry.IsPassword = !passwordEntry.IsPassword;
+		if (sender is Button button)
+		{
+			button.ImageSource = new FontImageSource{
+				FontFamily = "FluentIcons",
+				Glyph = passwordEntry.IsPassword ? Icons.Icons.EyeShow : Icons.Icons.EyeHide,
+				Color = Color.FromArgb("#242424"),
+				Size = 25
+			};
+		}
+	}
 }

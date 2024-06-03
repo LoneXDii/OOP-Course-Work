@@ -58,4 +58,34 @@ public partial class RegisterPage : ContentPage
             await DisplayAlert("Произошла ошибка", "Пользователь с таким логином уже существует", "OK");
         }
 	}
+
+    private void OnSeePasswordClicked(object sender, EventArgs e)
+    {
+        passwordEntry.IsPassword = !passwordEntry.IsPassword;
+        if (sender is Button button)
+        {
+            button.ImageSource = new FontImageSource
+            {
+                FontFamily = "FluentIcons",
+                Glyph = passwordEntry.IsPassword ? Icons.Icons.EyeShow : Icons.Icons.EyeHide,
+                Color = Color.FromArgb("#242424"),
+                Size = 25
+            };
+        }
+    }
+
+    private void OnSeePasswordRepeatClicked(object sender, EventArgs e)
+    {
+        passwordRepeatEntry.IsPassword = !passwordRepeatEntry.IsPassword;
+        if (sender is Button button)
+        {
+            button.ImageSource = new FontImageSource
+            {
+                FontFamily = "FluentIcons",
+                Glyph = passwordRepeatEntry.IsPassword ? Icons.Icons.EyeShow : Icons.Icons.EyeHide,
+                Color = Color.FromArgb("#242424"),
+                Size = 25
+            };
+        }
+    }
 }

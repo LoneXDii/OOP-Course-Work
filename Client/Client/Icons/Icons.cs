@@ -14,4 +14,6 @@ public static class Icons
     public const string PersonDelete = "\uf5da";
     public const string Cancel = "\uf3f2";
     public const string LogOut = "\ue935";
+    public const string EyeShow = "\ue5fe";
+    public const string EyeHide = "\ue603";
 }

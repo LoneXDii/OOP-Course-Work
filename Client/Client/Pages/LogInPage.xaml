@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:Client.Icons"
              x:Class="Client.Pages.LogInPage"
              Loaded="OnPageLoaded">
     
@@ -27,10 +28,26 @@
                        x:Name="loginEntry"
                        HorizontalOptions="Fill"/>
 
-                <Entry Placeholder="Пароль"
-                       x:Name="passwordEntry"
-                       HorizontalOptions="Fill"
-                       IsPassword="True"/>
+                <Grid HorizontalOptions="Fill"
+                      ColumnDefinitions="3*, *">
+                    <Entry Grid.Column="0"
+                           Placeholder="Пароль"
+                           x:Name="passwordEntry"
+                           HorizontalOptions="Fill"
+                           IsPassword="True"/>
+
+                    <Button Grid.Column="1"
+                            Margin="2"
+                            Clicked="OnSeePasswordClicked"
+                            CommandParameter="True">
+                        <Button.ImageSource>
+                            <FontImageSource FontFamily="FluentIcons"
+                                             Glyph="{x:Static icons:Icons.EyeShow}"
+                                             Color="#242424"
+                                             Size="25"/>
+                        </Button.ImageSource>
+                    </Button>
+                </Grid>
 
                 <HorizontalStackLayout HorizontalOptions="Fill">
                     <CheckBox x:Name="RememberMeCheckBox"/>
